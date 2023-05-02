@@ -1,0 +1,89 @@
+---
+title: "Analyse fonctionnelle de gènes et métabolites"
+author: "Vincent ROCHER & Juliette COOK"
+format: revealjs
+editor: visual
+---
+
+
+# Gene Enrichment Analysis
+
+## Introduction
+
+- Gene enrichment analysis identifies biological pathways or functions that are overrepresented in a set of genes of interest.
+
+## Methods
+
+- Fisher's exact test calculates the probability of observing a set of genes in a pathway by chance, based on a contingency table of gene counts.
+- Gene Set Enrichment Analysis (GSEA) compares the distribution of a gene set's expression values to the distribution of all gene expression values in a dataset to determine whether the gene set is overrepresented.
+- Other methods include the hypergeometric test, Kolmogorov-Smirnov test, Wilcoxon rank-sum test, Gene Set Variation Analysis (GSVA), and CAMERA.
+
+## Tools and Databases
+
+- Ensembl BioMart, AnnotationHub, and the DAVID database are available for obtaining gene metadata.
+- R is a popular programming language for performing gene enrichment analysis.
+- R packages include ClusterProfiler, DOSE, and fgsea.
+
+## Conclusion
+
+- Gene enrichment analysis is a powerful method for identifying biological pathways or functions that are overrepresented in a set of genes of interest.
+- With the availability of tools and databases, as well as R packages for performing analysis, gene enrichment analysis is becoming increasingly accessible to researchers in various fields.
+
+
+# Gene Enrichment Analysis
+
+## Introduction
+
+- Brief overview of gene enrichment analysis
+- Importance of identifying enriched biological pathways
+
+## Gene Ontology
+
+- Definition of Gene Ontology (GO)
+- GO categories: molecular function, biological process, cellular component
+- Example of GO term: "cellular respiration"
+
+## Gene Set Enrichment Analysis (GSEA)
+
+- Principle of GSEA
+- Advantages over other methods
+- Example of GSEA results
+
+## Fisher Exact Test
+
+- Principle of Fisher Exact Test
+- How it is used in gene enrichment analysis
+- Example of Fisher Exact Test results
+
+## Weighted Kolmogorov-Smirnov Statistics
+
+- Definition and principle of WKSS
+- Advantages over other methods
+- Example of WKSS results
+
+## Tools for Gene Enrichment Analysis
+
+- R packages:
+  - gprofiler2
+  - clusterProfiler
+  - GOstats
+- Online tools:
+  - Enrichr
+  - DAVID
+  - WebGestalt
+
+## Using gprofiler2
+
+- Example of gene enrichment analysis using gprofiler2
+- Input: list of genes
+- Output: enriched GO terms and KEGG pathways
+
+## Conclusion
+
+- Summary of gene enrichment analysis methods and tools
+- Importance of carefully selecting appropriate methods and tools
+- Future directions in gene enrichment analysis
+
+## References
+
+- List of relevant articles and resources used in the presentation.
