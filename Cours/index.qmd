@@ -1,6 +1,6 @@
 ---
 title: "Analyse fonctionnelle de gènes et métabolites"
-author: "Vincent ROCHER & Juliette COOK"
+author: "Vincent ROCHER & Juliette COOKE"
 format: revealjs
 editor: visual
 ---
