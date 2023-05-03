@@ -33,7 +33,7 @@ editor: visual
 
 ## Tools and Databases
 
-### IDs
+### Databases and IDs
 
 -   KEGG, PubChem, ChEBI, MeSH, HMDB are databases which all have their own metabolite IDs, some with links to each other
 
@@ -73,17 +73,9 @@ editor: visual
 
         -   untargeted metabolomics: all features than can be annotated
 
-## Notes
+## ORA: extra info
 
 -   Background set is very important! Use a specific background set: realistically observable, not all known metabolites
-
--   Loss of information when converting IDs
-
--   Sensitive to metabolite misidentification
-
--   Organism-specific pathway set if available
-
--   Run multiple times with different pathway databases and form a consensus
 
 -   Multiple-testing corrections + filtering are necessary to produce list of metabolites of interest
 
@@ -92,6 +84,24 @@ editor: visual
 -   Ranks all metabolite values and tests if closely ranked metabolites enrich the same pathway
 
 -   Doesn't require a threshold on metabolite values as it uses the entire list of metabolites of interest
+
+-   Doesn't need a background set (background set = all input metabolites)
+
+## GSEA: extra info
+
+-   Provides a list of leading metabolites which helped enrich each pathway
+
+-   Still need to filter on p-value for significantly enriched pathways
+
+-   Depending on input values, interpretation can be different!
+
+## General warnings
+
+-   Sensitive to metabolite misidentification
+
+-   Use organism-specific pathway set if available
+
+-   If possible, run multiple times with different pathway databases and form a consensus
 
 # Enrichment tools
 
@@ -104,6 +114,8 @@ editor: visual
 ## MetaboAnalyst
 
 -   ORA
+
+-   MSEA
 
 -   Pathway topology (PT)
 
