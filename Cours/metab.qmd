@@ -5,6 +5,15 @@ format: revealjs
 editor: visual
 ---
 
+```{r}
+#| label: load-packages
+#| include: false
+#| 
+library(clusterProfiler)
+library(tidyverse)
+library(FELLA)
+```
+
 # Overview
 
 ## Introduction
@@ -27,7 +36,7 @@ editor: visual
 
 -   ORA: Over-representation analysis (Fisher's exact test)
 
--   MSEA: Metabolite set enrichment analysis, often referred to as GSEA even for metabolites, a Functional Class Scoring (FCS) method
+-   MSEA: Metabolite set enrichment analysis, often referred to as GSEA even for metabolites = a Functional Class Scoring (FCS) method
 
 -   Topology-based methods: uses networks of pathways in addition to other methods
 
@@ -83,17 +92,19 @@ editor: visual
 
 -   Ranks all metabolite values and tests if closely ranked metabolites enrich the same pathway
 
+-   Provides an Enrichment Score of each pathway which indicates up or down regulation
+
 -   Doesn't require a threshold on metabolite values as it uses the entire list of metabolites of interest
 
 -   Doesn't need a background set (background set = all input metabolites)
 
 ## GSEA: extra info
 
--   Provides a list of leading metabolites which helped enrich each pathway
+-   Provides a list of leading metabolites which help enrich each pathway (where in clusterprofiler?)
 
 -   Still need to filter on p-value for significantly enriched pathways
 
--   Depending on input values, interpretation can be different!
+-   Depending on input values/scores, interpretation can be different!
 
 ## General warnings
 
@@ -111,6 +122,52 @@ editor: visual
 
 -   GSEA/MSEA
 
+```{r}
+#cond = zscores %>% as.data.frame() %>% select(2)  %>% rownames_to_column("id")
+#write.table(cond %>% rename("score" = 2), paste0("data/example_metab_data_",names(cond)[2],".tsv"), sep="\t", quote = F, row.names = F)
+```
+
+### GSEA example: input data
+
+::: columns
+::: {.column width="45%"}
+Pathway sets
+
+```{r}
+pathway_sets = read.table("/home/juliette/these/data/simulated_PA/dict/metabolite_pathways.tsv", sep="\t", header = T) %>% 
+  mutate(metabolite = str_remove(metabolite, "[a-z]$")) %>% relocate(subsystem)
+
+metabolites = read.table("data/example_metab_data_Acylglycerides_metabolism.tsv", sep="\t", header = T) %>% arrange(desc(score)) %>% mutate(id = as.character(id)) %>% pull(score,id) %>% na.omit()
+
+gsea.metab = GSEA(metabolites, TERM2GENE = pathway_sets,minGSSize = 3, pvalueCutoff = 1)
+pathway_sets %>% slice(sample(1:n())) %>% head(15) %>% tibble()
+```
+:::
+
+::: {.column width="10%"}
+:::
+
+::: {.column width="45%"}
+Metabolomics data
+
+```{r}
+metabolites %>% enframe() %>% tibble() %>% head(15)
+```
+:::
+:::
+
+### GSEA example: results
+
+```{r}
+tibble((gsea.metab@result)) %>% filter(pvalue < 0.05) %>% select(ID, setSize, NES, pvalue) %>% head(8)
+```
+
+### GSEA example: plot
+
+```{r}
+enrichplot::gseaplot2(gsea.metab, geneSetID = 8, title = gsea.metab$Description[8])
+```
+
 ## MetaboAnalyst
 
 -   ORA
@@ -125,6 +182,77 @@ editor: visual
 
 -   Represents KEGG as a knowledge graph with hierarchical connections from metabolties to pathways through reactions, enzymes...
 
+## FELLA: example
+
+```{r}
+data("FELLA.sample")
+input.sample = read.table("data/epithelial_input.csv", sep= ",", header = T)
+```
+
+```{r}
+#| eval: false
+graph <- buildGraphFromKEGGREST(
+ organism = "hsa",
+ filter.path = c("01100", "01200", "01210", "01212", "01230"))
+
+buildDataFromGraph(
+ keggdata.graph = graph,
+ databaseDir = "kegg_db/",
+ internalDir = FALSE,
+ matrices = "diffusion",
+ normality = "diffusion",
+ niter = 50)
+```
+
+```{r}
+fella.data <- loadKEGGdata(
+ databaseDir = "data/kegg_db",
+ internalDir = FALSE,
+ loadMatrix = NULL
+ )
+```
+
+```{r}
+myAnalysis = enrich(compounds = input.sample%>% pull(KEGG.id), method = "diffusion", 
+    approx = "normality",
+    data = fella.data)
+```
+
+```{r}
+g <- generateResultsGraph(object = myAnalysis, data = fella.data)
+# plot(
+#     x = myAnalysis, 
+#     method = "diffusion", 
+#     threshold = 0.05,
+#     nlimit = 150,
+#     data = fella.data,
+#     vertex.label.cex = 0.5)
+v.size <- c(
+  "1" = 10,
+  "2" = 6,
+  "3" = 5,
+  "4" = 4,
+  "5" = 2
+)
+v.color <- stats::setNames(grDevices::palette()[1:5], 1:5)
+
+```
+
+```{r fig.width=6, fig.height=7}
+#| fig-width: 17
+#| fig-height: 10
+plotGraph(g, 
+     vertex.size = v.size[V(g)$com], 
+     vertex.color = v.color[V(g)$com], 
+     # only show level 1 (pathway) and 5 (compound)
+     vertex.label = ifelse(V(g)$com %in% c(1, 5), V(g)$label, ""), 
+     vertex.label.dist = 1, 
+     vertex.label.color = ifelse(V(g)$name %in% input.sample, 
+                                 "indianred1", "gray20"), 
+     edge.width = 3,
+     nlimit = 150)
+```
+
 ## Metexplore
 
 -   Pathway analysis
@@ -135,6 +263,4 @@ editor: visual
 
 ## References
 
--   Wieder C, Frainay C, Poupin N, Rodríguez-Mier P, Vinson F, Cooke J, et
-    al. (2021) **Pathway analysis in metabolomics: Recommendations for the
-    use of over-representation analysis.** PLoS Comput Biol 17(9): e1009105. https://doi.org/10.1371/journal.pcbi.1009105
+-   Wieder C, Frainay C, Poupin N, Rodríguez-Mier P, Vinson F, Cooke J, et al. (2021) **Pathway analysis in metabolomics: Recommendations for the use of over-representation analysis.** PLoS Comput Biol 17(9): e1009105. https://doi.org/10.1371/journal.pcbi.1009105
