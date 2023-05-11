@@ -16,6 +16,12 @@ editor: visual
 * __Vincent Rocher__ (vincent.rocher@univ-tlse3.fr) : Ingénieur de recherche sur la plateforme big-A du CBI.
 * __Juliette Cooke__ (juliette.cooke@inrae.fr) : Doctorante dans l'équipe METexplore.
 
+## Supports
+
+* [__Slides du cours__](Cours/index.html).
+* [__Slides du TP__](TP/index.html).
+* [__Wiki compagnon__](https://github.com/rochevin/Formation_INRAE_genes/wiki).
+
 ## Objectifs pédagogiques
 
 Les objectifs pédagogiques de cette formation seront d'obtenir les compétences théoriques & pratiques permettant l'autonomie sur l'analyse et l'interprétation de liste de gènes ou métabolites obtenus par des méthodes omiques. Plus concrètement, le stagiaire sera en mesure de : 
