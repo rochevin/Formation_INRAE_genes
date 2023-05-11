@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Formation analyse fonctionnelle</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="index_files/libs/clipboard/clipboard.min.js"></script>
+<script src="index_files/libs/quarto-html/quarto.js"></script>
+<script src="index_files/libs/quarto-html/popper.min.js"></script>
+<script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="index_files/libs/quarto-html/anchor.min.js"></script>
+<link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="index_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="index_files/libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="index_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="index_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="index_files/libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#formateurs" id="toc-formateurs" class="nav-link active" data-scroll-target="#formateurs">Formateurs</a></li>
+  <li><a href="#objectifs-pédagogiques" id="toc-objectifs-pédagogiques" class="nav-link" data-scroll-target="#objectifs-pédagogiques">Objectifs pédagogiques</a></li>
+  <li><a href="#pré-requis" id="toc-pré-requis" class="nav-link" data-scroll-target="#pré-requis">Pré-requis</a></li>
+  <li><a href="#programme" id="toc-programme" class="nav-link" data-scroll-target="#programme">Programme</a>
+  <ul class="collapse">
+  <li><a href="#pour-la-partie-théorique" id="toc-pour-la-partie-théorique" class="nav-link" data-scroll-target="#pour-la-partie-théorique">Pour la partie théorique :</a></li>
+  <li><a href="#partie-pratique" id="toc-partie-pratique" class="nav-link" data-scroll-target="#partie-pratique">Partie pratique</a></li>
+  </ul></li>
+  <li><a href="#modalités" id="toc-modalités" class="nav-link" data-scroll-target="#modalités">Modalités</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Formation analyse fonctionnelle</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="formateurs" class="level2">
+<h2 class="anchored" data-anchor-id="formateurs">Formateurs</h2>
+<ul>
+<li><strong>Vincent Rocher</strong> (vincent.rocher@univ-tlse3.fr) : Ingénieur de recherche sur la plateforme big-A du CBI.</li>
+<li><strong>Juliette Cooke</strong> (juliette.cooke@inrae.fr) : Doctorante dans l’équipe METexplore.</li>
+</ul>
+</section>
+<section id="objectifs-pédagogiques" class="level2">
+<h2 class="anchored" data-anchor-id="objectifs-pédagogiques">Objectifs pédagogiques</h2>
+<p>Les objectifs pédagogiques de cette formation seront d’obtenir les compétences théoriques &amp; pratiques permettant l’autonomie sur l’analyse et l’interprétation de liste de gènes ou métabolites obtenus par des méthodes omiques. Plus concrètement, le stagiaire sera en mesure de : Formater son jeu de données de façon à pouvoir utiliser les différents outils d’enrichissement fonctionnel. Choisir la bonne base de données, comprendre son fonctionnement, et connaître les enjeux de ce choix. Apprendre comment fonctionnent les différents tests d’enrichissement et comment les interpréter. Comparer, simplifier et visualiser ses résultats de façon à produire un résultat “publication ready”.</p>
+</section>
+<section id="pré-requis" class="level2">
+<h2 class="anchored" data-anchor-id="pré-requis">Pré-requis</h2>
+<p>De manière générale, les stagiaires devront connaître et maîtriser les techniques d’analyse en RNA-seq et métabolomique. Pour la pratique (TP), une maîtrise des bases du logiciel de statistique R est demandée (chargement, manipulation et sauvegarde de tableaux).</p>
+</section>
+<section id="programme" class="level2">
+<h2 class="anchored" data-anchor-id="programme">Programme</h2>
+<p>La formation se déroulera en deux jours : un pour la partie théorique (cours) et un autre pour la partie pratique (TP).</p>
+<section id="pour-la-partie-théorique" class="level3">
+<h3 class="anchored" data-anchor-id="pour-la-partie-théorique">Pour la partie théorique :</h3>
+<ul>
+<li>Comment identifier, récupérer et gérer les bons identifiants de gènes / métabolites via l’utilisation d’outils de conversion (Biomart) et d’accès aux différentes bases de données (NCBI / Ensembl / KEGG / PubChem/ ChEBI / MeSH / HMDB).</li>
+<li>Quelles sont les différentes bases de données contenant des informations sur les fonctions des gènes et métabolites, comment fonctionnent-elles et comment les utiliser, et quel effet le choix de la base peut avoir sur les résultats.</li>
+<li>Quels sont les différents outils statistiques d’analyse fonctionnelle (Test d’enrichissement / Test de sur-représentation). Comment fonctionnent-ils et comment sont-ils appliqués à une liste d’entités biologiques et de voies biologiques (GSEA / MSEA / Fisher test).</li>
+<li>Comment analyser, comparer, simplifier et visualiser une analyse fonctionnelle à partir d’outils web (PANTHERR, Metaboanalyst, Metexplore) / programmatiques (clusterProfiler, gProfiler, enricher).</li>
+<li>Quelles sont les limites de ces outils, et comment aller au-delà de ces analyses.</li>
+</ul>
+</section>
+<section id="partie-pratique" class="level3">
+<h3 class="anchored" data-anchor-id="partie-pratique">Partie pratique</h3>
+<p>Les différentes méthodes et outils vus dans la partie théorique seront mises en application en utilisant le logiciel R. Via une étude de cas (fournie par les stagiaires), différentes librairies R seront utilisées pour récupérer et convertir les identifiants de gènes / métabolites, et pour les formater correctement de façon à pouvoir utiliser les outils d’analyse fonctionnelle existants. Enfin, différentes méthodes de visualisation et simplification des résultats seront abordées de façon à pouvoir interpréter les résultats et les enregistrer sous forme de figures “publication ready”. Tout au long de cette partie pratique, les stagiaires auront l’occasion de comparer leurs résultats à la correction de façon à évaluer l’acquisition de chacun des objectifs.</p>
+<p>De manière générale, les différentes méthodes permettant d’identifier les erreurs classiques de programmation et comment les corriger seront abordées tout au long du TP, ainsi que des pratiques FAIR ( Findable, Accessible, Interoperable, Reusable ).</p>
+</section>
+</section>
+<section id="modalités" class="level2">
+<h2 class="anchored" data-anchor-id="modalités">Modalités</h2>
+<p>La formation se déroulera en deux jours : Une journée théorique (cours) de 7h suivie d’une journée pratique (TP) de 7h également. La formation se déroulera sur le site des stagiaires (INRAE Auzeville), dans des salles de formation prévues à cet effet. Le nombre de stagiaires sera de 6 au minimum. Pour l’évaluation de la partie pratique, le stagiaire sera à même d’éva</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
