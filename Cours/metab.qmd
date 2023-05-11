@@ -8,7 +8,7 @@ editor: visual
 ```{r}
 #| label: load-packages
 #| include: false
-#| 
+#| echo: false
 library(clusterProfiler)
 library(tidyverse)
 library(FELLA)
@@ -26,11 +26,13 @@ library(FELLA)
 
 -   Lower metabolome coverage vs genome coverage, less data in general
 
--   No Gene Ontology equivalent, ChEBI ontology is close =\> gaining functional information is more difficult
+-   No Gene Ontology equivalent, ChEBI ontology & pathway sets are close =\> gaining functional information is more difficult and less standardised
 
 -   Metabolite identifier mapping is a major issue: metabolites have multiple names, IDs, isomers
 
--   Bias depending on input data used, more so for metabolomics
+-   Bias depending on input data used, more so for metabolomics (some metabolites cannot be detected)
+
+-   Depends on how pathways have been defined
 
 ## Methods
 
@@ -80,7 +82,7 @@ library(FELLA)
 
         -   targeted metabolomics: all assayed metabolites
 
-        -   untargeted metabolomics: all features than can be annotated
+        -   untargeted metabolomics: all features that can be annotated
 
 ## ORA: extra info
 
@@ -100,11 +102,11 @@ library(FELLA)
 
 ## GSEA: extra info
 
--   Provides a list of leading metabolites which help enrich each pathway (where in clusterprofiler?)
+-   Provides a list of leading metabolites which help enrich each pathway ***(where in clusterprofiler?)***
 
 -   Still need to filter on p-value for significantly enriched pathways
 
--   Depending on input values/scores, interpretation can be different!
+-   Depending on input values/scores, interpretation of pathway regulations can be different!
 
 ## General warnings
 
@@ -118,16 +120,12 @@ library(FELLA)
 
 ## Clusterprofiler
 
--   ORA?
-
--   GSEA/MSEA
+### Input data
 
 ```{r}
 #cond = zscores %>% as.data.frame() %>% select(2)  %>% rownames_to_column("id")
 #write.table(cond %>% rename("score" = 2), paste0("data/example_metab_data_",names(cond)[2],".tsv"), sep="\t", quote = F, row.names = F)
 ```
-
-### GSEA example: input data
 
 ::: columns
 ::: {.column width="45%"}
@@ -156,16 +154,31 @@ metabolites %>% enframe() %>% tibble() %>% head(15)
 :::
 :::
 
-### GSEA example: results
+### ORA
+
+```{r}
+metabolites.ORA = read.table("data/example_metab_data_Acylglycerides_metabolism.tsv", sep="\t", header = T) %>% na.omit() %>% filter(abs(score)> 1) %>% pull(id)
+
+ora.metab = enricher(metabolites.ORA , TERM2GENE = pathway_sets )
+dotplot(ora.metab)
+```
+
+### GSEA/MSEA
+
+#### GSEA example: results
 
 ```{r}
 tibble((gsea.metab@result)) %>% filter(pvalue < 0.05) %>% select(ID, setSize, NES, pvalue) %>% head(8)
 ```
 
-### GSEA example: plot
+#### GSEA example: plot
 
 ```{r}
 enrichplot::gseaplot2(gsea.metab, geneSetID = 8, title = gsea.metab$Description[8])
+```
+
+```{r}
+dotplot(gsea.metab)
 ```
 
 ## MetaboAnalyst
@@ -213,20 +226,13 @@ fella.data <- loadKEGGdata(
 ```
 
 ```{r}
-myAnalysis = enrich(compounds = input.sample%>% pull(KEGG.id), method = "diffusion", 
+myAnalysis = FELLA::enrich(compounds = input.sample%>% pull(KEGG.id), method = "diffusion", 
     approx = "normality",
     data = fella.data)
 ```
 
 ```{r}
 g <- generateResultsGraph(object = myAnalysis, data = fella.data)
-# plot(
-#     x = myAnalysis, 
-#     method = "diffusion", 
-#     threshold = 0.05,
-#     nlimit = 150,
-#     data = fella.data,
-#     vertex.label.cex = 0.5)
 v.size <- c(
   "1" = 10,
   "2" = 6,
@@ -255,9 +261,33 @@ plotGraph(g,
 
 ## Metexplore
 
--   Pathway analysis
+### Biosources/metabolic networks
 
--   Visualisation
+KEGG - E. coli
+
+![](images/metabolic_network.png){fig-align="center"}
+
+![](images/biosource_stats.png){fig-align="center"}
+
+### ID mapping
+
+-   Usually from "common names" to CHEBI
+
+-   Most often requires a manual step for missing ID conversions
+
+-   Can add a background set of metabolites for ORA
+
+### Pathway analysis
+
+-   Once a metabolite dataset has been mapped to a network, pathway analysis (ORA) is done automatically
+
+-   Can be viewed in a table with multiple test corrections
+
+### Visualisation
+
+-   Can visualise a subset of metabolites and reactions, or entire pathways
+
+-   Highlight metabolites of interest
 
 # Conclusion
 
