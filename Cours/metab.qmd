@@ -1,0 +1,266 @@
+---
+title: "Metabolite enrichment"
+author: "Vincent ROCHER & Juliette COOKE"
+format: revealjs
+editor: visual
+---
+
+```{r}
+#| label: load-packages
+#| include: false
+#| 
+library(clusterProfiler)
+library(tidyverse)
+library(FELLA)
+```
+
+# Overview
+
+## Introduction
+
+-   Pathway enrichment methods were originally developed for gene enrichment
+
+-   Are also widely used with metabolites and metabolomics data (with caution!)
+
+## Differences vs genes
+
+-   Lower metabolome coverage vs genome coverage, less data in general
+
+-   No Gene Ontology equivalent, ChEBI ontology is close =\> gaining functional information is more difficult
+
+-   Metabolite identifier mapping is a major issue: metabolites have multiple names, IDs, isomers
+
+-   Bias depending on input data used, more so for metabolomics
+
+## Methods
+
+-   ORA: Over-representation analysis (Fisher's exact test)
+
+-   MSEA: Metabolite set enrichment analysis, often referred to as GSEA even for metabolites = a Functional Class Scoring (FCS) method
+
+-   Topology-based methods: uses networks of pathways in addition to other methods
+
+## Tools and Databases
+
+### Databases and IDs
+
+-   KEGG, PubChem, ChEBI, MeSH, HMDB are databases which all have their own metabolite IDs, some with links to each other
+
+-   Converting IDs: MetaboAnalyst can convert from names/IDs to many different IDs
+
+### Tools
+
+-   R: `clusterprofiler`, `FELLA`
+
+-   In addition to R, Python can also be used for enrichment analyses: Python packages include `gseapy` with `gsea()` or `prerank()` functions
+
+-   MetaboAnalyst: for online analyses
+
+-   Metexplore for visualisation using metabolic networks
+
+### Pathway sets
+
+-   KEGG, Reactome, BioCyc, BiGG/MetabolicAtlas
+
+-   Pathway definitions are relatively arbitrary and depend on the database
+
+# Enrichment methods
+
+## Over-representation analysis (ORA)
+
+-   Uses Fisher's exact test to test for overlap in sets
+
+-   3 inputs:
+
+    -   a collection of pathways
+
+    -   a list of metabolites of interest (i.e. filtered on p-values)
+
+    -   a background set:
+
+        -   targeted metabolomics: all assayed metabolites
+
+        -   untargeted metabolomics: all features than can be annotated
+
+## ORA: extra info
+
+-   Background set is very important! Use a specific background set: realistically observable, not all known metabolites
+
+-   Multiple-testing corrections + filtering are necessary to produce list of metabolites of interest
+
+## Metabolite set enrichment analysis (MSEA/GSEA)
+
+-   Ranks all metabolite values and tests if closely ranked metabolites enrich the same pathway
+
+-   Provides an Enrichment Score of each pathway which indicates up or down regulation
+
+-   Doesn't require a threshold on metabolite values as it uses the entire list of metabolites of interest
+
+-   Doesn't need a background set (background set = all input metabolites)
+
+## GSEA: extra info
+
+-   Provides a list of leading metabolites which help enrich each pathway (where in clusterprofiler?)
+
+-   Still need to filter on p-value for significantly enriched pathways
+
+-   Depending on input values/scores, interpretation can be different!
+
+## General warnings
+
+-   Sensitive to metabolite misidentification
+
+-   Use organism-specific pathway set if available
+
+-   If possible, run multiple times with different pathway databases and form a consensus
+
+# Enrichment tools
+
+## Clusterprofiler
+
+-   ORA?
+
+-   GSEA/MSEA
+
+```{r}
+#cond = zscores %>% as.data.frame() %>% select(2)  %>% rownames_to_column("id")
+#write.table(cond %>% rename("score" = 2), paste0("data/example_metab_data_",names(cond)[2],".tsv"), sep="\t", quote = F, row.names = F)
+```
+
+### GSEA example: input data
+
+::: columns
+::: {.column width="45%"}
+Pathway sets
+
+```{r}
+pathway_sets = read.table("/home/juliette/these/data/simulated_PA/dict/metabolite_pathways.tsv", sep="\t", header = T) %>% 
+  mutate(metabolite = str_remove(metabolite, "[a-z]$")) %>% relocate(subsystem)
+
+metabolites = read.table("data/example_metab_data_Acylglycerides_metabolism.tsv", sep="\t", header = T) %>% arrange(desc(score)) %>% mutate(id = as.character(id)) %>% pull(score,id) %>% na.omit()
+
+gsea.metab = GSEA(metabolites, TERM2GENE = pathway_sets,minGSSize = 3, pvalueCutoff = 1)
+pathway_sets %>% slice(sample(1:n())) %>% head(15) %>% tibble()
+```
+:::
+
+::: {.column width="10%"}
+:::
+
+::: {.column width="45%"}
+Metabolomics data
+
+```{r}
+metabolites %>% enframe() %>% tibble() %>% head(15)
+```
+:::
+:::
+
+### GSEA example: results
+
+```{r}
+tibble((gsea.metab@result)) %>% filter(pvalue < 0.05) %>% select(ID, setSize, NES, pvalue) %>% head(8)
+```
+
+### GSEA example: plot
+
+```{r}
+enrichplot::gseaplot2(gsea.metab, geneSetID = 8, title = gsea.metab$Description[8])
+```
+
+## MetaboAnalyst
+
+-   ORA
+
+-   MSEA
+
+-   Pathway topology (PT)
+
+## FELLA
+
+-   Uses KEGG network and a list of KEGG metabolites
+
+-   Represents KEGG as a knowledge graph with hierarchical connections from metabolties to pathways through reactions, enzymes...
+
+## FELLA: example
+
+```{r}
+data("FELLA.sample")
+input.sample = read.table("data/epithelial_input.csv", sep= ",", header = T)
+```
+
+```{r}
+#| eval: false
+graph <- buildGraphFromKEGGREST(
+ organism = "hsa",
+ filter.path = c("01100", "01200", "01210", "01212", "01230"))
+
+buildDataFromGraph(
+ keggdata.graph = graph,
+ databaseDir = "kegg_db/",
+ internalDir = FALSE,
+ matrices = "diffusion",
+ normality = "diffusion",
+ niter = 50)
+```
+
+```{r}
+fella.data <- loadKEGGdata(
+ databaseDir = "data/kegg_db",
+ internalDir = FALSE,
+ loadMatrix = NULL
+ )
+```
+
+```{r}
+myAnalysis = enrich(compounds = input.sample%>% pull(KEGG.id), method = "diffusion", 
+    approx = "normality",
+    data = fella.data)
+```
+
+```{r}
+g <- generateResultsGraph(object = myAnalysis, data = fella.data)
+# plot(
+#     x = myAnalysis, 
+#     method = "diffusion", 
+#     threshold = 0.05,
+#     nlimit = 150,
+#     data = fella.data,
+#     vertex.label.cex = 0.5)
+v.size <- c(
+  "1" = 10,
+  "2" = 6,
+  "3" = 5,
+  "4" = 4,
+  "5" = 2
+)
+v.color <- stats::setNames(grDevices::palette()[1:5], 1:5)
+
+```
+
+```{r fig.width=6, fig.height=7}
+#| fig-width: 17
+#| fig-height: 10
+plotGraph(g, 
+     vertex.size = v.size[V(g)$com], 
+     vertex.color = v.color[V(g)$com], 
+     # only show level 1 (pathway) and 5 (compound)
+     vertex.label = ifelse(V(g)$com %in% c(1, 5), V(g)$label, ""), 
+     vertex.label.dist = 1, 
+     vertex.label.color = ifelse(V(g)$name %in% input.sample, 
+                                 "indianred1", "gray20"), 
+     edge.width = 3,
+     nlimit = 150)
+```
+
+## Metexplore
+
+-   Pathway analysis
+
+-   Visualisation
+
+# Conclusion
+
+## References
+
+-   Wieder C, Frainay C, Poupin N, Rodríguez-Mier P, Vinson F, Cooke J, et al. (2021) **Pathway analysis in metabolomics: Recommendations for the use of over-representation analysis.** PLoS Comput Biol 17(9): e1009105. https://doi.org/10.1371/journal.pcbi.1009105

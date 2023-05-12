@@ -1,0 +1,57 @@
+---
+title: "Formation analyse fonctionnelle"
+format: 
+  html:
+    toc: true
+    toc_float: true
+    theme:
+      light: flatly
+      dark: darkly
+  pdf: default
+editor: visual
+---
+
+## Formateurs
+
+* __Vincent Rocher__ (vincent.rocher@univ-tlse3.fr) : Ingénieur de recherche sur la plateforme big-A du CBI.
+* __Juliette Cooke__ (juliette.cooke@inrae.fr) : Doctorante dans l'équipe METexplore.
+
+## Supports
+
+* [__Slides du cours__](Cours/index.html).
+* [__Slides du TP__](TP/index.html).
+* [__Wiki compagnon__](https://github.com/rochevin/Formation_INRAE_genes/wiki).
+
+## Objectifs pédagogiques
+
+Les objectifs pédagogiques de cette formation seront d'obtenir les compétences théoriques & pratiques permettant l'autonomie sur l'analyse et l'interprétation de liste de gènes ou métabolites obtenus par des méthodes omiques. Plus concrètement, le stagiaire sera en mesure de : 
+Formater son jeu de données de façon à pouvoir utiliser les différents outils d'enrichissement fonctionnel.
+Choisir la bonne base de données, comprendre son fonctionnement, et connaître les enjeux de ce choix.
+Apprendre comment fonctionnent les différents tests d'enrichissement et comment les interpréter. 
+Comparer, simplifier et visualiser ses résultats de façon à produire un résultat “publication ready”.
+
+## Pré-requis
+
+De manière générale, les stagiaires devront connaître et maîtriser les techniques d'analyse en RNA-seq et métabolomique. Pour la pratique (TP), une maîtrise des bases du logiciel de statistique R est demandée (chargement, manipulation et sauvegarde de tableaux).
+
+## Programme
+La formation se déroulera en deux jours : un pour la partie théorique (cours) et un autre pour la partie pratique (TP). 
+
+### Pour la partie théorique : 
+
+* Comment identifier, récupérer et gérer les bons identifiants de gènes / métabolites via l'utilisation d'outils de conversion (Biomart) et d'accès aux différentes bases de données (NCBI / Ensembl / KEGG / PubChem/ ChEBI / MeSH / HMDB).
+* Quelles sont les différentes bases de données contenant des informations sur les fonctions des gènes et métabolites, comment fonctionnent-elles et comment les utiliser, et quel effet le choix de la base peut avoir sur les résultats.
+* Quels sont les différents outils statistiques d'analyse fonctionnelle (Test d'enrichissement / Test de sur-représentation). Comment fonctionnent-ils et comment sont-ils appliqués à une liste d'entités biologiques et de voies biologiques (GSEA / MSEA / Fisher test).
+* Comment analyser, comparer, simplifier et visualiser une analyse fonctionnelle à partir d'outils web (PANTHERR, Metaboanalyst, Metexplore) / programmatiques (clusterProfiler, gProfiler, enricher).
+* Quelles sont les limites de ces outils, et comment aller au-delà de ces analyses. 
+
+
+### Partie pratique
+
+Les différentes méthodes et outils vus dans la partie théorique seront mises en application en utilisant le logiciel R. Via une étude de cas (fournie par les stagiaires), différentes librairies R seront utilisées pour récupérer et convertir les identifiants de gènes / métabolites, et pour les formater correctement de façon à pouvoir utiliser les outils d'analyse fonctionnelle existants. Enfin, différentes méthodes de visualisation et simplification des résultats seront abordées de façon à pouvoir interpréter les résultats et les enregistrer sous forme de figures “publication ready”. Tout au long de cette partie pratique, les stagiaires auront l'occasion de comparer leurs résultats à la correction de façon à évaluer l'acquisition de chacun des objectifs.
+
+De manière générale, les différentes méthodes permettant d'identifier les erreurs classiques de programmation et comment les corriger seront abordées tout au long du TP, ainsi que des pratiques FAIR ( Findable, Accessible, Interoperable, Reusable ).    
+
+## Modalités
+
+La formation se déroulera en deux jours : Une journée théorique (cours) de 7h suivie d'une journée pratique (TP) de 7h également. La formation se déroulera sur le site des stagiaires (INRAE Auzeville), dans des salles de formation prévues à cet effet. Le nombre de stagiaires sera de 6 au minimum. Pour l'évaluation de la partie pratique, le stagiaire sera à même d'éva
