@@ -2,14 +2,90 @@
 title: "Analyse fonctionnelle de gènes et métabolites"
 author: "Vincent ROCHER & Juliette COOK"
 format: revealjs
-editor: visual
+editor: source
 ---
+
+```{r,echo=F,message=FALSE,warning=F}
+
+require(tidyverse)
+require(clusterProfiler)
+require(org.Hs.eg.db)
+
+```
+
+
 
 # Gene Enrichment Analysis
 
 ## Introduction
 
 -   Gene enrichment analysis identifies biological pathways or functions that are overrepresented in a set of genes of interest.
+
+
+The list of differentially expressed genes is sometimes:
+
+so long that its interpretation becomes cumbersome and time consuming,
+
+or very short while some genes have low p-value yet higher than the given threshold.
+
+There are many approaches to searching for biological meaning in the results of differential expression analysis.
+
+Commonly we assess whether the differentially expressed genes tend to relate to specific pathways or ontological groups of genes.
+
+We will look at two methods:
+
+Over Representation Analysis (ORA)
+
+Gene Set Enrichment Analysis (GSEA)
+
+
+
+Common sources of gene sets:
+
+KEGG pathways
+
+Gene Ontologies
+
+Reactome
+
+Molecular Signature Database, MSigDB (GSEA)
+
+Manually curated gene lists
+
+## 
+
+```{r echo=FALSE, warning=FALSE,message=FALSE}
+# Import list of differentially expressed genes
+# de_genes <- read_tsv("../TP/liste_genes.tsv")
+DE_result <- read_tsv("../TP/Gene_DE_DIVA.tsv")
+
+
+de_genes <- DE_result %>% filter(p.adj < 0.05,logFC>0.5)
+# Convert gene IDs to Entrez IDs using org.Hs.eg.db
+# de_genes_entrez <- bitr(de_genes$gene_name, fromType = "SYMBOL", toType = "ENTREZID", OrgDb = org.Hs.eg.db)
+# go_enrichment <- enrichGO(de_genes_entrez$ENTREZID, OrgDb = org.Hs.eg.db, keyType = "ENTREZID", ont = "BP")
+go_enrichment <- enrichGO(de_genes$rowname, OrgDb = org.Hs.eg.db, keyType = "ENSEMBL", ont = "BP",universe = DE_result$rowname)
+
+go_enrichment <- setReadable(go_enrichment, OrgDb = org.Hs.eg.db, keyType="ENSEMBL")
+
+my_go <- go_enrichment %>% as_tibble() %>% arrange(desc(p.adjust)) %>% filter(ID == "GO:0030155")
+
+
+d <- data.frame(gene.in.interest=c(33, 206),gene.not.interest=c(447, 10239))
+row.names(d) <- c("In_category", "not_in_category")
+
+
+phyper(33-1,206,447-33,10239, lower.tail=FALSE)
+
+args.df <- data.frame(numWdrawn=k-1, ## White balls drawn
+                          numW=M,        ## White balls
+                          numB=N-M,      ## Black balls
+                          numDrawn=n)    ## balls drawn
+
+
+```
+
+
 
 ## Methods
 
@@ -37,21 +113,25 @@ editor: visual
 
 ## Gene Ontology
 
--   Definition of Gene Ontology (GO)
--   GO categories: molecular function, biological process, cellular component
--   Example of GO term: "cellular respiration"
+- Gene Ontology (GO) is a widely used standardized vocabulary for describing gene function and localization across different organisms.
+- GO categories classify genes into three main categories: molecular function, biological process, and cellular component, based on their functions and locations within a cell or organism.
+- Each GO term is a specific functional annotation that describes the activity or role of a gene in a biological process or pathway. For example, "cellular respiration" is a GO term that describes the process of converting nutrients into energy in the form of ATP within a cell.
+
 
 ## Gene Set Enrichment Analysis (GSEA)
 
--   Principle of GSEA
--   Advantages over other methods
--   Example of GSEA results
+- GSEA is a statistical method for analyzing gene expression data that aims to identify sets of genes or pathways that are significantly differentially expressed between two or more biological conditions.
+- GSEA does not rely on predefined gene sets, but rather uses all genes in the dataset and ranks them based on their differential expression between the conditions. The method then tests whether genes in a given set are more likely to be located at the top or bottom of the ranked list.
+- GSEA can provide insights into the biological processes or pathways that are involved in a specific disease or phenotype, and can help identify potential therapeutic targets.
+
+
+They may consist in expression levels [see Barbie et al. (2009)], p-values, correlations, fold-changes (FC), t-statistics, signal-to-noise ratios, etc.
 
 ## Fisher Exact Test
 
--   Principle of Fisher Exact Test
--   How it is used in gene enrichment analysis
--   Example of Fisher Exact Test results
+- The Fisher Exact Test is a statistical method used to determine whether there is a significant association between two categorical variables, such as the presence or absence of a particular gene and a particular phenotype or disease.
+- In the context of gene enrichment analysis, the Fisher Exact Test is used to determine whether there is a significant association between a set of genes and a particular biological pathway or process.
+- The Fisher Exact Test can provide valuable information about the biological processes or pathways that are involved in a particular disease or phenotype, and can help identify potential drug targets or therapeutic interventions.
 
 ## Weighted Kolmogorov-Smirnov Statistics
 
@@ -85,3 +165,29 @@ editor: visual
 ## References
 
 -   List of relevant articles and resources used in the presentation.
+
+
+Sure, I can provide more details on the parts I wrote:
+
+### Gene Ontology
+- Gene Ontology (GO) is a widely used standardized vocabulary for describing gene function and localization across different organisms.
+- GO categories classify genes into three main categories: molecular function, biological process, and cellular component, based on their functions and locations within a cell or organism.
+- Each GO term is a specific functional annotation that describes the activity or role of a gene in a biological process or pathway. For example, "cellular respiration" is a GO term that describes the process of converting nutrients into energy in the form of ATP within a cell.
+
+### Gene Set Enrichment Analysis (GSEA)
+- GSEA is a statistical method for analyzing gene expression data that aims to identify sets of genes or pathways that are significantly differentially expressed between two or more biological conditions.
+- GSEA does not rely on predefined gene sets, but rather uses all genes in the dataset and ranks them based on their differential expression between the conditions. The method then tests whether genes in a given set are more likely to be located at the top or bottom of the ranked list.
+- GSEA can provide insights into the biological processes or pathways that are involved in a specific disease or phenotype, and can help identify potential therapeutic targets.
+
+### Fisher Exact Test
+- The Fisher Exact Test is a statistical method used to determine whether there is a significant association between two categorical variables, such as the presence or absence of a particular gene and a particular phenotype or disease.
+- In the context of gene enrichment analysis, the Fisher Exact Test is used to determine whether there is a significant association between a set of genes and a particular biological pathway or process.
+- The Fisher Exact Test can provide valuable information about the biological processes or pathways that are involved in a particular disease or phenotype, and can help identify potential drug targets or therapeutic interventions.
+
+### Weighted Kolmogorov-Smirnov Statistics
+- The Weighted Kolmogorov-Smirnov Statistics (WKSS) is a method for measuring the similarity between two sets of ranked genes, such as those obtained from a GSEA analysis.
+- WKSS takes into account the weights or scores assigned to each gene in the ranked list, and can provide a more accurate measure of similarity between two sets of genes compared to other methods that only consider the rankings.
+- WKSS can be useful for identifying the biological pathways or processes that are common between different gene expression datasets or between different stages of a disease.
+
+I hope this provides more clarity on the topics covered in the gene enrichment analysis presentation template.
+
