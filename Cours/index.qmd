@@ -10,7 +10,19 @@ editor: source
 require(tidyverse)
 require(clusterProfiler)
 require(org.Hs.eg.db)
-
+library(gganimate)
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  gganimate = list(
+    nframes = 50
+  ),
+  out.width = '100%',
+  dev.args=list(bg="transparent")
+)
+theme_set(theme_bw(base_size=12)) 
+theme_update(panel.background = element_rect(fill = "transparent", colour = NA), 
+             plot.background = element_rect(fill = "transparent", colour = NA)) 
 ```
 
 
@@ -61,27 +73,34 @@ DE_result <- read_tsv("../TP/Gene_DE_DIVA.tsv")
 
 
 de_genes <- DE_result %>% filter(p.adj < 0.05,logFC>0.5)
-# Convert gene IDs to Entrez IDs using org.Hs.eg.db
-# de_genes_entrez <- bitr(de_genes$gene_name, fromType = "SYMBOL", toType = "ENTREZID", OrgDb = org.Hs.eg.db)
-# go_enrichment <- enrichGO(de_genes_entrez$ENTREZID, OrgDb = org.Hs.eg.db, keyType = "ENTREZID", ont = "BP")
+
 go_enrichment <- enrichGO(de_genes$rowname, OrgDb = org.Hs.eg.db, keyType = "ENSEMBL", ont = "BP",universe = DE_result$rowname)
 
 go_enrichment <- setReadable(go_enrichment, OrgDb = org.Hs.eg.db, keyType="ENSEMBL")
 
 my_go <- go_enrichment %>% as_tibble() %>% arrange(desc(p.adjust)) %>% filter(ID == "GO:0030155")
 
+k = 32
+M = 203 
+N = 10097
+n = 448
 
-d <- data.frame(gene.in.interest=c(33, 206),gene.not.interest=c(447, 10239))
+
+d <- data.frame(gene.in.interest=c(32,416),gene.not.interest=c(171,9477))
 row.names(d) <- c("In_category", "not_in_category")
 
 
-phyper(33-1,206,447-33,10239, lower.tail=FALSE)
+numWdrawn= k -1
+numW = M
+numB = N-M
+numDrawn = n
 
-args.df <- data.frame(numWdrawn=k-1, ## White balls drawn
-                          numW=M,        ## White balls
-                          numB=N-M,      ## Black balls
-                          numDrawn=n)    ## balls drawn
 
+dhyper(32:(203), numW, numB, numDrawn,log=F) %>% sum()
+phyper(numWdrawn, numW, numB, numDrawn,lower.tail =F)
+
+
+fisher.test(d, alternative = "greater")
 
 ```
 
