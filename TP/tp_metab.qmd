@@ -1,0 +1,40 @@
+---
+title: "TP metabolites"
+format: html
+editor: visual
+---
+
+```{r}
+#| label: load-packages
+#| include: false
+#| echo: false
+library(clusterProfiler)
+library(tidyverse)
+library(FELLA)
+library("MetaboAnalystR")
+```
+
+## Goals
+
+-   Read in & format sample data
+
+-   Match IDs so they can be used with different pathway databases
+
+-   Highlight enriched pathways using different methods & visualisations
+
+## Data
+
+`read.table` is a generic function: specify the separator with `sep=` , and if there are column names, use `header = T`.
+
+```{r}
+geno.mother.raw = read.table("data/ML_add_geno_mother11_05_2023.csv", sep = ";", header = T)
+gestation.raw = read.table("data/ML_add_gestation_stage_11_05_2023.csv", sep = ";", header = T)
+```
+
+## Cluster profiler
+
+Cluster profiler is normally used with gene enrichment and therefore has direct access to gene pathway sets
+
+```{r}
+
+```

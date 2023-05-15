@@ -350,22 +350,23 @@
 <h2>Differences vs genes</h2>
 <ul>
 <li><p>Lower metabolome coverage vs genome coverage, less data in general</p></li>
-<li><p>No Gene Ontology equivalent, ChEBI ontology is close =&gt; gaining functional information is more difficult</p></li>
+<li><p>No Gene Ontology equivalent, ChEBI ontology &amp; pathway sets are close =&gt; gaining functional information is more difficult and less standardised</p></li>
 <li><p>Metabolite identifier mapping is a major issue: metabolites have multiple names, IDs, isomers</p></li>
-<li><p>Bias depending on input data used, more so for metabolomics</p></li>
+<li><p>Bias depending on input data used, more so for metabolomics (some metabolites cannot be detected)</p></li>
+<li><p>Depends on how pathways have been defined</p></li>
 </ul>
 </section>
 <section id="methods" class="slide level2">
 <h2>Methods</h2>
 <ul>
 <li><p>ORA: Over-representation analysis (Fisher’s exact test)</p></li>
-<li><p>MSEA: Metabolite set enrichment analysis, often referred to as GSEA even for metabolites, a Functional Class Scoring (FCS) method</p></li>
+<li><p>MSEA: Metabolite set enrichment analysis, often referred to as GSEA even for metabolites = a Functional Class Scoring (FCS) method</p></li>
 <li><p>Topology-based methods: uses networks of pathways in addition to other methods</p></li>
 </ul>
 </section>
 <section id="tools-and-databases" class="slide level2">
 <h2>Tools and Databases</h2>
-<h3 id="ids">IDs</h3>
+<h3 id="databases-and-ids">Databases and IDs</h3>
 <ul>
 <li><p>KEGG, PubChem, ChEBI, MeSH, HMDB are databases which all have their own metabolite IDs, some with links to each other</p></li>
 <li><p>Converting IDs: MetaboAnalyst can convert from names/IDs to many different IDs</p></li>
@@ -399,27 +400,42 @@
 <li><p>a background set:</p>
 <ul>
 <li><p>targeted metabolomics: all assayed metabolites</p></li>
-<li><p>untargeted metabolomics: all features than can be annotated</p></li>
+<li><p>untargeted metabolomics: all features that can be annotated</p></li>
 </ul></li>
 </ul></li>
 </ul>
 </section>
-<section id="notes" class="slide level2">
-<h2>Notes</h2>
+<section id="ora-extra-info" class="slide level2">
+<h2>ORA: extra info</h2>
 <ul>
 <li><p>Background set is very important! Use a specific background set: realistically observable, not all known metabolites</p></li>
-<li><p>Loss of information when converting IDs</p></li>
-<li><p>Sensitive to metabolite misidentification</p></li>
-<li><p>Organism-specific pathway set if available</p></li>
-<li><p>Run multiple times with different pathway databases and form a consensus</p></li>
 <li><p>Multiple-testing corrections + filtering are necessary to produce list of metabolites of interest</p></li>
 </ul>
 </section>
 <section id="metabolite-set-enrichment-analysis-mseagsea" class="slide level2">
 <h2>Metabolite set enrichment analysis (MSEA/GSEA)</h2>
 <ul>
-<li><p>Ranks all metabolite values and tests if closely ranked metabolites enrich the same pathway</p></li>
+<li><p>Ranks all metabolite values and tests if closely ranked metabolites enrich the same pathway =&gt; can detect subtle and coordinated changes</p></li>
+<li><p>Provides an Enrichment Score of each pathway which indicates up or down regulation</p></li>
 <li><p>Doesn’t require a threshold on metabolite values as it uses the entire list of metabolites of interest</p></li>
+<li><p>Doesn’t need a background set (background set = all input metabolites)</p></li>
+</ul>
+</section>
+<section id="gsea-extra-info" class="slide level2">
+<h2>GSEA: extra info</h2>
+<ul>
+<li><p>Provides a list of leading genes/metabolites which help enrich each pathway</p></li>
+<li><p>“The leading-edge subset in a gene set are those genes that appear in the ranked list at or before the point at which the running sum reaches its maximum deviation from zero. The leading-edge subset can be interpreted as the core that accounts for the gene set’s enrichment signal.”</p></li>
+<li><p>Still need to filter on p-value for significantly enriched pathways</p></li>
+<li><p>Depending on input values/scores, interpretation of pathway regulations can be different!</p></li>
+</ul>
+</section>
+<section id="general-warnings" class="slide level2">
+<h2>General warnings</h2>
+<ul>
+<li><p>Sensitive to metabolite misidentification</p></li>
+<li><p>Use organism-specific pathway set if available</p></li>
+<li><p>If possible, run multiple times with different pathway databases and form a consensus</p></li>
 </ul>
 </section></section>
 <section>
@@ -429,16 +445,117 @@
 </section>
 <section id="clusterprofiler" class="slide level2">
 <h2>Clusterprofiler</h2>
-<ul>
-<li><p>ORA?</p></li>
-<li><p>GSEA/MSEA</p></li>
-</ul>
+<h3 id="input-data">Input data</h3>
+<div class="cell">
+
+</div>
+<div class="columns">
+<div class="column" style="width:45%;">
+<p>Pathway sets</p>
+<div class="cell">
+<div class="cell-output-stdout">
+<pre><code># A tibble: 15 × 2
+   subsystem                                metabolite
+   &lt;chr&gt;                                    &lt;chr&gt;     
+ 1 Linoleate metabolism                     MAM01368  
+ 2 Exchange/demand reactions                MAM03781  
+ 3 Starch and sucrose metabolism            MAM02449  
+ 4 Transport reactions                      MAM01260  
+ 5 Starch and sucrose metabolism            MAM01965  
+ 6 Isolated                                 MAM02184  
+ 7 Glutathione metabolism                   MAM02027  
+ 8 Pool reactions                           MAM01582  
+ 9 Purine metabolism                        MAM02553  
+10 Nicotinate and nicotinamide metabolism   MAM02039  
+11 Butanoate metabolism                     MAM02039  
+12 Transport reactions                      MAM02048  
+13 Transport reactions                      MAM03131  
+14 Pentose and glucuronate interconversions MAM02338  
+15 Transport reactions                      MAM01380  </code></pre>
+</div>
+</div>
+</div><div class="column" style="width:10%;">
+
+</div><div class="column" style="width:45%;">
+<p>Metabolomics data</p>
+<div class="cell">
+<div class="cell-output-stdout">
+<pre><code># A tibble: 15 × 2
+   name     value
+   &lt;chr&gt;    &lt;dbl&gt;
+ 1 MAM02434  2.81
+ 2 MAM01570  2.76
+ 3 MAM10006  2.65
+ 4 MAM02750  2.62
+ 5 MAM00656  2.52
+ 6 MAM02778  2.20
+ 7 MAM02912  1.93
+ 8 MAM01580  1.84
+ 9 MAM01307  1.63
+10 MAM03909  1.53
+11 MAM02553  1.51
+12 MAM01747  1.50
+13 MAM00921  1.47
+14 MAM02007  1.44
+15 MAM00240  1.38</code></pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<h3 id="ora">ORA</h3>
+
+<img data-src="metab_files/figure-revealjs/unnamed-chunk-5-1.png" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
+<h3 id="gseamsea">GSEA/MSEA</h3>
+<h4 id="gsea-example-results">GSEA example: results</h4>
+<div class="cell">
+<div class="cell-output-stdout">
+<pre><code># A tibble: 8 × 5
+  ID                                       setSize   NES  pvalue core_enrichment
+  &lt;chr&gt;                                      &lt;int&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;          
+1 Peptide metabolism                           269  1.87 1.05e-8 MAM01307/MAM03…
+2 Formation and hydrolysis of cholesterol…      65 -2.00 1.81e-5 MAM02053/MAM02…
+3 Fatty acid activation (endoplasmic reti…      60 -1.98 5.36e-5 MAM02053/MAM02…
+4 Acyl-CoA hydrolysis                           66 -1.92 5.04e-5 MAM02344/MAM02…
+5 Pool reactions                                96 -1.81 8.06e-5 MAM01450/MAM01…
+6 Fatty acid activation (cytosolic)             73 -1.71 3.17e-4 MAM02053/MAM02…
+7 Xenobiotics metabolism                        62 -1.73 1.05e-3 MAM01647/MAM02…
+8 Galactose metabolism                          30 -1.81 2.22e-3 MAM02332/MAM02…</code></pre>
+</div>
+</div>
+<h4 id="gsea-example-plot">GSEA example: plot</h4>
+<div class="cell">
+<div class="cell-output-display">
+<p><img data-src="metab_files/figure-revealjs/unnamed-chunk-7-1.png" width="960"></p>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<p><img data-src="metab_files/figure-revealjs/unnamed-chunk-8-1.png" width="960"></p>
+</div>
+</div>
 </section>
 <section id="metaboanalyst" class="slide level2">
 <h2>MetaboAnalyst</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/metaboanalyst.png"></p>
+</figure>
+</div>
 <ul>
-<li><p>ORA</p></li>
-<li><p>Pathway topology (PT)</p></li>
+<li>Enrichment analysis = ORA, MSEA</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/enrichment_analysis.png" width="414"></p>
+</figure>
+</div>
+<ul>
+<li>Pathway analysis = ORA + Pathway topology (PT)</li>
 </ul>
 </section>
 <section id="fella" class="slide level2">
@@ -448,11 +565,55 @@
 <li><p>Represents KEGG as a knowledge graph with hierarchical connections from metabolties to pathways through reactions, enzymes…</p></li>
 </ul>
 </section>
+<section id="fella-example" class="slide level2">
+<h2>FELLA: example</h2>
+<div class="cell">
+
+</div>
+<div class="cell">
+
+</div>
+<div class="cell">
+
+</div>
+<div class="cell">
+
+</div>
+<div class="cell">
+
+</div>
+
+<img data-src="metab_files/figure-revealjs/unnamed-chunk-14-1.png" width="1632" class="r-stretch"></section>
 <section id="metexplore" class="slide level2">
 <h2>Metexplore</h2>
+<h3 id="biosourcesmetabolic-networks">Biosources/metabolic networks</h3>
+<p>KEGG - E. coli</p>
+
+<img data-src="images/metabolic_network.png" class="r-stretch quarto-figure-center"></section>
+
+<section class="slide level2">
+
+<h3 id="id-mapping">ID mapping</h3>
 <ul>
-<li><p>Pathway analysis</p></li>
-<li><p>Visualisation</p></li>
+<li><p>Usually from “common names” to CHEBI</p></li>
+<li><p>Most often requires a manual step for missing ID conversions</p></li>
+<li><p>Can add a background set of metabolites for ORA</p></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<h3 id="pathway-analysis">Pathway analysis</h3>
+<ul>
+<li><p>Once a metabolite dataset has been mapped to a network, pathway analysis (ORA) is done automatically</p></li>
+<li><p>Can be viewed in a table with multiple test corrections</p></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<h3 id="visualisation">Visualisation</h3>
+<ul>
+<li><p>Can visualise a subset of metabolites and reactions, or entire pathways</p></li>
+<li><p>Highlight metabolites of interest</p></li>
 </ul>
 </section></section>
 <section>
@@ -464,6 +625,7 @@
 <h2>References</h2>
 <ul>
 <li>Wieder C, Frainay C, Poupin N, Rodríguez-Mier P, Vinson F, Cooke J, et al.&nbsp;(2021) <strong>Pathway analysis in metabolomics: Recommendations for the use of over-representation analysis.</strong> PLoS Comput Biol 17(9): e1009105. https://doi.org/10.1371/journal.pcbi.1009105</li>
+<li>[GSEA leading edge analysis](https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideTEXT.htm#_Running_a_Leading_Edge%20Analysis)</li>
 </ul>
 <div class="footer footer-default">
 
@@ -681,6 +843,48 @@
         ]
       });
     </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        function fireSlideChanged(previousSlide, currentSlide) {
+
+          // dispatch for htmlwidgets
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for reveal
+        if (window.Reveal) {
+          window.Reveal.addEventListener("slidechanged", function(event) {
+            fireSlideChanged(event.previousSlide, event.currentSlide);
+          });
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
     <script type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
       const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
