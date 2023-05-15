@@ -4,21 +4,122 @@ format: revealjs
 editor: visual
 ---
 
-## Quarto
+# Practical Course: Gene Enrichment Analysis with `clusterProfiler`
 
-Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <https://quarto.org/docs/presentations/>.
+## Introduction
 
-## Bullets
+-   Brief overview of gene enrichment analysis
+-   Importance of identifying enriched biological pathways
 
-When you click the **Render** button a document will be generated that includes:
+## Setup
 
--   Content authored with markdown
--   Output from executable code
-
-## Code
-
-When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
+-   Install `clusterProfiler`
+-   Load required packages
 
 ```{r}
-1 + 1
+#| eval: false
+
+# Install clusterProfiler from Bioconductor
+if (!requireNamespace("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+
+BiocManager::install(c("clusterProfiler","DOSE"))
+
+# Load required packages
+library(clusterProfiler)
+library(DOSE)
+library(org.Hs.eg.db) # for human gene annotation
 ```
+
+```{r}
+#| echo: false
+
+library(clusterProfiler)
+library(DOSE)
+library(enrichplot)
+library(tidyverse)
+library(org.Hs.eg.db) # for human gene annotation
+```
+
+## Data
+
+-   Import list of differentially expressed genes
+-   Convert gene IDs to Entrez IDs using `org.Hs.eg.db`
+
+```{r}
+# Import list of differentially expressed genes
+de_genes <- read_tsv("liste_genes.tsv")
+
+# Convert gene IDs to Entrez IDs using org.Hs.eg.db
+de_genes_entrez <- bitr(de_genes$gene_name, fromType = "SYMBOL", toType = "ENTREZID", OrgDb = org.Hs.eg.db)
+```
+
+## Gene Ontology Enrichment Analysis
+
+-   Perform Gene Ontology (GO) enrichment analysis
+-   Plot results using `dotplot` and `enrichMap`
+
+```{r}
+# Perform GO enrichment analysis
+go_enrichment <- enrichGO(de_genes_entrez$ENTREZID, OrgDb = org.Hs.eg.db, keyType = "ENTREZID", ont = "BP")
+
+# Plot results with dotplot
+dotplot(go_enrichment,showCategory = 25)
+
+# Plot results with enrichMap
+go_enrichment <- pairwise_termsim(go_enrichment)
+emapplot(go_enrichment, showCategory = 10)
+```
+
+## Kyoto Encyclopedia of Genes and Genomes (KEGG) Enrichment Analysis
+
+-   Perform KEGG enrichment analysis
+-   Plot results using `dotplot` and `enrichMap`
+
+```{r}
+# Perform KEGG enrichment analysis
+kegg_enrichment <- enrichKEGG(de_genes_entrez$ENTREZID, OrgDb = org.Hs.eg.db, keyType = "ENTREZID")
+
+# Plot results with dotplot
+dotplot(kegg_enrichment)
+
+# Plot results with enrichMap
+enrichMap(kegg_enrichment, showCategory = 10)
+```
+
+## Gene Set Enrichment Analysis (GSEA)
+
+-   Perform GSEA using `gseGO` function
+-   Plot results using `barplot`
+
+```{r}
+# Perform GSEA
+gsea <- gseGO(de_genes_entrez$ENTREZID, OrgDb = org.Hs.eg.db, nPerm = 1000)
+
+# Plot results with barplot
+barplot(gsea, showCategory = 10)
+```
+
+## Network Visualization
+
+-   Visualize gene interaction network using `visNetwork`
+
+```{r}
+# Visualize gene interaction network
+genes <- rownames(gsea)
+network <- enricher(genes, OrgDb = org.Hs.eg.db, keyType = "ENTREZID", pvalueCutoff = 0.05) %>%
+  simplify(rmOverlap = TRUE) %>%
+  toCytoscape()
+
+visNetwork(nodes = network$nodes, edges = network$edges)
+```
+
+## Conclusion
+
+-   Summary of gene enrichment analysis methods and tools
+-   Importance of carefully selecting appropriate methods and tools
+-   Future directions in gene enrichment analysis
+
+## References
+
+-   List of relevant articles and resources used in the presentation.
