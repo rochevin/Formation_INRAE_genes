@@ -1,7 +1,14 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-  <meta charset="utf-8">
-  <meta name="generator" content="quarto-0.9.80">
+<script src="metab_files/libs/clipboard/clipboard.min.js"></script>
+<script src="metab_files/libs/quarto-html/tabby.min.js"></script>
+<script src="metab_files/libs/quarto-html/popper.min.js"></script>
+<script src="metab_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="metab_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="metab_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="metab_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.2.475">
+
   <meta name="author" content="Vincent ROCHER &amp; Juliette COOKE">
   <title>Metabolite enrichment</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -10,25 +17,83 @@
   <link rel="stylesheet" href="metab_files/libs/revealjs/dist/reset.css">
   <link rel="stylesheet" href="metab_files/libs/revealjs/dist/reveal.css">
   <style>
-    .reveal .sourceCode {  /* see #7635 */
-      overflow: visible;
-    }
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
   <link rel="stylesheet" href="metab_files/libs/revealjs/dist/theme/quarto.css" id="theme">
-
-  <script src="metab_files/libs/clipboard/clipboard.min.js"></script>
-  <script src="metab_files/libs/quarto-html/tabby.min.js"></script>
-  <script src="metab_files/libs/quarto-html/popper.min.js"></script>
-  <script src="metab_files/libs/quarto-html/tippy.umd.min.js"></script>
-  <link href="metab_files/libs/quarto-html/tippy.css" rel="stylesheet">
-  <link href="metab_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet">
-  <link href="metab_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
   <link href="metab_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="metab_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="metab_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -42,7 +107,7 @@
   }
 
   .callout.callout-style-simple { 
-    padding: 0em 0.7em;
+    padding: 0em 0.5em;
     border-left: solid #acacac .3rem;
     border-right: solid 1px silver;
     border-top: solid 1px silver;
@@ -153,8 +218,7 @@
     display: none !important;
   }
 
-  .callout.callout-captioned .callout-body > :last-child,
-  .callout.callout-captioned .callout-body > div > :last-child {
+  .callout.callout-captioned .callout-body > .callout-content > :last-child {
     margin-bottom: 0.5rem;
   }
 
@@ -243,12 +307,6 @@
     .reveal .slide:not(.center) {
       height: 100%;
     }
-    .reveal #title-slide.center,
-    .reveal .title-slide.center,
-    .reveal .controls .navigate-left .controls-arrow,
-    .reveal .controls .navigate-right .controls-arrow {
-      margin-top: -15px;
-    }
     .reveal .slide.scrollable {
       overflow-y: auto;
     }
@@ -325,15 +383,28 @@
     }
   </style>
 </head>
-<body>
+<body class="quarto-light">
   <div class="reveal">
     <div class="slides">
 
-<section id="title-slide" class="center">
+<section id="title-slide" class="quarto-title-block center">
   <h1 class="title">Metabolite enrichment</h1>
-  <p class="author">Vincent ROCHER &amp; Juliette COOKE</p>
-</section>
 
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Vincent ROCHER &amp; Juliette COOKE 
+</div>
+</div>
+</div>
+
+</section>
+<section class="slide level2">
+
+<div class="cell">
+
+</div>
+</section>
 <section>
 <section id="overview" class="title-slide slide level1 center">
 <h1>Overview</h1>
@@ -341,20 +412,16 @@
 </section>
 <section id="introduction" class="slide level2">
 <h2>Introduction</h2>
-<ul>
-<li><p>Pathway enrichment methods were originally developed for gene enrichment</p></li>
-<li><p>Are also widely used with metabolites and metabolomics data (with caution!)</p></li>
-</ul>
+<p>Pathway enrichment methods were originally developed for gene enrichment.</p>
+<p>They are also widely used with metabolites and metabolomics data, meaning we can apply gene enrichment methods to metabolites (with caution!)</p>
 </section>
 <section id="differences-vs-genes" class="slide level2">
 <h2>Differences vs genes</h2>
-<ul>
-<li><p>Lower metabolome coverage vs genome coverage, less data in general</p></li>
-<li><p>No Gene Ontology equivalent, ChEBI ontology &amp; pathway sets are close =&gt; gaining functional information is more difficult and less standardised</p></li>
-<li><p>Metabolite identifier mapping is a major issue: metabolites have multiple names, IDs, isomers</p></li>
-<li><p>Bias depending on input data used, more so for metabolomics (some metabolites cannot be detected)</p></li>
-<li><p>Depends on how pathways have been defined</p></li>
-</ul>
+<p>Metabolomics data has a lower metabolome coverage than genes have of genome coverage, and there is less metabolite data in general.</p>
+<p>For metabolites, there is no Gene Ontology equivalent, but ChEBI ontology &amp; pathway sets are close. This means that gaining functional information is more difficult and less standardised.</p>
+<p>Metabolite identifier mapping is a major issue: metabolites have multiple names, IDs, isomers and are called different things depending on the database.</p>
+<p>There is always a bias depending on input data used for enrichment analyses, more so for metabolomics (some metabolites cannot be detected and will never be enriched).</p>
+<p>Finally, it also depends on how pathways have been defined and obtaining a general consensus of metabolic pathways is difficult.</p>
 </section>
 <section id="methods" class="slide level2">
 <h2>Methods</h2>
@@ -369,7 +436,7 @@
 <h3 id="databases-and-ids">Databases and IDs</h3>
 <ul>
 <li><p>KEGG, PubChem, ChEBI, MeSH, HMDB are databases which all have their own metabolite IDs, some with links to each other</p></li>
-<li><p>Converting IDs: MetaboAnalyst can convert from names/IDs to many different IDs</p></li>
+<li><p>Converting IDs: MetaboAnalyst can convert from names/IDs to many different IDs, KEGG API in R</p></li>
 </ul>
 <h3 id="tools">Tools</h3>
 <ul>
@@ -378,11 +445,99 @@
 <li><p>MetaboAnalyst: for online analyses</p></li>
 <li><p>Metexplore for visualisation using metabolic networks</p></li>
 </ul>
+</section>
+<section class="slide level2">
+
 <h3 id="pathway-sets">Pathway sets</h3>
+<p>Pathway sets are collections of metabolites grouped together based on a metabolic function, sometimes focused around an important metabolite. Some examples are <code>Glycolysis / Gluconeogenesis</code>, <code>Arginine and proline metabolism</code>, <code>Fatty acid biosynthesis</code>.</p>
+<p>Pathway sets for metabolomics can be found in different databases:</p>
 <ul>
-<li><p>KEGG, Reactome, BioCyc, BiGG/MetabolicAtlas</p></li>
-<li><p>Pathway definitions are relatively arbitrary and depend on the database</p></li>
+<li><p>KEGG</p></li>
+<li><p>Reactome</p></li>
+<li><p>BioCyc</p></li>
+<li><p>BiGG/MetabolicAtlas</p></li>
 </ul>
+<p>Pathway definitions are relatively arbitrary and depend on the database. Filtering them may be necessary as many include non metabolic pathways such as cell differenciation processes, immune related pathways, or generic terms such as <code>Metabolic pathways</code>.</p>
+</section>
+<section id="kegg" class="slide level2">
+<h2>KEGG</h2>
+<p>KEGG is a Japanese database of genes, pathways, diseases, drugs and more. It contains metabolic pathways as well as many other pathways related to diseases, the immune system, genetic processes, and many more.</p>
+<p>Everything in KEGG has its own KEGG ID, and often also has an external ID (such as ChEBI for metabolites).</p>
+<p>When studying metabolomics data, we should filter the pathways to only use metabolic pathways (done in the Exercises part of this course).</p>
+<p>Using the KEGG API, we can access the database directly inside R.</p>
+<p>Information on the KEGG API can be found here: <a href="https://www.kegg.jp/kegg/rest/keggapi.html" class="uri">https://www.kegg.jp/kegg/rest/keggapi.html</a></p>
+<p>In R, we will be using the <a href="https://www.bioconductor.org/packages/release/bioc/html/KEGGREST.html">KEGGREST</a> library.</p>
+</section>
+<section id="kegglist" class="slide level2">
+<h2><code>keggList()</code></h2>
+<p>KEGG generic pathways can be listed using keggList and the term “pathway”.</p>
+<div class="cell" data-hash="metab_cache/revealjs/kegg-generic_c5c8f92b4f45ffee87649b6ff60f82c5">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">head</span>(<span class="fu">keggList</span>(<span class="st">"pathway"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                      map01100 
+                          "Metabolic pathways" 
+                                      map01110 
+       "Biosynthesis of secondary metabolites" 
+                                      map01120 
+"Microbial metabolism in diverse environments" 
+                                      map01200 
+                           "Carbon metabolism" 
+                                      map01210 
+             "2-Oxocarboxylic acid metabolism" 
+                                      map01212 
+                       "Fatty acid metabolism" </code></pre>
+</div>
+</div>
+<p>We can also search for pathways of a given species using the 3-letter species codes from KEGG. This is a subset of pathways of the generic pathway, so the pathway IDs are the same with “hsa” instead of “map”.</p>
+<div class="cell" data-hash="metab_cache/revealjs/kegg-human_8fb45198068b925d9474436fd2d476fb">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">head</span>(<span class="fu">keggList</span>(<span class="st">"pathway"</span>, <span class="st">"hsa"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                                hsa01100 
+             "Metabolic pathways - Homo sapiens (human)" 
+                                                hsa01200 
+              "Carbon metabolism - Homo sapiens (human)" 
+                                                hsa01210 
+"2-Oxocarboxylic acid metabolism - Homo sapiens (human)" 
+                                                hsa01212 
+          "Fatty acid metabolism - Homo sapiens (human)" 
+                                                hsa01230 
+    "Biosynthesis of amino acids - Homo sapiens (human)" 
+                                                hsa01232 
+          "Nucleotide metabolism - Homo sapiens (human)" </code></pre>
+</div>
+</div>
+</section>
+<section id="kegglink" class="slide level2">
+<h2><code>keggLink()</code></h2>
+<p>We can link multiple databases using <code>keggLink()</code>, for example to get all compounds in each pathway. Because compounds aren’t species-specific in KEGG, they are mapped to the generic pathways.</p>
+<div class="cell" data-hash="metab_cache/revealjs/kegg-link1_bad6bd335ca056aa09704c01ca42b536">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">head</span>(<span class="fu">keggLink</span>(<span class="st">"compound"</span>, <span class="st">"pathway"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>path:map00010 path:map00010 path:map00010 path:map00010 path:map00010 
+ "cpd:C00022"  "cpd:C00024"  "cpd:C00031"  "cpd:C00033"  "cpd:C00036" 
+path:map00010 
+ "cpd:C00068" </code></pre>
+</div>
+</div>
+<p>However, genes are species-specific so we can extract all human genes and their pathways directly.</p>
+<div class="cell" data-hash="metab_cache/revealjs/kegg-link2_46b54c37dbad316bb3c0fa80685967fd">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">head</span>(<span class="fu">keggLink</span>(<span class="st">"hsa"</span>, <span class="st">"pathway"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>path:hsa00010 path:hsa00010 path:hsa00010 path:hsa00010 path:hsa00010 
+  "hsa:10327"     "hsa:124"     "hsa:125"     "hsa:126"     "hsa:127" 
+path:hsa00010 
+    "hsa:128" </code></pre>
+</div>
+</div>
+<p>To convert all compound KEGG IDs to ChEBI, we can do the following:</p>
+<div class="cell" data-hash="metab_cache/revealjs/kegg-conv_ce1366f0e79ec66a073ccf45f126ed75">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">head</span>(<span class="fu">keggConv</span>(<span class="st">"compound"</span>, <span class="st">"chebi"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> chebi:16042  chebi:17051  chebi:28741  chebi:17996   chebi:6636  chebi:31206 
+"cpd:C00462" "cpd:C00742" "cpd:C08142" "cpd:C00698" "cpd:C07755" "cpd:C12538" </code></pre>
+</div>
+</div>
+<p>We can get a list of all pathways for a given organism, and a list of all compounds per pathway. We can then match them together to get all metabolites organised into pathways for our organism (done in the Exercises part of this course).</p>
 </section></section>
 <section>
 <section id="enrichment-methods" class="title-slide slide level1 center">
@@ -391,12 +546,12 @@
 </section>
 <section id="over-representation-analysis-ora" class="slide level2">
 <h2>Over-representation analysis (ORA)</h2>
+<p>ORA for metabolite enrichment is the same method as for genes: it uses Fisher’s exact test to test for significant overlap in sets.</p>
 <ul>
-<li><p>Uses Fisher’s exact test to test for overlap in sets</p></li>
 <li><p>3 inputs:</p>
 <ul>
-<li><p>a collection of pathways</p></li>
-<li><p>a list of metabolites of interest (i.e.&nbsp;filtered on p-values)</p></li>
+<li><p>a collection of pathways: one pathway is an ID associated with many metabolites. Metabolites can be in multiple pathways.</p></li>
+<li><p>a list of metabolites of interest (i.e.&nbsp;filtered on p-values or fold changes), with IDs that match the pathway set IDs.</p></li>
 <li><p>a background set:</p>
 <ul>
 <li><p>targeted metabolomics: all assayed metabolites</p></li>
@@ -405,37 +560,45 @@
 </ul></li>
 </ul>
 </section>
-<section id="ora-extra-info" class="slide level2">
-<h2>ORA: extra info</h2>
-<ul>
-<li><p>Background set is very important! Use a specific background set: realistically observable, not all known metabolites</p></li>
-<li><p>Multiple-testing corrections + filtering are necessary to produce list of metabolites of interest</p></li>
-</ul>
+<section id="ora-extra-information" class="slide level2">
+<h2>ORA: extra information</h2>
+<p>Due to the smaller input datasets in metabolomics, the background set is very important! Use a specific background set corresponding to realistically observable metabolites, not all known metabolites.</p>
+<p>Multiple-testing corrections and p-value filtering are necessary to produce list of metabolites of interest. Because input datasets are usually smaller, selecting the correct significant metabolites is very important.</p>
+<p>Multiple-testing in ORA is also necessary, however due to the stringent nature of these tests, it’s acceptable to use a higher threshold in metabolomics (e.g.&nbsp;0.1 instead of 0.05), when using a specific background set.</p>
 </section>
 <section id="metabolite-set-enrichment-analysis-mseagsea" class="slide level2">
 <h2>Metabolite set enrichment analysis (MSEA/GSEA)</h2>
-<ul>
-<li><p>Ranks all metabolite values and tests if closely ranked metabolites enrich the same pathway =&gt; can detect subtle and coordinated changes</p></li>
-<li><p>Provides an Enrichment Score of each pathway which indicates up or down regulation</p></li>
-<li><p>Doesn’t require a threshold on metabolite values as it uses the entire list of metabolites of interest</p></li>
-<li><p>Doesn’t need a background set (background set = all input metabolites)</p></li>
-</ul>
+<p>GSEA, also known as MSEA in metabolomics, is the same method as for genes. It requires values associated with each metabolite, uses the unfiltered metabolite dataset. It ranks all metabolite values and tests if closely ranked metabolites enrich the same pathway. Its main advantage is that it can detect subtle and coordinated changes.</p>
+<p>GSEA provides a p-value of enrichment for each pathway for significance, and an Enrichment Score of each pathway which indicates up or down regulation of that pathway.</p>
+<p>It doesn’t require a threshold on metabolite values as it uses the entire list of metabolites of interest. It therefore doesn’t need a background set (background set = all input metabolites). However, this means that when using a partially annotated list of metabolites of interest, the background set is not necessarily representative of what could be measured since non annotated metabolites should still be a part of this set.</p>
 </section>
-<section id="gsea-extra-info" class="slide level2">
-<h2>GSEA: extra info</h2>
-<ul>
-<li><p>Provides a list of leading genes/metabolites which help enrich each pathway</p></li>
-<li><p>“The leading-edge subset in a gene set are those genes that appear in the ranked list at or before the point at which the running sum reaches its maximum deviation from zero. The leading-edge subset can be interpreted as the core that accounts for the gene set’s enrichment signal.”</p></li>
-<li><p>Still need to filter on p-value for significantly enriched pathways</p></li>
-<li><p>Depending on input values/scores, interpretation of pathway regulations can be different!</p></li>
-</ul>
+<section id="gsea-extra-information" class="slide level2">
+<h2>GSEA: extra information</h2>
+<p>In addition to p-values for each pathway, it provides a list of leading genes/metabolites which help enrich each pathway:</p>
+<blockquote>
+<p>“The leading-edge subset in a gene set are those genes that appear in the ranked list at or before the point at which the running sum reaches its maximum deviation from zero. The leading-edge subset can be interpreted as the core that accounts for the gene set’s enrichment signal.”</p>
+</blockquote>
+<p>GSEA results do still need a filter on p-value to determine significantly enriched pathways, usually 0.05 or 0.1.</p>
+<div class="callout callout-warning callout-captioned callout-style-default">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Warning</strong></p>
+</div>
+<div class="callout-content">
+<p>Depending on input values/scores, interpretation of pathway regulations can be different! For example the fold change values are one condition / a different condition so be sure to interpret the pathway up/down regulation in that direction.</p>
+</div>
+</div>
+</div>
 </section>
-<section id="general-warnings" class="slide level2">
-<h2>General warnings</h2>
+<section id="general-metabolomics-data-enrichment-warnings" class="slide level2">
+<h2>General metabolomics data enrichment warnings</h2>
 <ul>
-<li><p>Sensitive to metabolite misidentification</p></li>
-<li><p>Use organism-specific pathway set if available</p></li>
-<li><p>If possible, run multiple times with different pathway databases and form a consensus</p></li>
+<li><p>Any enrichment method is sensitive to metabolite mis-identification.</p></li>
+<li><p>Use organism-specific pathway set if available.</p></li>
+<li><p>If possible, run multiple times with different pathway databases and enrichment methods and form a consensus.</p></li>
 </ul>
 </section></section>
 <section>
@@ -453,25 +616,25 @@
 <div class="column" style="width:45%;">
 <p>Pathway sets</p>
 <div class="cell">
-<div class="cell-output-stdout">
+<div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 15 × 2
-   subsystem                                metabolite
-   &lt;chr&gt;                                    &lt;chr&gt;     
- 1 Linoleate metabolism                     MAM01368  
- 2 Exchange/demand reactions                MAM03781  
- 3 Starch and sucrose metabolism            MAM02449  
- 4 Transport reactions                      MAM01260  
- 5 Starch and sucrose metabolism            MAM01965  
- 6 Isolated                                 MAM02184  
- 7 Glutathione metabolism                   MAM02027  
- 8 Pool reactions                           MAM01582  
- 9 Purine metabolism                        MAM02553  
-10 Nicotinate and nicotinamide metabolism   MAM02039  
-11 Butanoate metabolism                     MAM02039  
-12 Transport reactions                      MAM02048  
-13 Transport reactions                      MAM03131  
-14 Pentose and glucuronate interconversions MAM02338  
-15 Transport reactions                      MAM01380  </code></pre>
+   subsystem                                   metabolite
+   &lt;chr&gt;                                       &lt;chr&gt;     
+ 1 Bile acid biosynthesis                      MAM03509  
+ 2 Exchange/demand reactions                   MAM01926  
+ 3 Miscellaneous                               MAM02318  
+ 4 Drug metabolism                             MAM03583  
+ 5 Transport reactions                         MAM01334  
+ 6 Exchange/demand reactions                   MAM02039  
+ 7 Transport reactions                         MAM01647  
+ 8 Drug metabolism                             MAM03729  
+ 9 Exchange/demand reactions                   MAM01648  
+10 Amino sugar and nucleotide sugar metabolism MAM01597  
+11 Exchange/demand reactions                   MAM10041  
+12 Pool reactions                              MAM00114  
+13 Arachidonic acid metabolism                 MAM02396  
+14 Glycosphingolipid biosynthesis-globo series MAM02328  
+15 Vitamin E metabolism                        MAM01924  </code></pre>
 </div>
 </div>
 </div><div class="column" style="width:10%;">
@@ -479,7 +642,7 @@
 </div><div class="column" style="width:45%;">
 <p>Metabolomics data</p>
 <div class="cell">
-<div class="cell-output-stdout">
+<div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 15 × 2
    name     value
    &lt;chr&gt;    &lt;dbl&gt;
@@ -506,48 +669,70 @@
 <section class="slide level2">
 
 <h3 id="ora">ORA</h3>
+<div class="cell">
 
-<img data-src="metab_files/figure-revealjs/unnamed-chunk-5-1.png" width="960" class="r-stretch"></section>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>ora.metab <span class="ot">=</span> <span class="fu">enricher</span>(metabolites.ORA , <span class="at">TERM2GENE =</span> pathway_sets)</span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="fu">dotplot</span>(ora.metab)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="metab_files/figure-revealjs/ora-1.png" width="960" class="r-stretch"></section>
 <section class="slide level2">
 
 <h3 id="gseamsea">GSEA/MSEA</h3>
 <h4 id="gsea-example-results">GSEA example: results</h4>
 <div class="cell">
-<div class="cell-output-stdout">
+<div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 8 × 5
   ID                                       setSize   NES  pvalue core_enrichment
   &lt;chr&gt;                                      &lt;int&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;          
-1 Peptide metabolism                           269  1.87 1.05e-8 MAM01307/MAM03…
-2 Formation and hydrolysis of cholesterol…      65 -2.00 1.81e-5 MAM02053/MAM02…
-3 Fatty acid activation (endoplasmic reti…      60 -1.98 5.36e-5 MAM02053/MAM02…
-4 Acyl-CoA hydrolysis                           66 -1.92 5.04e-5 MAM02344/MAM02…
-5 Pool reactions                                96 -1.81 8.06e-5 MAM01450/MAM01…
-6 Fatty acid activation (cytosolic)             73 -1.71 3.17e-4 MAM02053/MAM02…
-7 Xenobiotics metabolism                        62 -1.73 1.05e-3 MAM01647/MAM02…
-8 Galactose metabolism                          30 -1.81 2.22e-3 MAM02332/MAM02…</code></pre>
-</div>
-</div>
-<h4 id="gsea-example-plot">GSEA example: plot</h4>
-<div class="cell">
-<div class="cell-output-display">
-<p><img data-src="metab_files/figure-revealjs/unnamed-chunk-7-1.png" width="960"></p>
+1 Peptide metabolism                           269  1.86 6.98e-9 MAM01307/MAM03…
+2 Formation and hydrolysis of cholesterol…      65 -2.02 1.02e-5 MAM02053/MAM02…
+3 Fatty acid activation (endoplasmic reti…      60 -2.05 1.98e-5 MAM02053/MAM02…
+4 Acyl-CoA hydrolysis                           66 -1.94 3.52e-5 MAM02344/MAM02…
+5 Pool reactions                                96 -1.79 5.73e-5 MAM01450/MAM01…
+6 Fatty acid activation (cytosolic)             73 -1.74 3.26e-4 MAM02053/MAM02…
+7 Xenobiotics metabolism                        62 -1.77 7.14e-4 MAM01647/MAM02…
+8 Galactose metabolism                          30 -1.85 9.30e-4 MAM02332/MAM02…</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="cell-output-display">
-<p><img data-src="metab_files/figure-revealjs/unnamed-chunk-8-1.png" width="960"></p>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>enrichplot<span class="sc">::</span><span class="fu">gseaplot2</span>(gsea.metab, <span class="at">geneSetID =</span> <span class="dv">8</span>, <span class="at">title =</span> gsea.metab<span class="sc">$</span>Description[<span class="dv">8</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
 </div>
+<img data-src="metab_files/figure-revealjs/gsea-plot-1.png" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">dotplot</span>(gsea.metab)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
 </div>
-</section>
+<img data-src="metab_files/figure-revealjs/gsea-dotplot-1.png" width="960" class="r-stretch"></section>
 <section id="metaboanalyst" class="slide level2">
 <h2>MetaboAnalyst</h2>
+<p>MetaboAnalyst is an online platform for various steps of analysing metabolomics data.</p>
+<p><img data-src="images/metaboanalyst.png" data-fig-align="center"> It can be useful for a quick analysis but often remains unclear on the actual methods used. For example, it mentions MSEA in its description but never actually provides a GSEA or MSEA analysis.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/metaboanalyst.png"></p>
+<p><img data-src="metaboanalyst_enrichment.png"></p>
 </figure>
 </div>
+<div class="callout callout-warning callout-captioned callout-style-default">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Warning</strong></p>
+</div>
+<div class="callout-content">
+<p>Due to its online nature, reproducibility of results can be an issue between versions.</p>
+</div>
+</div>
+</div>
 <ul>
-<li>Enrichment analysis = ORA, MSEA</li>
+<li>Enrichment analysis = ORA</li>
 </ul>
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -562,7 +747,7 @@
 <h2>FELLA</h2>
 <ul>
 <li><p>Uses KEGG network and a list of KEGG metabolites</p></li>
-<li><p>Represents KEGG as a knowledge graph with hierarchical connections from metabolties to pathways through reactions, enzymes…</p></li>
+<li><p>Represents KEGG as a knowledge graph with hierarchical connections from metabolites to pathways through reactions, enzymes…</p></li>
 </ul>
 </section>
 <section id="fella-example" class="slide level2">
@@ -576,21 +761,24 @@
 <div class="cell">
 
 </div>
-<div class="cell">
+<div class="cell" data-hash="metab_cache/revealjs/fella-enrich_ce2de2d4cf6625afa5889e3c816bd180">
 
 </div>
 <div class="cell">
 
 </div>
 
-<img data-src="metab_files/figure-revealjs/unnamed-chunk-14-1.png" width="1632" class="r-stretch"></section>
+<img data-src="metab_files/figure-revealjs/fella-fig-1.png" width="1632" class="r-stretch"></section>
 <section id="metexplore" class="slide level2">
 <h2>Metexplore</h2>
 <h3 id="biosourcesmetabolic-networks">Biosources/metabolic networks</h3>
 <p>KEGG - E. coli</p>
 
 <img data-src="images/metabolic_network.png" class="r-stretch quarto-figure-center"></section>
+<section class="slide level2">
 
+
+<img data-src="images/biosource_stats.png" class="r-stretch quarto-figure-center"></section>
 <section class="slide level2">
 
 <h3 id="id-mapping">ID mapping</h3>
@@ -599,15 +787,21 @@
 <li><p>Most often requires a manual step for missing ID conversions</p></li>
 <li><p>Can add a background set of metabolites for ORA</p></li>
 </ul>
-</section>
+
+<img data-src="images/metexplore_mapping.png" width="179" class="r-stretch quarto-figure-center"></section>
+<section class="slide level2">
+
+
+<img data-src="images/metexplore_mapping_example.png" width="507" class="r-stretch quarto-figure-center"></section>
 <section class="slide level2">
 
 <h3 id="pathway-analysis">Pathway analysis</h3>
 <ul>
-<li><p>Once a metabolite dataset has been mapped to a network, pathway analysis (ORA) is done automatically</p></li>
+<li><p>Once a metabolite dataset has been mapped to a network, pathway analysis (ORA) is done automatically using the mapped data</p></li>
 <li><p>Can be viewed in a table with multiple test corrections</p></li>
 </ul>
-</section>
+
+<img data-src="images/metexplore_pathway_enrichment.png" class="r-stretch quarto-figure-center"></section>
 <section class="slide level2">
 
 <h3 id="visualisation">Visualisation</h3>
@@ -615,17 +809,18 @@
 <li><p>Can visualise a subset of metabolites and reactions, or entire pathways</p></li>
 <li><p>Highlight metabolites of interest</p></li>
 </ul>
-</section></section>
+
+<img data-src="images/metexplore_viz.png" class="r-stretch quarto-figure-center"></section></section>
 <section>
 <section id="conclusion" class="title-slide slide level1 center">
 <h1>Conclusion</h1>
-
+<p>Generally gene enrichment methods can be used with metabolomics data, but the user should remain critical of the biological and statistical impact of the different inputs in those methods.</p>
 </section>
 <section id="references" class="slide level2">
 <h2>References</h2>
 <ul>
 <li>Wieder C, Frainay C, Poupin N, Rodríguez-Mier P, Vinson F, Cooke J, et al.&nbsp;(2021) <strong>Pathway analysis in metabolomics: Recommendations for the use of over-representation analysis.</strong> PLoS Comput Biol 17(9): e1009105. https://doi.org/10.1371/journal.pcbi.1009105</li>
-<li>[GSEA leading edge analysis](https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideTEXT.htm#_Running_a_Leading_Edge%20Analysis)</li>
+<li>Subramanian A, Tamayo P, Mootha VK, Mukherjee S, Ebert BL, Gillette MA, Paulovich A, Pomeroy SL, Golub TR, Lander ES, Mesirov JP. <strong>Gene set enrichment analysis: a knowledge-based approach for interpreting genome-wide expression profiles.</strong> Proc Natl Acad Sci U S A. 2005 Oct 25;102(43):15545-50. doi: 10.1073/pnas.0506580102. Epub 2005 Sep 30. PMID: 16199517; PMCID: PMC1239896.</li>
 </ul>
 <div class="footer footer-default">
 
@@ -636,19 +831,19 @@
 
   <script>window.backupDefine = window.define; window.define = undefined;</script>
   <script src="metab_files/libs/revealjs/dist/reveal.js"></script>
-
   <!-- reveal.js plugins -->
   <script src="metab_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
   <script src="metab_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
   <script src="metab_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
   <script src="metab_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
   <script src="metab_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
   <script src="metab_files/libs/revealjs/plugin/notes/notes.js"></script>
   <script src="metab_files/libs/revealjs/plugin/search/search.js"></script>
   <script src="metab_files/libs/revealjs/plugin/zoom/zoom.js"></script>
   <script src="metab_files/libs/revealjs/plugin/math/math.js"></script>
   <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
-
 
   <script>
 
@@ -662,10 +857,9 @@
 'autoAnimateEasing': "ease",
 'autoAnimateDuration': 1,
 'autoAnimateUnmatched': true,
-
 'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
 'smaller': false,
-
+ 
         // Display controls in the bottom right corner
         controls: false,
 
@@ -849,12 +1043,15 @@
       // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
       // slide changes (different for each slide format).
       (function () {
-        function fireSlideChanged(previousSlide, currentSlide) {
-
-          // dispatch for htmlwidgets
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
           const event = window.document.createEvent("Event");
           event.initEvent("slideenter", true, true);
           window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
 
           // dispatch for shiny
           if (window.jQuery) {
@@ -865,13 +1062,6 @@
               window.jQuery(currentSlide).trigger("shown");
             }
           }
-        }
-
-        // hookup for reveal
-        if (window.Reveal) {
-          window.Reveal.addEventListener("slidechanged", function(event) {
-            fireSlideChanged(event.previousSlide, event.currentSlide);
-          });
         }
 
         // hookup for slidy
@@ -885,8 +1075,26 @@
       })();
     </script>
 
-    <script type="application/javascript">
+    <script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
       const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
       tabsets.forEach(function(tabset) {
         const tabby = new Tabby('#' + tabset.id);
@@ -903,7 +1111,27 @@
         button.blur();
         // flash "checked"
         button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
         setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
           button.classList.remove('code-copy-button-checked');
         }, 1000);
         // clear code selection
@@ -932,31 +1160,50 @@
       for (var i=0; i<noterefs.length; i++) {
         const ref = noterefs[i];
         tippyHover(ref, function() {
-          let href = ref.getAttribute('href');
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
           try { href = new URL(href).hash; } catch {}
           const id = href.replace(/^#\/?/, "");
           const note = window.document.getElementById(id);
           return note.innerHTML;
         });
       }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
       var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
       for (var i=0; i<bibliorefs.length; i++) {
         const ref = bibliorefs[i];
-        const cites = ref.parentNode.getAttribute('data-cites').split(' ');
-        tippyHover(ref, function() {
-          var popup = window.document.createElement('div');
-          cites.forEach(function(cite) {
-            var citeDiv = window.document.createElement('div');
-            citeDiv.classList.add('hanging-indent');
-            citeDiv.classList.add('csl-entry');
-            var biblioDiv = window.document.getElementById('ref-' + cite);
-            if (biblioDiv) {
-              citeDiv.innerHTML = biblioDiv.innerHTML;
-            }
-            popup.appendChild(citeDiv);
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
           });
-          return popup.innerHTML;
-        });
+        }
       }
     });
     </script>
