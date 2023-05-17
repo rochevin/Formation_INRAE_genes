@@ -1,3 +1,21 @@
+perm.geneList <- function(geneList) {
+  ## perm.idx <- sample(seq_along(geneList), length(geneList), replace=FALSE)
+  perm.idx <- sample.int(length(geneList))
+  perm.geneList <- geneList
+  names(perm.geneList) <- names(geneList)[perm.idx]
+  return(perm.geneList)
+}
+perm.gseaEScore <- function(geneList, geneSets, exponent=1) {
+  geneList <- perm.geneList(geneList)
+  res <- sapply(1:length(geneSets), function(i)
+    gseaScores(geneSet=geneSets[[i]],
+               geneList=geneList,
+               exponent=exponent)$ES
+  )
+  return(res)
+}
+
+
 gseaScores <- function(geneList, geneSet, exponent=1, fortify=FALSE) {
   ###################################################################
   ##    geneList                                                   ##
@@ -63,17 +81,15 @@ gseaScores <- function(geneList, geneSet, exponent=1, fortify=FALSE) {
 }
 
 gsInfo <- function(object, geneSetID,shuffle=F) {
-  geneList <- object@geneList
   
+  geneList <- object@geneList
   if (is.numeric(geneSetID))
     geneSetID <- object@result[geneSetID, "ID"]
   
   if(shuffle){
-    geneSet <- sample(names(geneList),size = length(object@geneSets[[geneSetID]]),replace = F)
-  }else{
-    geneSet <- object@geneSets[[geneSetID]]
+    geneList <- perm.geneList(geneList)
   }
-  
+  geneSet <- object@geneSets[[geneSetID]]
   
   exponent <- object@params[["exponent"]]
   df <- gseaScores(geneList, geneSet, exponent, fortify=TRUE)
@@ -113,100 +129,3 @@ GetONTOLOGY <- function(OrgDb=org.Hs.eg.db::org.Hs.eg.db,ont="BP",keytype = "ENS
   goAnno$ONTOLOGYALL <- goterms[goAnno$GOALL]
   return(goAnno)
 }
-
-
-N = 10239
-M = 447
-K = 206
-X = 33
-
-
-mytable <- matrix(c(X, K-X, M-X, N-M-K+X), nr = 2) %>% as.data.frame()
-colnames(mytable) <- c("Of_interest_yes", "Of_interest_yes")
-rownames(mytable) <- c("in_pathway_yes","in_pathway_no")
-
-
-desired_colnames <- colnames(mytable) |> 
-  str_remove('Of_interest_') |> 
-  str_to_title()
-names(desired_colnames) <- actual_colnames
-
-cols_label(.list = desired_colnames) |> 
-  tab_spanner(
-    label = md('**Adelie**'),
-    columns = 3:4
-  ) |> 
-  tab_spanner(
-    label = md('**Chinstrap**'),
-    columns = c('Chinstrap_female', 'Chinstrap_male')
-  )
-
-fisher.test(mytable,
-            alternative = "greater")$p.value
-
-
-phyper(X,M, N-M, K,lower.tail = F)
-
-
-d <- data.frame(gene.not.interest=c(2613, n-k), gene.in.interest=c(28, 29))
-row.names(d) <- c("In_category", "not_in_category")
-d
-
-
-
-## GSEA
-
-
-GOonto <- GetONTOLOGY()
-
-
-geneList <- DE_result %>% dplyr::select(rowname,logFC) %>% arrange(desc(logFC)) %>% deframe() 
-
-ego <- gseGO(geneList     = geneList,
-             OrgDb        = org.Hs.eg.db,
-             ont          = "BP",
-             keyType = "ENSEMBL",
-             minGSSize    = 100,
-             maxGSSize    = 500,
-             pvalueCutoff = 0.05,
-             verbose      = FALSE)
-
-
-my_go = "GO:0001944"
-my_desc <- AnnotationDbi::Term(GO.db::GOTERM)[[my_go]]
-
-
-
-gseaplot(ego, geneSetID = my_go, title = my_desc)
-
-datatab <- gsInfo(ego,my_go)
-
-p <- ggplot(datatab, aes_(x = ~x)) 
-df2 <- data.frame(x = which(p$data$position == 1))
-df2$y <- p$data$geneList[df2$x]
-p <- p + geom_segment(data=df2, aes_(x=~x, xend=~x, y=~y, yend=0),
-                 color="black") + ggtitle(my_desc) + ylab("Ranked List Metric") + xlab("Position in the Ranked List of Genes")
-
-p1 <- ggplot(datatab, aes(x = x,y=runningScore))   +
-  geom_segment(data=df2, aes(x=x, xend=x, y=0.05, yend=0),
-               color="black") + 
-  geom_line() +
-  ggtitle(my_desc) + ylab("Ranked List Metric") + xlab("Position in the Ranked List of Genes")
-
-
-## Shuffle a bit
-
-datatab.shuff <- 1:1000 %>% map(function(x){
-  gsInfo(ego,my_go,shuffle=T)
-}) %>% bind_rows(.id="Shuffle")
-
-p2 <- ggplot(datatab.shuff)   +
-  # geom_segment(data=df2, aes(x=x, xend=x, y=0.05, yend=0),
-  #              color="black") + 
-  geom_line(aes(x = x,y=runningScore,col=Shuffle),linetype="dashed") +
-  geom_line(data=datatab, aes(x = x,y=runningScore)) +
-  ggtitle(my_desc) + ylab("Ranked List Metric") + xlab("Position in the Ranked List of Genes") + theme(legend.position="none")
-
-
-p5 <- datatab.shuff %>% group_by(Shuffle) %>% summarise(runningScore=max(runningScore)) %>% 
-  ggplot(aes(y=runningScore)) + geom_histogram(bins=50) + geom_hline(yintercept = max(datatab$runningScore),col="red",linetype="dashed")
