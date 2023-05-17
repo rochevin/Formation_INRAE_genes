@@ -51,7 +51,7 @@ library("MetaboAnalystR")
 
 -   KEGG, PubChem, ChEBI, MeSH, HMDB are databases which all have their own metabolite IDs, some with links to each other
 
--   Converting IDs: MetaboAnalyst can convert from names/IDs to many different IDs
+-   Converting IDs: MetaboAnalyst can convert from names/IDs to many different IDs, KEGG API in R
 
 ### Tools
 
@@ -68,6 +68,8 @@ library("MetaboAnalystR")
 -   KEGG, Reactome, BioCyc, BiGG/MetabolicAtlas
 
 -   Pathway definitions are relatively arbitrary and depend on the database
+
+-   Filtering them may be necessary
 
 # Enrichment methods
 
@@ -112,6 +114,8 @@ library("MetaboAnalystR")
 -   Still need to filter on p-value for significantly enriched pathways
 
 -   Depending on input values/scores, interpretation of pathway regulations can be different!
+
+-   GSEA is better for larger metabolic profiles with a variety of metabolites
 
 ## General warnings
 
@@ -196,7 +200,7 @@ dotplot(gsea.metab)
 
 ![](images/metaboanalyst.png){fig-align="center"}
 
--   Enrichment analysis = ORA, MSEA
+-   Enrichment analysis = ORA
 
 ![](images/enrichment_analysis.png){fig-align="center" width="414"}
 
@@ -346,7 +350,7 @@ KEGG - E. coli
 
 ### Pathway analysis
 
--   Once a metabolite dataset has been mapped to a network, pathway analysis (ORA) is done automatically
+-   Once a metabolite dataset has been mapped to a network, pathway analysis (ORA) is done automatically using the mapped data
 
 -   Can be viewed in a table with multiple test corrections
 
