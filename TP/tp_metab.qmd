@@ -1,18 +1,22 @@
 ---
 title: "TP metabolites"
-format: html
+format: 
+  revealjs:
+    fontsize: 24px
 editor: visual
+execute:
+  echo: true
+  cache: true
 ---
 
-```{r}
-#| label: load-packages
+```{r,load-packages}
 #| include: false
 #| echo: false
 library(clusterProfiler)
 library(tidyverse)
 library(FELLA)
-library(MetaboAnalystR)
 library(KEGGREST)
+library(splitstackshape)
 ```
 
 # Goals
@@ -23,6 +27,8 @@ library(KEGGREST)
 
 -   Highlight enriched pathways using different methods & visualisations
 
+-   Choose and understand parameters and their impact on the results
+
 # Input data
 
 `read.table` is a generic function: specify the separator with `sep=` , and if there are column names, use `header = T`.
@@ -32,14 +38,98 @@ library(KEGGREST)
 geno.mother.raw = read.table("data/ML_add_geno_mother11_05_2023.csv", sep = ";", header = T)
 gestation.raw = read.table("data/ML_add_gestation_stage_11_05_2023.csv", sep = ";", header = T)
 
-# Background set = all measurable metabolites
-background = read.table("data/metabolites_present_endometre.csv", sep = ";", header = T) %>% filter(!if_any(PubChem, is.na))
-
-# Raw un-filtered metabolite data
-all.fc = read.table("data/log2_FC_endometrium_metabolites_present.csv", sep = ";", header = T) %>% left_join(., background %>% select(names_asics, KEGG), by = c("metabolites" = "names_asics"))
-
 # Annotation database
 annot.db = read.table("data/ASICS_annotationID_2022_02.csv", sep = "\t", header = T)
+```
+
+## Data types
+
+The two types of data we will be using are:
+
+-   vector
+
+-   dataframe
+
+Vectors are lists of elements. Vector elements can be named.
+
+```{r}
+v = c(1, 2, 3)
+v
+```
+
+```{r}
+names(v) = c("a", "b", "c")
+v
+```
+
+Dataframes are tables: they have columns, rows, column names and can have row names.
+
+```{r}
+df = data.frame("cola" = c(1,2,3), "colb" = c(4,5,6), row.names = c("row1", "row2", "row3"))
+df
+```
+
+## Tidyverse
+
+Tidyverse is a R package which loads a collection of other packages designed to work well together for data manipulation. Some packages it contains are `tidyr`, `dplyr`, `ggplot2`.
+
+The syntax it is based on uses the pipe symbol: `%>%` , useful for chaining different operations.
+
+```{r}
+df %>% print() # same as print(df)
+```
+
+---
+
+The main operations used in these exercises are:
+
+-   `select()`: for selecting columns by name, can also select everything except a column using `select(-colname)`
+
+-   `filter()`: for filtering rows by a condition, usually based on a column
+
+-   `left_join()`: for joining two dataframes on a common ID column
+
+-   `mutate()`: for editing the values of a column
+
+-   `enframe()`: for converting a named vector into a two-column dataframe, useful for getting KEGG pathways into the correct format in our case
+
+-   `pull()`: converts a dataframe column into a vector, does the same thing as `df$colname`
+
+-   `rename()`: for renaming column(s)
+
+-   `relocate()`: specify a column name to reorder and place it as the first column
+
+You can also chain standard functions like `unique()`, `na.omit()`.
+
+---
+
+### Examples
+Here is an example using the background set:
+```{r}
+# Background set = all measurable metabolites
+background_unfiltered = read.table("data/metabolites_present_endometre.csv", sep = ";", header = T)
+tail(background_unfiltered)
+```
+
+```{r}
+background = read.table("data/metabolites_present_endometre.csv", sep = ";", header = T) %>% 
+  filter(!if_any(PubChem, is.na))  # filter out rows that contain NA in column PubChem
+tail(background)
+```
+
+---
+
+And an example using the raw unfiltered fold changes:
+```{r}
+# Join by metabolite names to get all fold changes with the ID columns (ChEBI, KEGG..)
+all.fc.file = read.table("data/log2_FC_endometrium_metabolites_present.csv", sep = ";", header = T) 
+head(all.fc.file)
+
+all.fc = read.table("data/log2_FC_endometrium_metabolites_present.csv", sep = ";", header = T) %>% 
+  left_join(., background %>% select(names_asics, KEGG), 
+            by = c("metabolites" = "names_asics")) %>% 
+  rename("gestation" = fc_D110vsD90, "geno.mother" = fc_LWvsMS)
+head(all.fc)
 ```
 
 # Pathway sets
@@ -52,50 +142,77 @@ Using the KEGG API, we can access the database directly inside R. We can get a l
 
 ```{r}
 # Pig KEGG pathways
-pig.pathways = keggList("pathway", "ssc") %>% enframe() %>% mutate(name = str_remove(name,"^ssc"), value = str_remove(value, " \\- Sus scrofa \\(pig\\)")) 
-
-# Human KEGG pathways
-human.pathways = keggList("pathway", "hsa") %>% enframe() %>% mutate(name = str_remove(name,"^hsa"), value = str_remove(value, " \\- Homo sapiens \\(human\\)"))
-
-# All KEGG pathways
-all.pathways = keggList("pathway") %>% enframe()%>% 
-  mutate(name = str_remove(name,"^map"))
+pig.pathways = keggList("pathway", "ssc") %>% 
+  enframe() %>% 
+  mutate(name = str_remove(name,"^ssc"), 
+         value = str_remove(value, " \\- Sus scrofa \\(pig\\)")) 
 
 # Compounds per pathways
-pathway.compounds = keggLink("cpd", "pathway") %>% enframe() %>% 
-  mutate(name = str_remove(name,"^path:map"), value = str_remove(value, "^cpd:"))
+pathway.compounds = keggLink("cpd", "pathway") %>% 
+  enframe() %>% 
+  mutate(name = str_remove(name,"^path:map"), 
+         value = str_remove(value, "^cpd:"))
 
 # Join the pathways we want to use with the compounds, filter out non metabolic pathways
-kegg.pathways = pig.pathways %>% left_join(., pathway.compounds, by = "name")%>% 
-  filter(str_starts(name, "01|00"), name != "01100")
+kegg.pathways = pig.pathways %>% 
+  left_join(., pathway.compounds, by = "name") %>% 
+  filter(str_starts(name, "01|00"), 
+         name != "01100")
+```
+
+---
+
+Other organisms, and a table to convert IDs:
+```{r}
+# Human KEGG pathways
+human.pathways = keggList("pathway", "hsa") %>% 
+  enframe() %>% 
+  mutate(name = str_remove(name,"^hsa"), 
+         value = str_remove(value, " \\- Homo sapiens \\(human\\)"))
+
+# All KEGG pathways
+all.pathways = keggList("pathway") %>% 
+  enframe() %>% 
+  mutate(name = str_remove(name,"^map"))
 
 # We can also use the KEGG API to extract the ChEBI IDs for compounds
-chebi.to.kegg = keggConv("cpd", "chebi") %>% enframe() %>% 
-  mutate(name = str_remove(name,"^chebi:"), value = str_remove(value, "^cpd:")) %>%
-  rename("ChEBI" = "name", "KEGG" = "value") %>% unique()
+chebi.to.kegg = keggConv("cpd", "chebi") %>% 
+  enframe() %>% 
+  mutate(name = str_remove(name,"^chebi:"), 
+         value = str_remove(value, "^cpd:")) %>%
+  rename("ChEBI" = "name", "KEGG" = "value") %>% 
+  unique()
 ```
 
 ## Reactome
 
 Reactome pathways can be downloaded [here](https://reactome.org/download-data), in `Physical Entity (PE) Identifier mapping files` \> `ChEBI to pathways`.
 
-Reactome has many more pathways than KEGG meaning it is harder to enrich them. The database contains many pathways not pertaining to metabolism meaning we would need to filter them.
+Reactome has many more pathways than KEGG meaning it is harder to enrich them. The database contains many pathways not pertaining to metabolism meaning we would need to filter them (manually?).
 
 ```{r}
 # Create colnames
-reactome.colnames = c("ChEBI", "RID", "RName", "RPathway", "URL", "PathwayName", "EvidenceCode", "Species")
+reactome.colnames = c("ChEBI", "RID", "URL", "PathwayName", "EvidenceCode", "Species")
 
 # Lowest level pathways
-reactome.pathways = read.table("data/ChEBI2Reactome_PE_Pathway.txt", sep = "\t",comment.char = "", quote="", col.names = reactome.colnames) %>% filter(Species == "Sus scrofa") %>% select(ChEBI, PathwayName)  %>% relocate(PathwayName) %>%
-  mutate(ChEBI = as.character(ChEBI)) %>%
-  left_join(., chebi.to.kegg, by = "ChEBI") %>%
-  select(-ChEBI) %>% na.omit()
+reactome.pathways = read.table("data/ChEBI2Reactome_Pathway.txt", sep = "\t",comment.char = "", quote="", col.names = reactome.colnames) %>% 
+  filter(Species == "Sus scrofa") %>% # Filter only pig pathways
+  select(ChEBI, PathwayName)%>% # Select relevant columns
+  relocate(PathwayName) %>% # Reorder
+  mutate(ChEBI = as.character(ChEBI)) %>% # Fix ChEBI IDs being read as numbers
+  left_join(., chebi.to.kegg, by = "ChEBI") %>% # Join with ChEBI to KEGG df to get KEGG IDs
+  select(-ChEBI) %>% # Remove ChEBI column
+  na.omit()
 
 # All level pathways
-reactome.all.pathways = read.table("data/ChEBI2Reactome_PE_All_Levels.txt", sep = "\t",comment.char = "", quote="", col.names = reactome.colnames) %>% filter(Species == "Sus scrofa") %>% select(ChEBI, PathwayName)  %>% relocate(PathwayName)%>%
-  mutate(ChEBI = as.character(ChEBI)) %>%
-  left_join(., chebi.to.kegg, by = "ChEBI") %>%
-  select(-ChEBI)
+reactome.all.pathways = read.table("data/ChEBI2Reactome_All_Levels.txt", sep = "\t",comment.char = "", quote="", col.names = reactome.colnames) %>% 
+  filter(Species == "Sus scrofa") %>% # Filter only pig pathways
+  select(ChEBI, PathwayName)%>% # Select relevant columns
+  relocate(PathwayName) %>% # Reorder
+  mutate(ChEBI = as.character(ChEBI)) %>% # Fix ChEBI IDs being read as numbers
+  left_join(., chebi.to.kegg, by = "ChEBI") %>% # Join with ChEBI to KEGG df to get KEGG IDs
+  select(-ChEBI) %>% # Remove ChEBI column
+  na.omit()
 ```
 
 ## Metabolic network
@@ -105,19 +222,34 @@ Metabolic networks can be used for various flux-based simulations of metabolism,
 ```{r}
 # Metabolites have network-specific IDs, this is a mapped ID to KEGG and ChEBI table
 metab.network.ids = read.table("data/metabolite_ids.tsv", sep = "\t", header = T, quote = "")
+# The original file contains nan instead of NA, so replace them:
 metab.network.ids$kegg[metab.network.ids$kegg == "nan"] = NA
 metab.network.ids$chebi[metab.network.ids$chebi == "nan"] = NA
 
-# Filter out irrelevant pathways (specific to flux simulation)
+# Create a filter to filter out irrelevant pathways (specific to flux simulation)
 metab.network.filter = c("Artificial reactions", "Isolated", "Miscellaneous", "Pool reactions", "Exchange/demand reactions", "Transport reactions")
 
 # Read in the pathway data, map to KEGG and ChEBI, and filter
-metab.network.pathways = read.table("data/metabolite_pathways.tsv", sep = "\t", header = T) %>% unique()%>%
-  left_join(., metab.network.ids, by = "metabolite") %>% filter(!(subsystem %in% metab.network.filter))
-
+metab.network.pathways = read.table("data/metabolite_pathways.tsv", sep = "\t", header = T) %>% 
+  unique() %>%
+  left_join(., metab.network.ids, by = "metabolite") %>% 
+  filter(!(subsystem %in% metab.network.filter))
 ```
 
-## Biocyc
+## CPDB
+
+ConsensusPathDB is a compiled database of various pathway sets, including Reactome, KEGG, BioCyc and others. We are using it as an example of a very large pathway set database.
+
+The database can be downloaded from <http://cpdb.molgen.mpg.de/>: 
+> "Biological pathways (as defined by source databases) with their metabolites identified with KEGG / ChEBI / Pubchem-compound accession numbers"
+
+```{r}
+cpdb = read.table("data/CPDB_pathways_metabolites.tab", sep = "\t", comment.char = "", header = T) %>%
+  cSplit("metabolites", ",",direction = "long") %>% 
+  unique() %>% 
+  mutate(metabolites = str_remove(metabolites, "^kegg:"),
+         pathway = str_remove(pathway, " - Homo sapiens \\(human\\)$"))
+```
 
 # ORA
 
@@ -139,11 +271,15 @@ Important parameters:
 
 We will use the KEGG IDs in the input data and perform ORA using the KEGG pathway sets. By default, the background set is the entire list of metabolites in the pathway set.
 
+### Geno mother dataset
 ```{r}
 ora.geno.mother.kegg = enricher(geno.mother.raw$KEGG , TERM2GENE = kegg.pathways %>% select(-name))
 dotplot(ora.geno.mother.kegg)
 ```
 
+---
+
+### Gestation data set
 ```{r}
 ora.gestation.kegg = enricher(gestation.raw$KEGG, TERM2GENE = kegg.pathways %>% select(-name))
 dotplot(ora.gestation.kegg)
@@ -160,6 +296,8 @@ ora.geno.mother.kegg = enricher(geno.mother.raw$KEGG , TERM2GENE = kegg.pathways
 dotplot(ora.geno.mother.kegg)
 ```
 
+---
+
 Using a restrictive background set means that we get fewer enriched pathways. However, biologically and statistically we must use a background set reflective of what could have been measured.
 
 ![](images/ora.PNG){fig-align="center" width="333"}
@@ -172,8 +310,11 @@ M = metabolites in pathway being tested against
 
 k = overlap between n and M
 
+---
+
+### Using the annotation set as an example
 ```{r}
-# Using the annotation set as an example
+
 ora.geno.mother.kegg = enricher(geno.mother.raw$KEGG , TERM2GENE = kegg.pathways %>% select(-name),
                                 universe = annot.db %>% pull(KEGG))
 dotplot(ora.geno.mother.kegg)
@@ -192,6 +333,8 @@ ora.geno.mother.metnet = enricher(geno.mother.raw$KEGG , TERM2GENE = metab.netwo
 dotplot(ora.geno.mother.metnet)
 ```
 
+---
+
 Using the second larger dataset, it is harder to gain significantly enriched pathways. Using the metabolic network pathways, we are unable to get any enriched pathways even with no p-value cutoff. Only by removing the background set are we able to get enrichment.
 
 ```{r}
@@ -199,14 +342,18 @@ ora.gestation.metnet = enricher(gestation.raw$KEGG , TERM2GENE = metab.network.p
 dotplot(ora.gestation.metnet)
 ```
 
+---
+
 ### Reactome
 
-Reactome is a larger pathway set, meaning we need to use a less stringent p-value cutoff to get significant pathways, and no background set (!).
+Reactome is a larger pathway set, meaning we need to use no background set (!) to get significant pathways.
 
 ```{r}
-ora.geno.mother.reactome = enricher(geno.mother.raw$KEGG , TERM2GENE = reactome.pathways)
-dotplot(ora.geno.mother.reactome)
+ora.gestation.reactome = enricher(gestation.raw$KEGG , TERM2GENE = reactome.pathways)
+dotplot(ora.gestation.reactome)
 ```
+
+---
 
 As you can see, even though the p-values are low, having only one metabolite enrich each pathway is not necessarily relevant.
 
@@ -216,45 +363,417 @@ ora.geno.mother.reactome = enricher(geno.mother.raw$KEGG , TERM2GENE = reactome.
 dotplot(ora.geno.mother.reactome)
 ```
 
+---
+
+### CPDB
+
+Here is an example of using a non filtered pathway set database. We obtain many non-metabolic pathways that are enriched but are meaningless in terms of our input data.
+
+```{r}
+ora.gestation.cpdb = enricher(gestation.raw$KEGG, 
+                              TERM2GENE = cpdb %>% filter(source == "Reactome") %>% select(-source))
+dotplot(ora.gestation.cpdb)
+```
+
 ## Varying significant metabolites
+
+The initial filtering of measured metabolites can also change the resulting enrichment. Here we can use a strict filtering of the fold changes in the initial dataset. Since it is stricter, we can't use a background set in this example since we wouldn't get any results.
+
+```{r}
+gestation.filtered = all.fc %>% select(-geno.mother) %>%
+  filter(abs(gestation) > 1)
+ora.gestation.filtered.kegg = enricher(gestation.filtered$KEGG , TERM2GENE = kegg.pathways %>% select(-name))
+dotplot(ora.gestation.filtered.kegg)
+```
+ 
+---
+
+We can also use a more relaxed threshold on this dataset's fold changes, again without a background set for illustration purposes.
+
+```{r}
+gestation.filtered = all.fc %>% select(-geno.mother) %>%
+  filter(abs(gestation) > 0.1)
+ora.gestation.filtered.kegg = enricher(gestation.filtered$KEGG , TERM2GENE = kegg.pathways %>% select(-name))
+dotplot(ora.gestation.filtered.kegg)
+```
 
 ## Varying minGSSize
 
-Lower minGSSize = more pathways to test against = usually higher pvalues but more possibilities for a pathway to be enriched.
+By default, ORA filters out pathways smaller than 10 metabolites when enriching. This parameter can be varied depending on the pathway sets: if you know that they are smaller in general, lowering this threshold may be more relevant.
 
-In some cases lowering the minGSSize means that we test against a small pathway that is enriched.
+A lower minGSSize means more pathways to test against, which usually means higher p-values but more possibilities for small pathways to be enriched.
+
+```{r}
+pathway.sizes = kegg.pathways %>% group_by(value.x) %>% summarise(count = n()) 
+pathway.counts = pathway.sizes %>% pull(count)
+hist(pathway.counts, breaks = 50)
+abline(v=10,col="red")
+```
+
+---
+
+```{r}
+ora.gestation.filtered.kegg = enricher(geno.mother.raw$KEGG , 
+                                       TERM2GENE = kegg.pathways %>% select(-name), 
+                                       minGSSize = 10, 
+                                       universe = annot.db %>% pull(KEGG), pvalueCutoff = 0.1)
+dotplot(ora.gestation.filtered.kegg)
+```
+
+---
+
+In this case, by setting `minGSSize` to 3, we gain some new enriched pathways at the cost of higher adjusted p-values. These pathways weren't enriched before because there were less total pathways, so their enrichments weren't as significant. We most likely added many small pathways with no enrichment by lowering the `minGSSize`.
+
+```{r}
+ora.gestation.filtered.kegg = enricher(geno.mother.raw$KEGG , 
+                                       TERM2GENE = kegg.pathways %>% select(-name), 
+                                       minGSSize = 3, 
+                                       universe =  annot.db %>% pull(KEGG), pvalueCutoff = 0.1)
+dotplot(ora.gestation.filtered.kegg)
+```
 
 ## Bonus: varying p-value cutoff
 
-# GSEA
+We can also vary the p-value and p-value adjust cutoff to determine what is and isn't a significantly enriched pathway. This must be done with caution as a high cutoff will provide many false positives.
+
+We can use the previous example with a `pvalueCutoff` of 0.05 (the default).
 
 ```{r}
-gsea.input.gestation = all.fc%>%
-  mutate(fc_D110vsD90 = abs(fc_D110vsD90)) %>% 
-  arrange(desc(fc_D110vsD90))%>% na.omit() %>%
-  pull(fc_D110vsD90,KEGG) 
-
-gsea.gestation.kegg = GSEA(gsea.input.gestation, TERM2GENE = kegg.pathways %>% select(-name),minGSSize = 10, pvalueCutoff = 0.05)
-tibble((gsea.gestation.kegg@result)) 
-dotplot(gsea.gestation.kegg)
+ora.gestation.filtered.kegg = enricher(geno.mother.raw$KEGG , 
+                                       TERM2GENE = kegg.pathways %>% select(-name), 
+                                       minGSSize = 3, 
+                                       universe =  annot.db %>% pull(KEGG), pvalueCutoff = 0.05)
+dotplot(ora.gestation.filtered.kegg)
 ```
+
+## ORA on up vs down regulated in dataset
+
+In addition to using the entire filtered fold changes, we can split the dataset into up and down regulated metabolites.
+
+```{r}
+geno.mother.raw.up = geno.mother.raw %>% filter(log2FC_mg > 0)
+geno.mother.raw.down = geno.mother.raw %>% filter(log2FC_mg < 0)
+```
+
+Using a higher `pvalueCutoff` to show enriched pathways: again, because we are being stringent with the background set and by splitting the input set into two, we can be less strict with the p.adjust.
+
+### Upregulated metabolites
+```{r}
+ora.geno.mother.kegg.up = enricher(geno.mother.raw.up$KEGG , TERM2GENE = kegg.pathways %>% select(-name),
+                                universe = annot.db %>% pull(KEGG), pvalueCutoff = 0.2, minGSSize = 3)
+dotplot(ora.geno.mother.kegg.up)
+```
+
+---
+
+We can plot using the p-value as a the colour to show that these unadjusted p-values are still significant.
+
+```{r}
+dotplot(ora.geno.mother.kegg.up, color = "pvalue")
+```
+
+---
+
+### Downregulated metabolites:
+
+```{r}
+ora.geno.mother.kegg.down = enricher(geno.mother.raw.down$KEGG , TERM2GENE = kegg.pathways %>% select(-name),
+                                universe = annot.db %>% pull(KEGG), pvalueCutoff = 0.1, minGSSize = 3)
+dotplot(ora.geno.mother.kegg.down)
+```
+
+This results in pathways that we can define as up or down regulated in addition to being enriched.
+
+# GSEA
+
+In this section, we remove set multiple correction to `"none"` as GSEA will not return anything significant with a small input dataset. This is illustrated using the gseaplots.
+
+## Gestation data set
+
+### Using fold changes
+
+For illustrative purposes, we set the `pvalueCutoff` to be 1 to show all pathway p-values.
+
+```{r}
+gsea.input.gestation = all.fc %>% 
+  arrange(desc(gestation)) %>% 
+  na.omit() %>%
+  pull(gestation,KEGG) 
+
+gsea.gestation.kegg = GSEA(gsea.input.gestation, 
+                           TERM2GENE = kegg.pathways %>% select(-name),
+                           minGSSize = 3, pvalueCutoff = 1,
+                           pAdjustMethod = "none")
+tibble(gsea.gestation.kegg@result)
+```
+
+------------------------------------------------------------------------
+
+This gseaplot shows that even if Purine metabolism seems to be enriched, with so few metabolites it doesn't reach a high enough enrichment score and p-value to be classed as significant when correcting the p-value. Even the raw p-value is fairly high at 0.169.
+
+The gseaplot also reveals that we have a split of strong fold changed metabolites: 1 up and 4 down.
+
+```{r}
+enrichplot::gseaplot2(gsea.gestation.kegg, geneSetID = 1, title = gsea.gestation.kegg$Description[1])
+```
+
+------------------------------------------------------------------------
+
+This dotplot uses the unadjusted pvalue as the colour legend. Only the very red pathways could be considered as enriched.
+
+```{r}
+dotplot(gsea.gestation.kegg, color = "pvalue")
+```
+
+------------------------------------------------------------------------
+
+### Using absolute fold changes
+
+In genomics, when genes are upregulated together this usually means that the enriched pathway is upregulated. With metabolites, pathways can be enriched regardless of an increase or a decrease in metabolite concentration: this means we can look for enriched pathways that are affected using the metabolites, without being able to conclude on its up or down regulation.
+
+To do this, we use the absolute value of the fold changes instead of the raw fold changes. We also need to add a parameter to GSEA: `scoreType = "pos"`, to do a one tailed test, since all our values will be positive.
+
+```{r}
+gsea.input.gestation = all.fc %>%
+  mutate(gestation = abs(gestation)) %>% 
+  arrange(desc(gestation)) %>% 
+  na.omit() %>%
+  pull(gestation,KEGG) 
+
+gsea.gestation.kegg = GSEA(gsea.input.gestation, 
+                           TERM2GENE = kegg.pathways %>% select(-name),
+                           minGSSize = 3, pvalueCutoff = 1,
+                           pAdjustMethod = "none", 
+                           scoreType="pos")
+```
+
+---
+
+```{r}
+enrichplot::gseaplot2(gsea.gestation.kegg, geneSetID = 1, title = gsea.gestation.kegg$Description[1])
+```
+
+In the gseaplot, we can see that we have 5 highly ranked metabolites for Purine metabolism, instead of 1 up and 4 down as seen in the previous gseaplot. This groups together the metabolites affected by the condition in order to better enrich affected pathways.
+
+## Geno mother data set
+
+We can do the same analyses with the second data set.
+
+### Using fold changes
 
 ```{r}
 gsea.input.geno = all.fc %>%
-  mutate(fc_LWvsMS = fc_LWvsMS) %>% 
-  arrange(desc(fc_LWvsMS))%>% na.omit() %>%
-  pull(fc_LWvsMS,KEGG) 
+  mutate(geno.mother = geno.mother) %>% 
+  arrange(desc(geno.mother))%>% na.omit() %>%
+  pull(geno.mother,KEGG) 
 
-gsea.geno.kegg = GSEA(gsea.input.geno, TERM2GENE = kegg.pathways %>% select(-name),minGSSize = 10, pvalueCutoff = 0.1, pAdjustMethod = "none")
+gsea.geno.kegg = GSEA(gsea.input.geno, 
+                      TERM2GENE = kegg.pathways %>% select(-name),
+                      minGSSize = 3, 
+                      pvalueCutoff = 1, 
+                      pAdjustMethod = "none")
 tibble(gsea.geno.kegg@result)
+```
+
+------------------------------------------------------------------------
+
+```{r}
 dotplot(gsea.geno.kegg)
 ```
+
+------------------------------------------------------------------------
+
+The most enriched pathway for this dataset is Biosynthesis of cofactors. In the gseaplot, many metabolites have a strong negative fold change.
+
+```{r}
+enrichplot::gseaplot2(gsea.geno.kegg, geneSetID = 1, title = gsea.geno.kegg$Description[1])
+```
+
+------------------------------------------------------------------------
+
+### Using absolute fold changes
+
+By using the absolute values of fold changes, we can reveal pathways that weren't enriched before simply because their metabolites were split over up and down regulated metabolites.
+
+```{r}
+gsea.input.geno.abs = all.fc %>%
+  mutate(geno.mother = abs(geno.mother)) %>% 
+  arrange(desc(geno.mother)) %>% 
+  na.omit() %>%
+  pull(geno.mother,KEGG) 
+
+gsea.geno.kegg.abs = GSEA(gsea.input.geno.abs, 
+                           TERM2GENE = kegg.pathways %>% select(-name),
+                           minGSSize = 3, pvalueCutoff = 1,
+                           pAdjustMethod = "none", 
+                           scoreType="pos")
+```
+
+---
+
+```{r, fig.height=3.5}
+enrichplot::gseaplot2(gsea.geno.kegg, geneSetID = 9, title = gsea.geno.kegg$Description[9])
+enrichplot::gseaplot2(gsea.geno.kegg.abs, geneSetID = 1, title = gsea.geno.kegg.abs$Description[1])
+```
+
+## Metabolic network pathways instead of KEGG pathways
+
+```{r}
+gsea.gestation.network = GSEA(gsea.input.gestation, 
+                      TERM2GENE = metab.network.pathways %>% select(subsystem, kegg) %>% na.omit(),
+                      minGSSize = 3, pvalueCutoff = 0.1, pAdjustMethod = "none")
+tibble(gsea.gestation.network@result)
+
+dotplot(gsea.gestation.network)
+```
+
+---
+
+```{r}
+enrichplot::gseaplot2(gsea.gestation.network, geneSetID = 1, title = gsea.gestation.network$Description[1])
+```
+
+---
 
 ```{r}
 gsea.geno.kegg = GSEA(gsea.input.geno, 
                       TERM2GENE = metab.network.pathways %>% select(subsystem, kegg) %>% na.omit(),
-                      minGSSize = 10, pvalueCutoff = 0.1, pAdjustMethod = "none")
+                      minGSSize = 3, pvalueCutoff = 0.05, pAdjustMethod = "none")
 tibble(gsea.geno.kegg@result)
 
 dotplot(gsea.geno.kegg)
 ```
+
+# MetExplore
+
+MetExplore can be found [here](https://metexplore.toulouse.inrae.fr/index.html/). Click on START MetExplore to start.
+
+It can be used without an account.
+
+## Biosource
+
+In the Network Data tab, you can browse all available BioSources. BioSources are metabolic networks. We recommend using the Human1 / HumanGEM network as it is the most recent network.
+
+On the right of the website, you can start typing the name of a network and select the network you wish to use. You can also right click in the BioSources table and Select Biosource.
+
+## Data in the network
+
+The tabs along the top of the window in the Network Data tab show the different types of information included in the network.
+
+![](images/metexplore_network_data.png)
+
+Compartments represent cellular compartments such as cytosol, nucleus...
+
+Pathways are pathway sets defined in the model.
+
+Reactions usually have a name and a GPR (gene protein reaction) relationship, which is a rule defining the activity of a reaction based on the activity of one or more genes.
+
+![](images/metexplore_GPR.png)
+
+Metabolites have a name and an Identifier, either specific to the network or sometimes an external ID (KEGG for example). They also usually have a compartment, meaning there are multiple versions of some metabolites with different compartments.
+
+## Mapping your data
+
+If you have reaction or metabolite IDs, you can map them to a network, run pathway enrichment and visualise them. This is done by clicking the Omics button \> Mapping \> From Omics.
+
+Here you can upload a file or copy paste directly from Excel into the grid. In this example, we pasted the KEGG IDs from the geno mother dataset.
+
+![](images/metexplore_id_pasted.png)
+
+---
+
+By checking "Taking into account chemical library" you can provide a background set for pathway enrichment. Once you have uploaded or pasted the data, you can select the Feature type depending on the ID you provided (e.g. KEGG). Then, click Map, and it will tell you how many IDs were successfully mapped to the network.
+
+![](images/metexplore_mapping_results.png)
+
+## Pathway enrichment
+
+When data is mapped, pathway enrichment is automatically calculated on the input data.
+
+You can find the results in Network Data \> Pathways as new columns. You can then click on the column names to order by p-value, coverage etc.
+
+![](images/metexplore_top_PE.png)
+
+## Visualise the selected network
+
+By selecting one or more pathways, you can visualise your mapped data among all metabolites of the pathway(s). To do this, select multiple pathways by Shift + clicking or Ctrl + clicking. Once you have your selection, right click \> Filter on selection. This will filter the reactions in the network to only show those in the pathways you have filtered.
+
+![](images/metexplore_filter_on_selection.png)
+
+---
+
+### Cart
+
+:::: {.columns}
+::: {.column}
+You can then go into the Reactions tab and right click on any reaction \> Copy All to cart. The cart on the right of the screen is what contains the reactions you will visualise in the visualisation section.
+:::
+::: {.column}
+![](images/metexplore_cart.png)
+:::
+::::
+
+---
+
+### Create a network viz
+
+Right click on any reaction in the cart and click Create network in viz from cart, or go directly to the Network Viz tab and click MetExplore selection.
+
+This should show the selected reactions in the visualisation tab. Here, metabolites are circles and reactions are squares.
+
+![](images/metexplore_viz_1.png){fig-align="center"}
+
+---
+
+### Side compounds
+
+Sometimes, there are some areas that are very densely connected. This is due to side compounds being very highly connected in the network. Side compounds are metabolites such as ATP, water, H+ used in many reactions. In MetExplore, the Human1 metabolic network has a predefined list of side compounds. Click on Drawing \> Remove side compounds to remove them from the visualisation, and click the Play button to let the layout algorithm calculate a new layout.
+
+![](images/metexplore_viz_2.png){fig-align="center"}
+
+---
+
+### Compartment colours
+
+On the left, we have the Network Manager which helps us change various styles of the network. Click on Compartments and click highlight compartments on links to see the compartments for each reaction.
+
+![](images/metexplore_viz_compartments.png){fig-align="center"}
+
+## Visualise mapped data
+
+Go to Styles \> Metabolite and click on the middle (Mapping) column of the Node background. Click on Select a condition and choose your mapping (Mapping / undefined). In Type of data, select Identified in mapping. You can change the colour to red for example.
+
+::: {layout-ncol=2}
+![](images/metexplore_node_bg_select.png)
+
+![](images/metexplore_node_bg_mapped.png)
+:::
+
+---
+
+### Input metabolites highlighted in red
+
+![](images/metexplore_viz_node_bg.png){fig-align="center"}
+
+---
+
+### Changing width/height and roundness
+
+You can further enhance your visualisation by changing the width and height of mapped metabolites in a similar fashion.
+
+::: {layout-ncol=2}
+![](images/metexplore_width_height.png)
+
+![](images/metexplore_rx_ry.png)
+:::
+
+---
+
+### Larger nodes for input metabolites
+
+![](images/metexplore_viz_large.png){fig-align="center"}
+
+## Other mapping
+Instead of mapping all of your metabolomics dataset, you could map the leading edge metabolites from GSEA (which is a subset of your data for one pathway).
+
+You can visualise more than one pathway at once, but too many will be very slow to load!

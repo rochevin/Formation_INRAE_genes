@@ -420,7 +420,8 @@ Vincent ROCHER &amp; Juliette COOKE
 <p>Metabolomics data has a lower metabolome coverage than genes have of genome coverage, and there is less metabolite data in general.</p>
 <p>For metabolites, there is no Gene Ontology equivalent, but ChEBI ontology &amp; pathway sets are close. This means that gaining functional information is more difficult and less standardised.</p>
 <p>Metabolite identifier mapping is a major issue: metabolites have multiple names, IDs, isomers and are called different things depending on the database.</p>
-<p>There is always a bias depending on input data used for enrichment analyses, more so for metabolomics (some metabolites cannot be detected and will never be enriched).</p>
+<p>There is always a bias depending on input data used for enrichment analyses, more so for metabolomics (some metabolites cannot be detected and will never be used to enrich pathways).</p>
+<p>Exo-metabolomics vs endo-metabolomics: metabolites from exo-metabolomics (blood) are further away from internal pathways than endo (cells, tissue).</p>
 <p>Finally, it also depends on how pathways have been defined and obtaining a general consensus of metabolic pathways is difficult.</p>
 </section>
 <section id="methods" class="slide level2">
@@ -442,7 +443,7 @@ Vincent ROCHER &amp; Juliette COOKE
 <ul>
 <li><p>R: <code>clusterprofiler</code>, <code>FELLA</code></p></li>
 <li><p>In addition to R, Python can also be used for enrichment analyses: Python packages include <code>gseapy</code> with <code>gsea()</code> or <code>prerank()</code> functions</p></li>
-<li><p>MetaboAnalyst: for online analyses</p></li>
+<li><p>MetaboAnalyst and IMPaLA: for online analyses</p></li>
 <li><p>Metexplore for visualisation using metabolic networks</p></li>
 </ul>
 </section>
@@ -454,10 +455,10 @@ Vincent ROCHER &amp; Juliette COOKE
 <ul>
 <li><p>KEGG</p></li>
 <li><p>Reactome</p></li>
-<li><p>BioCyc</p></li>
-<li><p>BiGG/MetabolicAtlas</p></li>
+<li><p>Metabolic networks: BiGG / MetabolicAtlas</p></li>
 </ul>
 <p>Pathway definitions are relatively arbitrary and depend on the database. Filtering them may be necessary as many include non metabolic pathways such as cell differenciation processes, immune related pathways, or generic terms such as <code>Metabolic pathways</code>.</p>
+<p>More pathway sets can be found on BioCyc for example, but it requires an account, and extracting relevant data is complicated.</p>
 </section>
 <section id="kegg" class="slide level2">
 <h2>KEGG</h2>
@@ -529,6 +530,9 @@ path:hsa00010
     "hsa:128" </code></pre>
 </div>
 </div>
+</section>
+<section id="keggconv" class="slide level2">
+<h2><code>keggConv()</code></h2>
 <p>To convert all compound KEGG IDs to ChEBI, we can do the following:</p>
 <div class="cell" data-hash="metab_cache/revealjs/kegg-conv_ce1366f0e79ec66a073ccf45f126ed75">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">head</span>(<span class="fu">keggConv</span>(<span class="st">"compound"</span>, <span class="st">"chebi"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -562,15 +566,27 @@ path:hsa00010
 </section>
 <section id="ora-extra-information" class="slide level2">
 <h2>ORA: extra information</h2>
+<div class="callout callout-warning callout-captioned callout-style-default">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Warning</strong></p>
+</div>
+<div class="callout-content">
 <p>Due to the smaller input datasets in metabolomics, the background set is very important! Use a specific background set corresponding to realistically observable metabolites, not all known metabolites.</p>
+</div>
+</div>
+</div>
 <p>Multiple-testing corrections and p-value filtering are necessary to produce list of metabolites of interest. Because input datasets are usually smaller, selecting the correct significant metabolites is very important.</p>
 <p>Multiple-testing in ORA is also necessary, however due to the stringent nature of these tests, it’s acceptable to use a higher threshold in metabolomics (e.g.&nbsp;0.1 instead of 0.05), when using a specific background set.</p>
 </section>
 <section id="metabolite-set-enrichment-analysis-mseagsea" class="slide level2">
 <h2>Metabolite set enrichment analysis (MSEA/GSEA)</h2>
-<p>GSEA, also known as MSEA in metabolomics, is the same method as for genes. It requires values associated with each metabolite, uses the unfiltered metabolite dataset. It ranks all metabolite values and tests if closely ranked metabolites enrich the same pathway. Its main advantage is that it can detect subtle and coordinated changes.</p>
+<p>GSEA, also known as <em>MSEA</em> in metabolomics, is the same method as for genes. It requires values associated with each metabolite, uses the unfiltered metabolite dataset. It ranks all metabolite values and tests if closely ranked metabolites enrich the same pathway. Its main advantage is that it can detect subtle and coordinated changes.</p>
 <p>GSEA provides a p-value of enrichment for each pathway for significance, and an Enrichment Score of each pathway which indicates up or down regulation of that pathway.</p>
-<p>It doesn’t require a threshold on metabolite values as it uses the entire list of metabolites of interest. It therefore doesn’t need a background set (background set = all input metabolites). However, this means that when using a partially annotated list of metabolites of interest, the background set is not necessarily representative of what could be measured since non annotated metabolites should still be a part of this set.</p>
+<p>It doesn’t require a threshold on input metabolite values as it uses the entire list of metabolites of interest. It therefore doesn’t need a background set (background set = all input metabolites). However, this means that when using a partially annotated list of metabolites of interest, the background set is not necessarily representative of what could be measured since non annotated metabolites should still be a part of this set. This is important to take into account for the interpretation of the results as GSEA can only enrich using the input metabolites.</p>
 </section>
 <section id="gsea-extra-information" class="slide level2">
 <h2>GSEA: extra information</h2>
@@ -609,6 +625,7 @@ path:hsa00010
 <section id="clusterprofiler" class="slide level2">
 <h2>Clusterprofiler</h2>
 <h3 id="input-data">Input data</h3>
+<p>In the lesson examples, I will be using a simulated data set based on a metabolic network.</p>
 <div class="cell">
 
 </div>
@@ -618,23 +635,23 @@ path:hsa00010
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 15 × 2
-   subsystem                                   metabolite
-   &lt;chr&gt;                                       &lt;chr&gt;     
- 1 Bile acid biosynthesis                      MAM03509  
- 2 Exchange/demand reactions                   MAM01926  
- 3 Miscellaneous                               MAM02318  
- 4 Drug metabolism                             MAM03583  
- 5 Transport reactions                         MAM01334  
- 6 Exchange/demand reactions                   MAM02039  
- 7 Transport reactions                         MAM01647  
- 8 Drug metabolism                             MAM03729  
- 9 Exchange/demand reactions                   MAM01648  
-10 Amino sugar and nucleotide sugar metabolism MAM01597  
-11 Exchange/demand reactions                   MAM10041  
-12 Pool reactions                              MAM00114  
-13 Arachidonic acid metabolism                 MAM02396  
-14 Glycosphingolipid biosynthesis-globo series MAM02328  
-15 Vitamin E metabolism                        MAM01924  </code></pre>
+   subsystem                           metabolite
+   &lt;chr&gt;                               &lt;chr&gt;     
+ 1 Transport reactions                 MAM01630  
+ 2 Drug metabolism                     MAM02519  
+ 3 Exchange/demand reactions           MAM01423  
+ 4 Exchange/demand reactions           MAM03262  
+ 5 Fatty acid biosynthesis (odd-chain) MAM02040  
+ 6 Drug metabolism                     MAM03756  
+ 7 Carnitine shuttle (mitochondrial)   MAM02348  
+ 8 Transport reactions                 MAM01428  
+ 9 Transport reactions                 MAM02039  
+10 Transport reactions                 MAM02938  
+11 Purine metabolism                   MAM00266  
+12 Exchange/demand reactions           MAM01747  
+13 Exchange/demand reactions           MAM01874  
+14 Exchange/demand reactions           MAM03243  
+15 Transport reactions                 MAM03947  </code></pre>
 </div>
 </div>
 </div><div class="column" style="width:10%;">
@@ -687,14 +704,14 @@ path:hsa00010
 <pre><code># A tibble: 8 × 5
   ID                                       setSize   NES  pvalue core_enrichment
   &lt;chr&gt;                                      &lt;int&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;          
-1 Peptide metabolism                           269  1.86 6.98e-9 MAM01307/MAM03…
-2 Formation and hydrolysis of cholesterol…      65 -2.02 1.02e-5 MAM02053/MAM02…
-3 Fatty acid activation (endoplasmic reti…      60 -2.05 1.98e-5 MAM02053/MAM02…
-4 Acyl-CoA hydrolysis                           66 -1.94 3.52e-5 MAM02344/MAM02…
-5 Pool reactions                                96 -1.79 5.73e-5 MAM01450/MAM01…
-6 Fatty acid activation (cytosolic)             73 -1.74 3.26e-4 MAM02053/MAM02…
-7 Xenobiotics metabolism                        62 -1.77 7.14e-4 MAM01647/MAM02…
-8 Galactose metabolism                          30 -1.85 9.30e-4 MAM02332/MAM02…</code></pre>
+1 Peptide metabolism                           269  1.86 3.62e-9 MAM01307/MAM03…
+2 Fatty acid activation (endoplasmic reti…      60 -2.02 1.74e-5 MAM02053/MAM02…
+3 Formation and hydrolysis of cholesterol…      65 -2.02 1.51e-5 MAM02053/MAM02…
+4 Acyl-CoA hydrolysis                           66 -1.93 7.14e-5 MAM02344/MAM02…
+5 Pool reactions                                96 -1.81 9.71e-5 MAM01450/MAM01…
+6 Xenobiotics metabolism                        62 -1.77 5.82e-4 MAM01647/MAM02…
+7 Fatty acid activation (cytosolic)             73 -1.74 6.97e-4 MAM02053/MAM02…
+8 Acylglycerides metabolism                     18 -1.87 2.18e-3 MAM01983/MAM02…</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -712,13 +729,13 @@ path:hsa00010
 <section id="metaboanalyst" class="slide level2">
 <h2>MetaboAnalyst</h2>
 <p>MetaboAnalyst is an online platform for various steps of analysing metabolomics data.</p>
-<p><img data-src="images/metaboanalyst.png" data-fig-align="center"> It can be useful for a quick analysis but often remains unclear on the actual methods used. For example, it mentions MSEA in its description but never actually provides a GSEA or MSEA analysis.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="metaboanalyst_enrichment.png"></p>
-</figure>
-</div>
-<div class="callout callout-warning callout-captioned callout-style-default">
+
+<img data-src="images/metaboanalyst.png" class="r-stretch quarto-figure-center"></section>
+<section class="slide level2">
+
+<p>It can be useful for a quick analysis but often remains unclear on the actual methods used. For example, it mentions MSEA in its description but never actually provides a GSEA or MSEA analysis.</p>
+
+<img data-src="images/metaboanalyst_enrichment.png" width="277" class="r-stretch quarto-figure-center"><div class="callout callout-warning callout-captioned callout-style-default">
 <div class="callout-body">
 <div class="callout-caption">
 <div class="callout-icon-container">
@@ -727,22 +744,59 @@ path:hsa00010
 <p><strong>Warning</strong></p>
 </div>
 <div class="callout-content">
-<p>Due to its online nature, reproducibility of results can be an issue between versions.</p>
+<p>Due to its online nature, reproducibility of results can be an issue between versions. Similarly, IMPaLA is an online interface for enriching genes and metabolites, but its results must be taken with a grain of salt since it combines many pathway databases into one in the results.</p>
 </div>
 </div>
 </div>
-<ul>
-<li>Enrichment analysis = ORA</li>
-</ul>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/enrichment_analysis.png" width="414"></p>
-</figure>
-</div>
-<ul>
-<li>Pathway analysis = ORA + Pathway topology (PT)</li>
-</ul>
 </section>
+<section class="slide level2">
+
+<h3 id="different-metaboanalyst-analyses">Different MetaboAnalyst analyses</h3>
+<p>MetaboAnalyst provides interfaces for ORA, single sample profiling and QEA. ssprofiling and QEA are other enrichment methods that we will not go over during this course.</p>
+
+<img data-src="images/enrichment_analysis.png" width="414" class="r-stretch quarto-figure-center"></section>
+<section id="metexplore" class="slide level2">
+<h2>Metexplore</h2>
+<h3 id="biosourcesmetabolic-networks">Biosources/metabolic networks</h3>
+<p>KEGG - E. coli</p>
+
+<img data-src="images/metabolic_network.png" class="r-stretch quarto-figure-center"></section>
+<section class="slide level2">
+
+
+<img data-src="images/biosource_stats.png" width="343" class="r-stretch quarto-figure-center"></section>
+<section class="slide level2">
+
+<h3 id="id-mapping">ID mapping</h3>
+<ul>
+<li><p>Usually from “common names” to CHEBI</p></li>
+<li><p>Most often requires a manual step for missing ID conversions</p></li>
+<li><p>Can add a background set of metabolites for ORA</p></li>
+</ul>
+
+<img data-src="images/metexplore_mapping.png" width="148" class="r-stretch quarto-figure-center"></section>
+<section class="slide level2">
+
+
+<img data-src="images/metexplore_mapping_example.png" width="507" class="r-stretch quarto-figure-center"></section>
+<section class="slide level2">
+
+<h3 id="pathway-analysis">Pathway analysis</h3>
+<ul>
+<li><p>Once a metabolite dataset has been mapped to a network, pathway analysis (ORA) is done automatically using the mapped data</p></li>
+<li><p>Can be viewed in a table with multiple test corrections</p></li>
+</ul>
+
+<img data-src="images/metexplore_pathway_enrichment.png" class="r-stretch quarto-figure-center"></section>
+<section class="slide level2">
+
+<h3 id="visualisation">Visualisation</h3>
+<ul>
+<li><p>Can visualise a subset of metabolites and reactions, or entire pathways</p></li>
+<li><p>Highlight metabolites of interest</p></li>
+</ul>
+
+<img data-src="images/metexplore_viz.png" class="r-stretch quarto-figure-center"></section>
 <section id="fella" class="slide level2">
 <h2>FELLA</h2>
 <ul>
@@ -768,53 +822,11 @@ path:hsa00010
 
 </div>
 
-<img data-src="metab_files/figure-revealjs/fella-fig-1.png" width="1632" class="r-stretch"></section>
-<section id="metexplore" class="slide level2">
-<h2>Metexplore</h2>
-<h3 id="biosourcesmetabolic-networks">Biosources/metabolic networks</h3>
-<p>KEGG - E. coli</p>
-
-<img data-src="images/metabolic_network.png" class="r-stretch quarto-figure-center"></section>
-<section class="slide level2">
-
-
-<img data-src="images/biosource_stats.png" class="r-stretch quarto-figure-center"></section>
-<section class="slide level2">
-
-<h3 id="id-mapping">ID mapping</h3>
-<ul>
-<li><p>Usually from “common names” to CHEBI</p></li>
-<li><p>Most often requires a manual step for missing ID conversions</p></li>
-<li><p>Can add a background set of metabolites for ORA</p></li>
-</ul>
-
-<img data-src="images/metexplore_mapping.png" width="179" class="r-stretch quarto-figure-center"></section>
-<section class="slide level2">
-
-
-<img data-src="images/metexplore_mapping_example.png" width="507" class="r-stretch quarto-figure-center"></section>
-<section class="slide level2">
-
-<h3 id="pathway-analysis">Pathway analysis</h3>
-<ul>
-<li><p>Once a metabolite dataset has been mapped to a network, pathway analysis (ORA) is done automatically using the mapped data</p></li>
-<li><p>Can be viewed in a table with multiple test corrections</p></li>
-</ul>
-
-<img data-src="images/metexplore_pathway_enrichment.png" class="r-stretch quarto-figure-center"></section>
-<section class="slide level2">
-
-<h3 id="visualisation">Visualisation</h3>
-<ul>
-<li><p>Can visualise a subset of metabolites and reactions, or entire pathways</p></li>
-<li><p>Highlight metabolites of interest</p></li>
-</ul>
-
-<img data-src="images/metexplore_viz.png" class="r-stretch quarto-figure-center"></section></section>
+<img data-src="metab_files/figure-revealjs/fella-fig-1.png" width="1632" class="r-stretch"></section></section>
 <section>
 <section id="conclusion" class="title-slide slide level1 center">
 <h1>Conclusion</h1>
-<p>Generally gene enrichment methods can be used with metabolomics data, but the user should remain critical of the biological and statistical impact of the different inputs in those methods.</p>
+<p>Generally, gene enrichment methods can be used with metabolomics data, but the user should remain critical of the biological and statistical impacts of the different inputs and parameters.</p>
 </section>
 <section id="references" class="slide level2">
 <h2>References</h2>

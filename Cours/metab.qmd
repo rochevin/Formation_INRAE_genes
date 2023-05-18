@@ -32,7 +32,9 @@ For metabolites, there is no Gene Ontology equivalent, but ChEBI ontology & path
 
 Metabolite identifier mapping is a major issue: metabolites have multiple names, IDs, isomers and are called different things depending on the database.
 
-There is always a bias depending on input data used for enrichment analyses, more so for metabolomics (some metabolites cannot be detected and will never be enriched).
+There is always a bias depending on input data used for enrichment analyses, more so for metabolomics (some metabolites cannot be detected and will never be used to enrich pathways).
+
+Exo-metabolomics vs endo-metabolomics: metabolites from exo-metabolomics (blood) are further away from internal pathways than endo (cells, tissue).
 
 Finally, it also depends on how pathways have been defined and obtaining a general consensus of metabolic pathways is difficult.
 
@@ -58,7 +60,7 @@ Finally, it also depends on how pathways have been defined and obtaining a gener
 
 -   In addition to R, Python can also be used for enrichment analyses: Python packages include `gseapy` with `gsea()` or `prerank()` functions
 
--   MetaboAnalyst: for online analyses
+-   MetaboAnalyst and IMPaLA: for online analyses
 
 -   Metexplore for visualisation using metabolic networks
 
@@ -74,11 +76,11 @@ Pathway sets for metabolomics can be found in different databases:
 
 -   Reactome
 
--   BioCyc
-
--   BiGG/MetabolicAtlas
+-   Metabolic networks: BiGG / MetabolicAtlas
 
 Pathway definitions are relatively arbitrary and depend on the database. Filtering them may be necessary as many include non metabolic pathways such as cell differenciation processes, immune related pathways, or generic terms such as `Metabolic pathways`.
+
+More pathway sets can be found on BioCyc for example, but it requires an account, and extracting relevant data is complicated.
 
 ## KEGG
 
@@ -122,6 +124,8 @@ However, genes are species-specific so we can extract all human genes and their 
 head(keggLink("hsa", "pathway"))
 ```
 
+## `keggConv()`
+
 To convert all compound KEGG IDs to ChEBI, we can do the following:
 
 ```{r, kegg-conv, cache=TRUE}
@@ -150,7 +154,9 @@ ORA for metabolite enrichment is the same method as for genes: it uses Fisher's 
 
 ## ORA: extra information
 
+::: callout-warning
 Due to the smaller input datasets in metabolomics, the background set is very important! Use a specific background set corresponding to realistically observable metabolites, not all known metabolites.
+:::
 
 Multiple-testing corrections and p-value filtering are necessary to produce list of metabolites of interest. Because input datasets are usually smaller, selecting the correct significant metabolites is very important.
 
@@ -158,11 +164,11 @@ Multiple-testing in ORA is also necessary, however due to the stringent nature o
 
 ## Metabolite set enrichment analysis (MSEA/GSEA)
 
-GSEA, also known as MSEA in metabolomics, is the same method as for genes. It requires values associated with each metabolite, uses the unfiltered metabolite dataset. It ranks all metabolite values and tests if closely ranked metabolites enrich the same pathway. Its main advantage is that it can detect subtle and coordinated changes.
+GSEA, also known as *MSEA* in metabolomics, is the same method as for genes. It requires values associated with each metabolite, uses the unfiltered metabolite dataset. It ranks all metabolite values and tests if closely ranked metabolites enrich the same pathway. Its main advantage is that it can detect subtle and coordinated changes.
 
 GSEA provides a p-value of enrichment for each pathway for significance, and an Enrichment Score of each pathway which indicates up or down regulation of that pathway.
 
-It doesn't require a threshold on metabolite values as it uses the entire list of metabolites of interest. It therefore doesn't need a background set (background set = all input metabolites). However, this means that when using a partially annotated list of metabolites of interest, the background set is not necessarily representative of what could be measured since non annotated metabolites should still be a part of this set.
+It doesn't require a threshold on input metabolite values as it uses the entire list of metabolites of interest. It therefore doesn't need a background set (background set = all input metabolites). However, this means that when using a partially annotated list of metabolites of interest, the background set is not necessarily representative of what could be measured since non annotated metabolites should still be a part of this set. This is important to take into account for the interpretation of the results as GSEA can only enrich using the input metabolites.
 
 ## GSEA: extra information
 
@@ -189,6 +195,8 @@ Depending on input values/scores, interpretation of pathway regulations can be d
 ## Clusterprofiler
 
 ### Input data
+
+In the lesson examples, I will be using a simulated data set based on a metabolic network.
 
 ```{r, eval=FALSE, echo=FALSE}
 cond = zscores %>% as.data.frame() %>% select(2)  %>% rownames_to_column("id")
@@ -261,22 +269,71 @@ MetaboAnalyst is an online platform for various steps of analysing metabolomics 
 
 ![](images/metaboanalyst.png){fig-align="center"}
 
+------------------------------------------------------------------------
+
 It can be useful for a quick analysis but often remains unclear on the actual methods used. For example, it mentions MSEA in its description but never actually provides a GSEA or MSEA analysis.
 
 ![](images/metaboanalyst_enrichment.png){fig-align="center" width="277"}
 
 ::: callout-warning
-Due to its online nature, reproducibility of results can be an issue between versions.
+Due to its online nature, reproducibility of results can be an issue between versions. Similarly, IMPaLA is an online interface for enriching genes and metabolites, but its results must be taken with a grain of salt since it combines many pathway databases into one in the results.
 :::
 
----
+------------------------------------------------------------------------
 
 ### Different MetaboAnalyst analyses
 
-MetaboAnalyst provides interfaces for ORA, single sample profiling and QEA.
-ssprofiling and QEA are other enrichment methods that we will not go over during this course.
+MetaboAnalyst provides interfaces for ORA, single sample profiling and QEA. ssprofiling and QEA are other enrichment methods that we will not go over during this course.
 
 ![](images/enrichment_analysis.png){fig-align="center" width="414"}
+
+## Metexplore
+
+### Biosources/metabolic networks
+
+KEGG - E. coli
+
+![](images/metabolic_network.png){fig-align="center"}
+
+------------------------------------------------------------------------
+
+![](images/biosource_stats.png){fig-align="center" width="343"}
+
+------------------------------------------------------------------------
+
+### ID mapping
+
+-   Usually from "common names" to CHEBI
+
+-   Most often requires a manual step for missing ID conversions
+
+-   Can add a background set of metabolites for ORA
+
+![](images/metexplore_mapping.png){fig-align="center" width="148"}
+
+------------------------------------------------------------------------
+
+![](images/metexplore_mapping_example.png){fig-align="center" width="507"}
+
+------------------------------------------------------------------------
+
+### Pathway analysis
+
+-   Once a metabolite dataset has been mapped to a network, pathway analysis (ORA) is done automatically using the mapped data
+
+-   Can be viewed in a table with multiple test corrections
+
+![](images/metexplore_pathway_enrichment.png){fig-align="center"}
+
+------------------------------------------------------------------------
+
+### Visualisation
+
+-   Can visualise a subset of metabolites and reactions, or entire pathways
+
+-   Highlight metabolites of interest
+
+![](images/metexplore_viz.png){fig-align="center"}
 
 ## FELLA
 
@@ -351,57 +408,9 @@ plotGraph(g,
      nlimit = 150)
 ```
 
-## Metexplore
-
-### Biosources/metabolic networks
-
-KEGG - E. coli
-
-![](images/metabolic_network.png){fig-align="center"}
-
-------------------------------------------------------------------------
-
-![](images/biosource_stats.png){fig-align="center"}
-
-------------------------------------------------------------------------
-
-### ID mapping
-
--   Usually from "common names" to CHEBI
-
--   Most often requires a manual step for missing ID conversions
-
--   Can add a background set of metabolites for ORA
-
-![](images/metexplore_mapping.png){fig-align="center" width="179"}
-
-------------------------------------------------------------------------
-
-![](images/metexplore_mapping_example.png){fig-align="center" width="507"}
-
-------------------------------------------------------------------------
-
-### Pathway analysis
-
--   Once a metabolite dataset has been mapped to a network, pathway analysis (ORA) is done automatically using the mapped data
-
--   Can be viewed in a table with multiple test corrections
-
-![](images/metexplore_pathway_enrichment.png){fig-align="center"}
-
-------------------------------------------------------------------------
-
-### Visualisation
-
--   Can visualise a subset of metabolites and reactions, or entire pathways
-
--   Highlight metabolites of interest
-
-![](images/metexplore_viz.png){fig-align="center"}
-
 # Conclusion
 
-Generally gene enrichment methods can be used with metabolomics data, but the user should remain critical of the biological and statistical impact of the different inputs in those methods.
+Generally, gene enrichment methods can be used with metabolomics data, but the user should remain critical of the biological and statistical impacts of the different inputs and parameters.
 
 ## References
 
