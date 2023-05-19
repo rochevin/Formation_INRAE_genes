@@ -141,3 +141,74 @@ permScores <- apply(permScores, 2, normalized_ES, pos.m=pos.m, neg.m=neg.m)
 p5 <- enframe(permScores[1,]) %>% 
   ggplot(aes(y=value)) + geom_histogram(bins=50) + geom_hline(yintercept = ES,col="red",linetype="dashed")
 
+
+
+### Code for cours
+
+
+DE_result <- read_tsv("../TP/Gene_DE_DIVA.tsv")
+
+DE_result
+
+de_genes <- DE_result %>% dplyr::filter(p.adj < 0.05,logFC>0.5)
+
+de_genes %>% dim
+
+geneList <- DE_result %>% dplyr::select(rowname,logFC) %>% arrange(desc(logFC)) %>% deframe() 
+
+
+## ClusterProfiler Analysis
+require(clusterProfiler)
+require(org.Hs.eg.db)
+org.db <- org.Hs.eg.db
+
+## We can also use our own DB
+hub <- AnnotationHub()
+org.db <- hub[['AH111575']]
+org.db
+
+
+
+### 
+
+
+
+kk <- enrichKEGG(gene         = res2$ENTREZID,
+                 organism     = 'hsa',
+                 pvalueCutoff = 0.05)
+
+kk %>% as_tibble()
+
+res2 <- bitr(DE_result$rowname, fromType="ENSEMBL", toType=c("ENTREZID"), OrgDb=org.db)
+geneListENTREZ <- DE_result %>% left_join(res2,by=c("rowname"="ENSEMBL")) %>%
+  dplyr::select(ENTREZID,logFC) %>%
+  arrange(desc(logFC)) %>% 
+  drop_na() %>% 
+  deframe()
+
+kk2 <- gseKEGG(geneList     = geneListENTREZ,
+               organism     = 'hsa',
+               minGSSize    = 120,
+               pvalueCutoff = 0.05,
+               verbose      = FALSE)
+
+kk2 %>% as_tibble()
+
+mkk <- enrichMKEGG(gene = res2$ENTREZID,
+                   organism = 'hsa',
+                   pvalueCutoff = 1,
+                   qvalueCutoff = 1)
+
+
+
+
+
+## Universal enrichment analysis
+TERM2GENE <- select(org.db, keys = keys(org.db,"GOALL"), column="ENSEMBL",keytype="GOALL") %>% dplyr::select(GOALL,ENSEMBL)
+enricher(de_genes$rowname, TERM2GENE = TERM2GENE,universe = DE_result$rowname) %>% as_tibble()
+
+
+genesets <- split(TERM2GENE,TERM2GENE$GOALL) %>% map("ENSEMBL")
+
+
+hyp_obj <- hypeR::hypeR(de_genes$rowname, genesets)

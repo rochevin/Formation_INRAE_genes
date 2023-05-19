@@ -1,18 +1,56 @@
 ---
-title: "Analyse fonctionnelle de gènes et métabolites"
+title: "Functional analysis of genes and metabolites"
 author: "Vincent ROCHER & Juliette COOKE"
 format: 
   revealjs:
     fontsize: 24px
+    width: 1600
 editor: source
 execute:
   echo: true
 ---
 
+# Feature Enrichment Analysis
+
+## Features Functional Analysis
+
+### Gene Functional Analysis program
+
+* Taught by Vincent
+* Gene IDs and conversion nightmares
+* 2 methods for Gene Functional Analysis:
+  1. Over Representation Analysis (ORA)
+  2. Gene Set Enrichment Analysis (GSEA)
+* Some gene similarity with pathway
+
+## Features Functional Analysis
+
+### Metabolite Functional Analysis
+
+* Taught by Juliette
+
+
+## Disclaimer
+
+In functional analysis of biological pathway, the biologist is __always__ the expert :
+
+* The pathway database is determinent.
+* You decide the relationship and biological significance of the data you want to present.
+
+The Statistician is just here to give you the right tools to discover the __relevant information__ and to __display your data__.
+
+__Differential expression__ analysis and __functional analysis__ are only used to refine your data in order to find relevant information.
+
+# Gene Enrichment Analysis
+
+## Introduction
+
+
 ```{r,echo=F,message=FALSE,warning=F}
 
 require(tidyverse)
 require(clusterProfiler)
+library(ReactomePA)
 require(org.Hs.eg.db)
 require(gt)
 require(AnnotationHub)
@@ -34,19 +72,25 @@ de_genes <- DE_result %>% dplyr::filter(p.adj < 0.05,logFC>0.5)
 
 ```
 
-# Gene Enrichment Analysis
 
-## Introduction
+### **Definition**:
 
-**Definition**: Gene enrichment analysis identifies biological pathways or functions that are overrepresented in a set of genes of interest.
+Gene enrichment analysis identifies __biological pathways__ or __functions__ that are __overrepresented__ in a set of genes of interest.
+
+### Why ?
 
 The interpretation of the list of differentially expressed genes can be challenging due to two scenarios:
 
 1.  The list is so long that it becomes cumbersome and time-consuming to analyze and interpret each gene individually.
 
-2.  The list is very short, and some genes may have low p-values but not low enough to meet the given threshold for significance.
+2.  Some genes may have low p-values but not low enough to meet the given threshold for significance.
 
-## Approches
+### In such situations, enrichment analysis can be employed to enhance the understanding of our dataset.
+
+
+## Approaches
+
+::: {style="font-size: 22px;"}
 
 To derive biological meaning from the results of differential expression analysis, there are several approaches available. Two commonly used methods are:
 
@@ -54,17 +98,7 @@ To derive biological meaning from the results of differential expression analysi
 
 2.  **Gene Set Enrichment Analysis (GSEA)**: GSEA evaluates whether a pre-defined set of genes (gene set) shows statistically significant differences between two or more biological conditions. Instead of focusing on individual genes, GSEA considers the collective behavior of genes within a gene set to identify enriched biological pathways or functional categories.
 
-## Common sources of feature sets
-
-KEGG pathways
-
-Gene Ontologies
-
-Reactome
-
-Molecular Signature Database, MSigDB (GSEA)
-
-Manually curated gene lists
+:::
 
 # Before Functionnal analysis
 
@@ -294,7 +328,7 @@ transcripts(ens.db)
 select(ens.db, keys=de_genes$rowname,columns=c("SYMBOL", "GENEID","ENTREZID","GENENAME","GENEBIOTYPE"),keytype = "GENEID")
 ```
 
-> Note: If you don't have a gene list and want everything, provide `keys=keys(ens.db, keytype="GENEID")` to the `select()` function. \## AnnotationHub
+> Note: If you don't have a gene list and want everything, provide `keys=keys(ens.db, keytype="GENEID")` to the `select()` function. 
 
 ## AnnotationHub
 
@@ -302,15 +336,62 @@ select(ens.db, keys=de_genes$rowname,columns=c("SYMBOL", "GENEID","ENTREZID","GE
 
 ```{r,echo=T}
 hub <- AnnotationHub()
-hub[['AH111575']]
+org.db <- hub[['AH111575']]
+org.db
 ```
 
 ## Retrieve other annotations using `AnnotationHub` or `biomaRt`
 
+### Go Annotations
+
+
+```{r,warning=FALSE,message=FALSE}
+select(org.db, keys = "GO:0030155", column="ENSEMBL",keytype="GOALL")
+```
+
+## Retrieve other annotations using `AnnotationHub` or `biomaRt`
+
+### Go Annotations
+
+
+```{r}
+go_list <- getBM(attributes=c("ensembl_gene_id"),
+                 filters = "go",
+                 values = c("GO:0030155"),
+                 mart=ensembl, 
+                 uniqueRows = FALSE)
+go_list
+
+```
+
+## Retrieve other annotations using `AnnotationHub` or `biomaRt`
+
+### Ortholog
+
+```{r}
+mus_musculus_attributes <- listAttributes(ensembl)$name %>% str_subset("mmusculus_homolog")
+getBM(attributes = c("ensembl_gene_id",mus_musculus_attributes),
+      filters = "ensembl_gene_id",
+      values = de_genes$rowname, 
+      mart = ensembl)
+```
+
+
 # Functionnal analysis
 
-## Pathways collections for Genes
+## Approaches
 
+::: {style="font-size: 18px;"}
+
+To derive biological meaning from the results of differential expression analysis, there are several approaches available. Two commonly used methods are:
+
+1.  **Over Representation Analysis (ORA)**: This method determines whether the differentially expressed genes are enriched in specific pathways or ontological groups. It assesses whether the observed number of genes in a particular pathway or gene ontology term is higher than what would be expected by chance.
+
+2.  **Gene Set Enrichment Analysis (GSEA)**: GSEA evaluates whether a pre-defined set of genes (gene set) shows statistically significant differences between two or more biological conditions. Instead of focusing on individual genes, GSEA considers the collective behavior of genes within a gene set to identify enriched biological pathways or functional categories.
+
+:::
+
+## Common sources of feature sets
 
 1. **Gene Ontology (GO)**
 2. **KEGG (Kyoto Encyclopedia of Genes and Genomes)**:
@@ -324,11 +405,19 @@ These pathway collections databases serve as valuable resources for researchers 
 
 ## **Gene Ontology (GO)**
 
+<http://geneontology.org/>
+
 GO is a widely used database that categorizes genes into three main ontologies: molecular function, biological process, and cellular component. It provides a standardized vocabulary to describe gene functions and interactions, allowing researchers to annotate and analyze gene sets in a structured manner.
+
+
+[Ten Quick Tips for Using the Gene Ontology](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1003343)
 
 ## **KEGG (Kyoto Encyclopedia of Genes and Genomes)**
 
 KEGG is a comprehensive database that integrates biological pathways, genomic information, and functional annotations. It covers various organisms and provides detailed pathway maps, as well as information on metabolic pathways, signaling networks, diseases, and drugs.
+
+
+List here: https://www.genome.jp/kegg/catalog/org_list.html
 
 ## **WikiPathways**
 WikiPathways is a community-curated database that focuses on biological pathways. It provides a platform for researchers to collaboratively create, annotate, and update pathway information. WikiPathways covers a wide range of species and offers pathway diagrams, annotations, and links to external resources.
@@ -385,6 +474,9 @@ $$
 * $M$ is the number of genes within that distribution that are annotated (either directly or indirectly) to the gene set of interest
 * $n$ is the size of the list of genes of interest
 * $k$ is the number of genes within that list which are annotated to the gene set. 
+
+![From Wieder et al. (https://doi.org/10.1371/journal.pcbi.1009105)](images/ora.PNG){fig-align="center" width="250" height="250"}
+
 
 [^1]: In case of alternative hypothesis as `greater`.
 
@@ -625,12 +717,24 @@ datatab.shuff <- 1:100 %>% parallel::mclapply(function(x){
   gsInfo(ego,my_go,shuffle=T)
 },mc.cores=10) %>% bind_rows(.id="Shuffle")
 datatab <- gsInfo(ego,my_go)
+
+
+
+point_score <- datatab.shuff %>% group_by(Shuffle) %>% arrange(desc(abs(runningScore))) %>%
+  dplyr::slice(1) 
+
+
 p2 <- datatab.shuff %>% ggplot()   +
   # geom_segment(data=df2, aes(x=x, xend=x, y=0.05, yend=0),
   #              color="black") + 
   geom_line(aes(x = x,y=runningScore,col=Shuffle),linetype="dashed") +
   geom_line(data=datatab, aes(x = x,y=runningScore)) +
+  geom_point(data=point_score,aes(x=x,y=runningScore)) + 
   ggtitle(my_desc) + ylab("Ranked List Metric") + xlab("Position in the Ranked List of Genes") + theme(legend.position="none")
+
+
+
+
 
 print(p2)
 ```
@@ -683,61 +787,391 @@ p5 <- enframe(permScores[1,]) %>%
 print(p5)
 ```
 
-## Fisher Exact Test
 
--   The Fisher Exact Test is a statistical method used to determine whether there is a significant association between two categorical variables, such as the presence or absence of a particular gene and a particular phenotype or disease.
--   In the context of gene enrichment analysis, the Fisher Exact Test is used to determine whether there is a significant association between a set of genes and a particular biological pathway or process.
--   The Fisher Exact Test can provide valuable information about the biological processes or pathways that are involved in a particular disease or phenotype, and can help identify potential drug targets or therapeutic interventions.
+## Over Representation Test tools
 
-## Weighted Kolmogorov-Smirnov Statistics
+### Online tools
 
--   Definition and principle of WKSS
--   Advantages over other methods
--   Example of WKSS results
+* PANTHER (<http://geneontology.org/> or <http://www.pantherdb.org/>)
+* gprofiler (<https://biit.cs.ut.ee/gprofiler/gost>)
+* DAVID (<https://david.ncifcrf.gov/>)
+* WEB-based GEne SeT AnaLysis Toolkit (WebGestalt) <https://www.webgestalt.org/>
 
-## Tools for Gene Enrichment Analysis
+### Programmatic (R) tools 
 
--   R packages:
-    -   gprofiler2
-    -   clusterProfiler
-    -   GOstats
--   Online tools:
-    -   Enrichr
-    -   DAVID
-    -   WebGestalt
+* `ClusterProfiler`
+* `hypeR`
+* `gprofiler2`
+* `rbioapi`: R api to query Enrichr, miEAA, PANTHER, Reactome, and STRING.
 
-## Using gprofiler2
+## Gene Set Enrichment Analysis
 
--   Example of gene enrichment analysis using gprofiler2
--   Input: list of genes
--   Output: enriched GO terms and KEGG pathways
+### Online tools
 
-## Conclusion
+* WEB-based GEne SeT AnaLysis Toolkit (WebGestalt) <https://www.webgestalt.org/>
+* gsea-msigdb <https://www.gsea-msigdb.org/gsea/index.jsp> (Download required)
 
--   Summary of gene enrichment analysis methods and tools
--   Importance of carefully selecting appropriate methods and tools
--   Future directions in gene enrichment analysis
+### Programmatic tools
 
-## References
+* `ClusterProfiler`
+* `hypeR`
+* `gprofiler2`
+* `fgsea` (used internally by ClusterProfiler)
 
--   List of relevant articles and resources used in the presentation.
+## Some examples with `clusterProfiler`
 
-### Gene Ontology
 
--   Gene Ontology (GO) is a widely used standardized vocabulary for describing gene function and localization across different organisms.
--   GO categories classify genes into three main categories: molecular function, biological process, and cellular component, based on their functions and locations within a cell or organism.
--   Each GO term is a specific functional annotation that describes the activity or role of a gene in a biological process or pathway. For example, "cellular respiration" is a GO term that describes the process of converting nutrients into energy in the form of ATP within a cell.
+### We need for that a dataset
 
-### Fisher Exact Test
 
--   The Fisher Exact Test is a statistical method used to determine whether there is a significant association between two categorical variables, such as the presence or absence of a particular gene and a particular phenotype or disease.
--   In the context of gene enrichment analysis, the Fisher Exact Test is used to determine whether there is a significant association between a set of genes and a particular biological pathway or process.
--   The Fisher Exact Test can provide valuable information about the biological processes or pathways that are involved in a particular disease or phenotype, and can help identify potential drug targets or therapeutic interventions.
+```{r}
 
-### Weighted Kolmogorov-Smirnov Statistics
+DE_result <- read_tsv("../TP/Gene_DE_DIVA.tsv")
 
--   The Weighted Kolmogorov-Smirnov Statistics (WKSS) is a method for measuring the similarity between two sets of ranked genes, such as those obtained from a GSEA analysis.
--   WKSS takes into account the weights or scores assigned to each gene in the ranked list, and can provide a more accurate measure of similarity between two sets of genes compared to other methods that only consider the rankings.
--   WKSS can be useful for identifying the biological pathways or processes that are common between different gene expression datasets or between different stages of a disease.
+DE_result
 
-I hope this provides more clarity on the topics covered in the gene enrichment analysis presentation template.
+de_genes <- DE_result %>% dplyr::filter(p.adj < 0.05,logFC>0.5)
+
+de_genes %>% dim
+
+geneList <- DE_result %>% dplyr::select(rowname,logFC) %>% arrange(desc(logFC)) %>% deframe() 
+
+```
+
+
+## Some examples with `clusterProfiler`
+
+### And a `orgDB` object
+
+```{r}
+#| message: false
+#| warning: false
+
+require(clusterProfiler)
+require(org.Hs.eg.db)
+org.db <- org.Hs.eg.db
+
+## We can also use our own DB
+hub <- AnnotationHub()
+org.db <- hub[['AH111575']]
+org.db
+
+
+```
+
+## Some examples with `clusterProfiler`
+
+### Gene classification based on GO distribution at a specific level
+
+```{r}
+#| message: false
+#| warning: false
+
+ggo <- groupGO(gene     = de_genes$rowname,
+               OrgDb        = org.db,
+               ont          = "BP",
+               keyType = "ENSEMBL",
+               level    = 3,
+               readable = TRUE)
+ggo
+
+ggo %>% as_tibble()
+```
+
+
+
+
+## Some examples with `clusterProfiler`
+
+### GO over-representation analysis
+
+The clusterProfiler package implements `enrichGO()` for gene ontology over-representation test.
+
+
+```{r}
+#| message: false
+#| warning: false
+
+ego <- enrichGO(gene          = de_genes$rowname,
+                universe      = DE_result$rowname,
+                OrgDb         = org.db,
+                keyType = "ENSEMBL",
+                ont           = "BP",
+                pAdjustMethod = "BH",
+                pvalueCutoff  = 0.01,
+                qvalueCutoff  = 0.05,
+                readable      = TRUE)
+
+ego %>% as_tibble()
+```
+
+## Some examples with `clusterProfiler`
+
+### And  `gseGO()` for Gene Set Enrichment Analysis
+
+```{r}
+#| message: false
+#| warning: false
+
+ego <- gseGO(geneList     = geneList,
+             OrgDb        = org.Hs.eg.db,
+             ont          = "BP",
+             keyType = "ENSEMBL",
+             minGSSize    = 100,
+             maxGSSize    = 500,
+             pvalueCutoff = 0.05,
+             verbose      = FALSE)
+
+
+ego %>% as_tibble()
+
+```
+
+
+## Some examples with `clusterProfiler`
+
+### Of course Gene IDs may be hard to understand
+
+```{r}
+#| message: false
+#| warning: false
+
+setReadable(ego, OrgDb = org.db, keyType="ENSEMBL") %>% as_tibble() %>% pull(core_enrichment)
+
+
+```
+
+## Some examples with `clusterProfiler`
+
+### Enrichment test for KEGG
+
+### Need conversion first
+
+```{r}
+#| message: false
+#| warning: false
+res1 <- select(org.db, keys=de_genes$rowname,columns=c("ENSEMBL","ENTREZID"),keytype = "ENSEMBL")
+res2 <- bitr(de_genes$rowname, fromType="ENSEMBL", toType=c("ENTREZID"), OrgDb=org.db)
+```
+
+### And then use `enrichKEGG()`
+
+```{r}
+#| message: false
+#| warning: false
+
+
+kk <- enrichKEGG(gene         = res2$ENTREZID,
+                 organism     = 'hsa',
+                 pvalueCutoff = 0.05)
+
+kk %>% as_tibble()
+```
+
+## Some examples with `clusterProfiler`
+
+### Or with `enrichMKEGG()` for Modules
+
+```{r}
+mkk <- enrichMKEGG(gene = res2$ENTREZID,
+                   organism = 'hsa',
+                   pvalueCutoff = 1,
+                   qvalueCutoff = 1)
+
+mkk %>% as_tibble()
+```
+
+
+## Some examples with `clusterProfiler`
+
+### GSEA for KEGG
+
+### Need conversion first
+
+```{r}
+#| message: false
+#| warning: false
+
+res2 <- bitr(DE_result$rowname, fromType="ENSEMBL", toType=c("ENTREZID"), OrgDb=org.db)
+geneListENTREZ <- DE_result %>% left_join(res2,by=c("rowname"="ENSEMBL")) %>%
+  dplyr::select(ENTREZID,logFC) %>%
+  arrange(desc(logFC)) %>% 
+  drop_na() %>% 
+  deframe()
+```
+
+### And then use `gseKEGG()`
+
+```{r}
+#| message: false
+#| warning: false
+kk2 <- gseKEGG(geneList     = geneListENTREZ,
+               organism     = 'hsa',
+               minGSSize    = 120,
+               pvalueCutoff = 0.05,
+               verbose      = FALSE)
+
+kk2 %>% as_tibble()
+```
+
+
+## Some examples with `clusterProfiler`
+
+### WikiPathways
+
+```{r}
+#| eval: false
+
+
+get_wp_organisms()
+
+enrichWP(res2$ENTREZID, organism = "Homo sapiens") %>% as_tibble()
+
+gseWP(geneListENTREZ, organism = "Homo sapiens")%>% as_tibble()
+```
+
+
+### Reactome
+
+```{r}
+#| eval: false
+library(ReactomePA)
+
+enrichPathway(gene=res2$ENTREZID, readable=TRUE) %>% as_tibble()
+
+gsePathway(geneListENTREZ, verbose = FALSE) %>% as_tibble()
+
+```
+
+
+### DOSE
+
+```{r}
+#| eval: false
+
+
+library(DOSE)
+
+
+enrichDO(gene=res2$ENTREZID, readable=TRUE) %>% as_tibble()
+
+gseDO(geneListENTREZ, verbose = FALSE) %>% as_tibble()
+
+```
+
+
+## Some examples with `rbioapi`
+
+```{r}
+require(rbioapi)
+genes <- de_genes$gene_name
+```
+
+
+### Querying Enricher
+
+
+```{r}
+rba_enrichr_libs()
+```
+
+
+## Some examples with `rbioapi`
+
+```{r}
+#| eval: false
+results_all <- rba_enrichr(gene_list = genes)
+```
+```r
+--Step 1/3:
+Retrieving List of available libraries and statistics from Enrichr human.
+--Step 2/3:
+Uploading 248 gene symbols to Enrichr human.
+--Step 3/3:
+Performing enrichment analysis on gene-list 62468329 using multiple Enrichr human libraries.
+Note: You have selected '211' Enrichr human libraries. Note that for each library, a separate call should be sent to Enrichr server. Thus, this could take a while depending on the number of selected libraries and your network connection.
+```
+
+```{r}
+#| echo: false
+
+results_all <- readRDS("data/result_all.rds")
+```
+
+```{r}
+results_all[["GO_Biological_Process_2021"]] %>% as_tibble()
+```
+
+
+
+## Some examples with `rbioapi`
+
+### Using STRING
+
+STRING let you perform two types of enrichments.
+
+#### We need to map proteins first
+
+```{r}
+proteins <- de_genes %>% dplyr::filter(gene_biotype=="protein_coding") %>% pull(gene_name)
+proteins_mapped <- rba_string_map_ids(ids = proteins,
+                                      species = 9606)
+
+proteins_mapped %>% as_tibble()
+
+```
+
+## Some examples with `rbioapi`
+
+### Using STRING
+
+#### Functional enrichment
+
+Currently, STRING supports Gene Ontology, KEGG pathways, UniProt Keywords, PubMed publications, Pfam domains, InterPro domains, and SMART domains. (source).
+
+```{r}
+enriched <- rba_string_enrichment(ids = proteins_mapped$stringId,
+                                  species = 9606 )
+enriched %>% names()
+
+enriched[["PMID"]] %>% as_tibble()
+
+```
+
+## Some examples with `rbioapi`
+
+### Using STRING
+
+#### Get functional annotations
+
+As you have seen above, STRING maps the proteins to multiple annotation sources. You can obtain any annotation associated with your proteins without performing enrichment analysis and retrieving just the significant portion.
+
+```{r}
+
+annotations <- rba_string_annotations(ids = "9606.ENSP00000269305",
+                                     species = 9606)
+
+annotations$InterPro
+
+```
+
+## Some examples with `rbioapi`
+
+### Using STRING
+
+#### Protein-protein interaction enrichment
+
+Even without incorporating annotation data, STRING can calculate if your proteins are functionally related. Briefly, STRING accomplishes this by comparing the interactions’ distribution in your protein-set to the interactions’ distribution in the proteome.
+
+```{r}
+rba_string_enrichment_ppi(ids = proteins_mapped$stringId,
+                          species = 9606)
+```
+
+
+# Beyond Enrichment
+
+## Relationship between pathway and products (features) using semantic
+
+GO-CAMs
+

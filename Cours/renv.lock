@@ -55,6 +55,41 @@
       ],
       "Hash": "23a8bf8b555ec9e4d20c8a0bec495786"
     },
+    "AnnotationHub": {
+      "Package": "AnnotationHub",
+      "Version": "3.8.0",
+      "Source": "Repository",
+      "Repository": null,
+      "RemoteType": "standard",
+      "RemotePkgRef": "AnnotationHub",
+      "RemoteRef": "AnnotationHub",
+      "RemoteRepos": "https://bioconductor.org/packages/3.17/bioc",
+      "RemotePkgPlatform": "source",
+      "RemoteSha": "3.8.0",
+      "git_url": "https://git.bioconductor.org/packages/AnnotationHub",
+      "git_branch": "RELEASE_3_17",
+      "git_last_commit": "975022d",
+      "git_last_commit_date": "2023-04-25",
+      "Requirements": [
+        "AnnotationDbi",
+        "BiocFileCache",
+        "BiocGenerics",
+        "BiocManager",
+        "BiocVersion",
+        "RSQLite",
+        "S4Vectors",
+        "curl",
+        "dplyr",
+        "grDevices",
+        "httr",
+        "interactiveDisplayBase",
+        "methods",
+        "rappdirs",
+        "utils",
+        "yaml"
+      ],
+      "Hash": "2c1ffa13c06028def99e049e30f5dbfa"
+    },
     "BH": {
       "Package": "BH",
       "Version": "1.81.0-1",
@@ -78,6 +113,36 @@
       ],
       "Hash": "ed269b250f5844d54dfdc7e749f901aa"
     },
+    "BiocFileCache": {
+      "Package": "BiocFileCache",
+      "Version": "2.8.0",
+      "Source": "Repository",
+      "Repository": null,
+      "RemoteType": "standard",
+      "RemotePkgRef": "BiocFileCache",
+      "RemoteRef": "BiocFileCache",
+      "RemoteRepos": "https://bioconductor.org/packages/3.17/bioc",
+      "RemotePkgPlatform": "source",
+      "RemoteSha": "2.8.0",
+      "git_url": "https://git.bioconductor.org/packages/BiocFileCache",
+      "git_branch": "RELEASE_3_17",
+      "git_last_commit": "d088b32",
+      "git_last_commit_date": "2023-04-25",
+      "Requirements": [
+        "DBI",
+        "R",
+        "RSQLite",
+        "curl",
+        "dbplyr",
+        "dplyr",
+        "filelock",
+        "httr",
+        "methods",
+        "stats",
+        "utils"
+      ],
+      "Hash": "4fcebdf379954d5d1a3291006a93499b"
+    },
     "BiocGenerics": {
       "Package": "BiocGenerics",
       "Version": "0.46.0",
@@ -94,6 +159,37 @@
         "utils"
       ],
       "Hash": "c179ae59955c36f5d0068ed29ce832f7"
+    },
+    "BiocHubsShiny": {
+      "Package": "BiocHubsShiny",
+      "Version": "1.0.0",
+      "Source": "Repository",
+      "Repository": null,
+      "RemoteType": "standard",
+      "RemotePkgRef": "BiocHubsShiny",
+      "RemoteRef": "BiocHubsShiny",
+      "RemoteRepos": "https://bioconductor.org/packages/3.17/bioc",
+      "RemotePkgPlatform": "source",
+      "RemoteSha": "1.0.0",
+      "git_url": "https://git.bioconductor.org/packages/BiocHubsShiny",
+      "git_branch": "RELEASE_3_17",
+      "git_last_commit": "762fd05",
+      "git_last_commit_date": "2023-04-25",
+      "Requirements": [
+        "AnnotationHub",
+        "DT",
+        "ExperimentHub",
+        "R",
+        "S4Vectors",
+        "htmlwidgets",
+        "shiny",
+        "shinyAce",
+        "shinyjs",
+        "shinythemes",
+        "shinytoastr",
+        "utils"
+      ],
+      "Hash": "fb87bb64814170e597f2f0a626f68909"
     },
     "BiocManager": {
       "Package": "BiocManager",
@@ -126,6 +222,26 @@
         "utils"
       ],
       "Hash": "6e0d920ff5276a1ab9990c35eb1bcd9c"
+    },
+    "BiocVersion": {
+      "Package": "BiocVersion",
+      "Version": "3.17.1",
+      "Source": "Repository",
+      "Repository": null,
+      "RemoteType": "standard",
+      "RemotePkgRef": "BiocVersion",
+      "RemoteRef": "BiocVersion",
+      "RemoteRepos": "https://bioconductor.org/packages/3.17/bioc",
+      "RemotePkgPlatform": "source",
+      "RemoteSha": "3.17.1",
+      "git_url": "https://git.bioconductor.org/packages/BiocVersion",
+      "git_branch": "master",
+      "git_last_commit": "a2d0c4c",
+      "git_last_commit_date": "2022-11-02",
+      "Requirements": [
+        "R"
+      ],
+      "Hash": "f7c0d5521799b7b0d0a211143ed0bfcb"
     },
     "Biostrings": {
       "Package": "Biostrings",
@@ -185,6 +301,55 @@
         "utils"
       ],
       "Hash": "adf53d60be91fa7a3e2687591993d9f7"
+    },
+    "DT": {
+      "Package": "DT",
+      "Version": "0.27",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "RemoteType": "standard",
+      "RemotePkgRef": "DT",
+      "RemoteRef": "DT",
+      "RemoteRepos": "https://cloud.r-project.org",
+      "RemotePkgPlatform": "source",
+      "RemoteSha": "0.27",
+      "Requirements": [
+        "crosstalk",
+        "htmltools",
+        "htmlwidgets",
+        "jquerylib",
+        "jsonlite",
+        "magrittr",
+        "promises"
+      ],
+      "Hash": "3444e6ed78763f9f13aaa39f2481eb34"
+    },
+    "ExperimentHub": {
+      "Package": "ExperimentHub",
+      "Version": "2.8.0",
+      "Source": "Repository",
+      "Repository": null,
+      "RemoteType": "standard",
+      "RemotePkgRef": "ExperimentHub",
+      "RemoteRef": "ExperimentHub",
+      "RemoteRepos": "https://bioconductor.org/packages/3.17/bioc",
+      "RemotePkgPlatform": "source",
+      "RemoteSha": "2.8.0",
+      "git_url": "https://git.bioconductor.org/packages/ExperimentHub",
+      "git_branch": "RELEASE_3_17",
+      "git_last_commit": "f25c854",
+      "git_last_commit_date": "2023-04-25",
+      "Requirements": [
+        "AnnotationHub",
+        "BiocFileCache",
+        "BiocGenerics",
+        "BiocManager",
+        "S4Vectors",
+        "methods",
+        "rappdirs",
+        "utils"
+      ],
+      "Hash": "bf1c80ce0b08daf134398b62e8b662f5"
     },
     "FELLA": {
       "Package": "FELLA",
@@ -435,6 +600,35 @@
       ],
       "Hash": "1e035db628cefb315c571202d70202fe"
     },
+    "ReactomePA": {
+      "Package": "ReactomePA",
+      "Version": "1.44.0",
+      "Source": "Repository",
+      "Repository": null,
+      "RemoteType": "standard",
+      "RemotePkgRef": "ReactomePA",
+      "RemoteRef": "ReactomePA",
+      "RemoteRepos": "https://bioconductor.org/packages/3.17/bioc",
+      "RemotePkgPlatform": "source",
+      "RemoteSha": "1.44.0",
+      "git_url": "https://git.bioconductor.org/packages/ReactomePA",
+      "git_branch": "RELEASE_3_17",
+      "git_last_commit": "86d6ade",
+      "git_last_commit_date": "2023-04-25",
+      "Requirements": [
+        "AnnotationDbi",
+        "DOSE",
+        "R",
+        "enrichplot",
+        "ggplot2",
+        "ggraph",
+        "graphite",
+        "gson",
+        "igraph",
+        "reactome.db"
+      ],
+      "Hash": "a6d0510c5226ed84ed85e8c0904ed6e9"
+    },
     "S4Vectors": {
       "Package": "S4Vectors",
       "Version": "0.38.1",
@@ -452,6 +646,37 @@
         "utils"
       ],
       "Hash": "f0a46e23a2a7d6aa27e945faf7f242c7"
+    },
+    "V8": {
+      "Package": "V8",
+      "Version": "4.3.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "Rcpp",
+        "curl",
+        "jsonlite",
+        "utils"
+      ],
+      "Hash": "d1fa8fae6a47e88bb46d5152312bd8bd"
+    },
+    "XML": {
+      "Package": "XML",
+      "Version": "3.99-0.14",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "RemoteType": "standard",
+      "RemotePkgRef": "XML",
+      "RemoteRef": "XML",
+      "RemoteRepos": "https://cloud.r-project.org",
+      "RemotePkgPlatform": "source",
+      "RemoteSha": "3.99-0.14",
+      "Requirements": [
+        "R",
+        "methods",
+        "utils"
+      ],
+      "Hash": "e5c8af79df616c135b21eaeb1dc6bc5c"
     },
     "XVector": {
       "Package": "XVector",
@@ -537,6 +762,46 @@
         "R"
       ],
       "Hash": "543776ae6848fde2f48ff3816d0628bc"
+    },
+    "bigD": {
+      "Package": "bigD",
+      "Version": "0.2.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R"
+      ],
+      "Hash": "93637e906f3fe962413912c956eb44db"
+    },
+    "biomaRt": {
+      "Package": "biomaRt",
+      "Version": "2.56.0",
+      "Source": "Repository",
+      "Repository": null,
+      "RemoteType": "standard",
+      "RemotePkgRef": "biomaRt",
+      "RemoteRef": "biomaRt",
+      "RemoteRepos": "https://bioconductor.org/packages/3.17/bioc",
+      "RemotePkgPlatform": "source",
+      "RemoteSha": "2.56.0",
+      "git_url": "https://git.bioconductor.org/packages/biomaRt",
+      "git_branch": "RELEASE_3_17",
+      "git_last_commit": "91ca89e",
+      "git_last_commit_date": "2023-04-25",
+      "Requirements": [
+        "AnnotationDbi",
+        "BiocFileCache",
+        "XML",
+        "digest",
+        "httr",
+        "methods",
+        "progress",
+        "rappdirs",
+        "stringr",
+        "utils",
+        "xml2"
+      ],
+      "Hash": "51728b7b82b32decee5d5925c3965c06"
     },
     "bit": {
       "Package": "bit",
@@ -733,6 +998,13 @@
       ],
       "Hash": "f20c47fd52fae58b4e377c37bb8c335b"
     },
+    "commonmark": {
+      "Package": "commonmark",
+      "Version": "1.9.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "d691c61bff84bd63c383874d2d0c3307"
+    },
     "conflicted": {
       "Package": "conflicted",
       "Version": "1.2.0",
@@ -781,6 +1053,25 @@
         "utils"
       ],
       "Hash": "e8a1e41acf02548751f45c718d55aa6a"
+    },
+    "crosstalk": {
+      "Package": "crosstalk",
+      "Version": "1.2.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "RemoteType": "standard",
+      "RemotePkgRef": "crosstalk",
+      "RemoteRef": "crosstalk",
+      "RemoteRepos": "https://cloud.r-project.org",
+      "RemotePkgPlatform": "source",
+      "RemoteSha": "1.2.0",
+      "Requirements": [
+        "R6",
+        "htmltools",
+        "jsonlite",
+        "lazyeval"
+      ],
+      "Hash": "6aa54f69598c32177e920eb3402e8293"
     },
     "curl": {
       "Package": "curl",
@@ -1013,6 +1304,19 @@
         "utils"
       ],
       "Hash": "62342298a29521147ea0764b22e8121e"
+    },
+    "filelock": {
+      "Package": "filelock",
+      "Version": "1.0.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "RemoteType": "standard",
+      "RemotePkgRef": "filelock",
+      "RemoteRef": "filelock",
+      "RemoteRepos": "https://cloud.r-project.org",
+      "RemotePkgPlatform": "source",
+      "RemoteSha": "1.0.2",
+      "Hash": "38ec653c2613bed60052ba3787bd8a2c"
     },
     "fontawesome": {
       "Package": "fontawesome",
@@ -1355,6 +1659,61 @@
       ],
       "Hash": "fd7b97bd862a14297b0bb7ed28a3dada"
     },
+    "graph": {
+      "Package": "graph",
+      "Version": "1.78.0",
+      "Source": "Repository",
+      "Repository": null,
+      "RemoteType": "standard",
+      "RemotePkgRef": "graph",
+      "RemoteRef": "graph",
+      "RemoteRepos": "https://bioconductor.org/packages/3.17/bioc",
+      "RemotePkgPlatform": "source",
+      "RemoteSha": "1.78.0",
+      "git_url": "https://git.bioconductor.org/packages/graph",
+      "git_branch": "RELEASE_3_17",
+      "git_last_commit": "9df68e8",
+      "git_last_commit_date": "2023-04-25",
+      "Requirements": [
+        "BiocGenerics",
+        "R",
+        "methods",
+        "stats",
+        "stats4",
+        "utils"
+      ],
+      "Hash": "1cf0ccf889cb4325011e1ad92e222ab1"
+    },
+    "graphite": {
+      "Package": "graphite",
+      "Version": "1.46.0",
+      "Source": "Repository",
+      "Repository": null,
+      "RemoteType": "standard",
+      "RemotePkgRef": "graphite",
+      "RemoteRef": "graphite",
+      "RemoteRepos": "https://bioconductor.org/packages/3.17/bioc",
+      "RemotePkgPlatform": "source",
+      "RemoteSha": "1.46.0",
+      "git_url": "https://git.bioconductor.org/packages/graphite",
+      "git_branch": "RELEASE_3_17",
+      "git_last_commit": "c59c522",
+      "git_last_commit_date": "2023-04-25",
+      "Requirements": [
+        "AnnotationDbi",
+        "R",
+        "graph",
+        "graphics",
+        "httr",
+        "methods",
+        "purrr",
+        "rappdirs",
+        "rlang",
+        "stats",
+        "utils"
+      ],
+      "Hash": "8e46a85d778ce6fee03ee675c2d167ce"
+    },
     "graphlayouts": {
       "Package": "graphlayouts",
       "Version": "1.0.0",
@@ -1408,6 +1767,36 @@
         "utils"
       ],
       "Hash": "d37d82cf043b679dd802e91d0b2ef6a1"
+    },
+    "gt": {
+      "Package": "gt",
+      "Version": "0.9.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "base64enc",
+        "bigD",
+        "bitops",
+        "cli",
+        "commonmark",
+        "dplyr",
+        "fs",
+        "glue",
+        "htmltools",
+        "htmlwidgets",
+        "juicyjuice",
+        "magrittr",
+        "markdown",
+        "reactable",
+        "rlang",
+        "sass",
+        "scales",
+        "tibble",
+        "tidyselect",
+        "xml2"
+      ],
+      "Hash": "d55233a737e43e44987724e57dfec302"
     },
     "gtable": {
       "Package": "gtable",
@@ -1487,6 +1876,42 @@
       ],
       "Hash": "ba0240784ad50a62165058a27459304a"
     },
+    "htmlwidgets": {
+      "Package": "htmlwidgets",
+      "Version": "1.6.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "grDevices",
+        "htmltools",
+        "jsonlite",
+        "knitr",
+        "rmarkdown",
+        "yaml"
+      ],
+      "Hash": "a865aa85bcb2697f47505bfd70422471"
+    },
+    "httpuv": {
+      "Package": "httpuv",
+      "Version": "1.6.11",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "RemoteType": "standard",
+      "RemotePkgRef": "httpuv",
+      "RemoteRef": "httpuv",
+      "RemoteRepos": "https://cloud.r-project.org",
+      "RemotePkgPlatform": "source",
+      "RemoteSha": "1.6.11",
+      "Requirements": [
+        "R",
+        "R6",
+        "Rcpp",
+        "later",
+        "promises",
+        "utils"
+      ],
+      "Hash": "838602f54e32c1a0f8cc80708cefcefa"
+    },
     "httr": {
       "Package": "httr",
       "Version": "1.4.6",
@@ -1533,6 +1958,30 @@
       ],
       "Hash": "3e476b375c746d899fd53a7281d78191"
     },
+    "interactiveDisplayBase": {
+      "Package": "interactiveDisplayBase",
+      "Version": "1.38.0",
+      "Source": "Repository",
+      "Repository": null,
+      "RemoteType": "standard",
+      "RemotePkgRef": "interactiveDisplayBase",
+      "RemoteRef": "interactiveDisplayBase",
+      "RemoteRepos": "https://bioconductor.org/packages/3.17/bioc",
+      "RemotePkgPlatform": "source",
+      "RemoteSha": "1.38.0",
+      "git_url": "https://git.bioconductor.org/packages/interactiveDisplayBase",
+      "git_branch": "RELEASE_3_17",
+      "git_last_commit": "3b3a3fd",
+      "git_last_commit_date": "2023-04-25",
+      "Requirements": [
+        "BiocGenerics",
+        "DT",
+        "R",
+        "methods",
+        "shiny"
+      ],
+      "Hash": "bb387403478f98a8e1574f27d5bcfbcf"
+    },
     "isoband": {
       "Package": "isoband",
       "Version": "0.2.7",
@@ -1563,6 +2012,16 @@
         "methods"
       ],
       "Hash": "a4269a09a9b865579b2635c77e572374"
+    },
+    "juicyjuice": {
+      "Package": "juicyjuice",
+      "Version": "0.1.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "V8"
+      ],
+      "Hash": "3bcd11943da509341838da9399e18bce"
     },
     "knitr": {
       "Package": "knitr",
@@ -1601,6 +2060,23 @@
         "formatR"
       ],
       "Hash": "b1e925c4b9ffeb901bacf812cbe9a6ad"
+    },
+    "later": {
+      "Package": "later",
+      "Version": "1.3.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "RemoteType": "standard",
+      "RemotePkgRef": "later",
+      "RemoteRef": "later",
+      "RemoteRepos": "https://cloud.r-project.org",
+      "RemotePkgPlatform": "source",
+      "RemoteSha": "1.3.1",
+      "Requirements": [
+        "Rcpp",
+        "rlang"
+      ],
+      "Hash": "40401c9cf2bc2259dfe83311c9384710"
     },
     "lattice": {
       "Package": "lattice",
@@ -1662,6 +2138,19 @@
         "R"
       ],
       "Hash": "7ce2733a9826b3aeb1775d56fd305472"
+    },
+    "markdown": {
+      "Package": "markdown",
+      "Version": "1.6",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "commonmark",
+        "utils",
+        "xfun"
+      ],
+      "Hash": "c0e8495f796d73f2d2e1a8c6964d67e8"
     },
     "memoise": {
       "Package": "memoise",
@@ -1879,6 +2368,27 @@
       ],
       "Hash": "14dc9f7a3c91ebb14ec5bb9208a07061"
     },
+    "promises": {
+      "Package": "promises",
+      "Version": "1.2.0.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "RemoteType": "standard",
+      "RemotePkgRef": "promises",
+      "RemoteRef": "promises",
+      "RemoteRepos": "https://cloud.r-project.org",
+      "RemotePkgPlatform": "source",
+      "RemoteSha": "1.2.0.1",
+      "Requirements": [
+        "R6",
+        "Rcpp",
+        "later",
+        "magrittr",
+        "rlang",
+        "stats"
+      ],
+      "Hash": "4ab2c43adb4d4699cf3690acd378d75d"
+    },
     "ps": {
       "Package": "ps",
       "Version": "1.7.5",
@@ -1942,6 +2452,49 @@
         "R"
       ],
       "Hash": "5e3c5dc0b071b21fa128676560dbe94d"
+    },
+    "reactR": {
+      "Package": "reactR",
+      "Version": "0.4.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "htmltools"
+      ],
+      "Hash": "75389c8091eb14ee21c6bc87a88b3809"
+    },
+    "reactable": {
+      "Package": "reactable",
+      "Version": "0.4.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "digest",
+        "htmltools",
+        "htmlwidgets",
+        "jsonlite",
+        "reactR"
+      ],
+      "Hash": "6069eb2a6597963eae0605c1875ff14c"
+    },
+    "reactome.db": {
+      "Package": "reactome.db",
+      "Version": "1.84.0",
+      "Source": "Repository",
+      "Repository": null,
+      "RemoteType": "standard",
+      "RemotePkgRef": "reactome.db",
+      "RemoteRef": "reactome.db",
+      "RemoteRepos": "https://bioconductor.org/packages/3.17/data/annotation",
+      "RemotePkgPlatform": "source",
+      "RemoteSha": "1.84.0",
+      "Requirements": [
+        "AnnotationDbi",
+        "R",
+        "methods"
+      ],
+      "Hash": "77648b4779745122b85209deca242f7d"
     },
     "readr": {
       "Package": "readr",
@@ -2181,6 +2734,118 @@
       ],
       "Hash": "e639c0fa75fc71085c37e21e05a06e41"
     },
+    "shiny": {
+      "Package": "shiny",
+      "Version": "1.7.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "RemoteType": "standard",
+      "RemotePkgRef": "shiny",
+      "RemoteRef": "shiny",
+      "RemoteRepos": "https://cloud.r-project.org",
+      "RemotePkgPlatform": "source",
+      "RemoteSha": "1.7.4",
+      "Requirements": [
+        "R",
+        "R6",
+        "bslib",
+        "cachem",
+        "commonmark",
+        "crayon",
+        "ellipsis",
+        "fastmap",
+        "fontawesome",
+        "glue",
+        "grDevices",
+        "htmltools",
+        "httpuv",
+        "jsonlite",
+        "later",
+        "lifecycle",
+        "methods",
+        "mime",
+        "promises",
+        "rlang",
+        "sourcetools",
+        "tools",
+        "utils",
+        "withr",
+        "xtable"
+      ],
+      "Hash": "c2eae3d8c670fa9dfa35a12066f4a1d5"
+    },
+    "shinyAce": {
+      "Package": "shinyAce",
+      "Version": "0.4.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "RemoteType": "standard",
+      "RemotePkgRef": "shinyAce",
+      "RemoteRef": "shinyAce",
+      "RemoteRepos": "https://cloud.r-project.org",
+      "RemotePkgPlatform": "source",
+      "RemoteSha": "0.4.2",
+      "Requirements": [
+        "R",
+        "jsonlite",
+        "shiny",
+        "tools",
+        "utils"
+      ],
+      "Hash": "99b2ee37c4f174539b1b0d920b00d16c"
+    },
+    "shinyjs": {
+      "Package": "shinyjs",
+      "Version": "2.1.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "RemoteType": "standard",
+      "RemotePkgRef": "shinyjs",
+      "RemoteRef": "shinyjs",
+      "RemoteRepos": "https://cloud.r-project.org",
+      "RemotePkgPlatform": "source",
+      "RemoteSha": "2.1.0",
+      "Requirements": [
+        "R",
+        "digest",
+        "jsonlite",
+        "shiny"
+      ],
+      "Hash": "802e4786b353a4bb27116957558548d5"
+    },
+    "shinythemes": {
+      "Package": "shinythemes",
+      "Version": "1.2.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "RemoteType": "standard",
+      "RemotePkgRef": "shinythemes",
+      "RemoteRef": "shinythemes",
+      "RemoteRepos": "https://cloud.r-project.org",
+      "RemotePkgPlatform": "source",
+      "RemoteSha": "1.2.0",
+      "Requirements": [
+        "R",
+        "shiny"
+      ],
+      "Hash": "30f0ebc41feba25691073626ff5e2cf4"
+    },
+    "shinytoastr": {
+      "Package": "shinytoastr",
+      "Version": "2.1.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "RemoteType": "standard",
+      "RemotePkgRef": "shinytoastr",
+      "RemoteRef": "shinytoastr",
+      "RemoteRepos": "https://cloud.r-project.org",
+      "RemotePkgPlatform": "source",
+      "RemoteSha": "2.1.1",
+      "Requirements": [
+        "shiny"
+      ],
+      "Hash": "9e2768fd640e803d18ee95530939029e"
+    },
     "snow": {
       "Package": "snow",
       "Version": "0.4-4",
@@ -2191,6 +2856,22 @@
         "utils"
       ],
       "Hash": "40b74690debd20c57d93d8c246b305d4"
+    },
+    "sourcetools": {
+      "Package": "sourcetools",
+      "Version": "0.1.7-1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "RemoteType": "standard",
+      "RemotePkgRef": "sourcetools",
+      "RemoteRef": "sourcetools",
+      "RemoteRepos": "https://cloud.r-project.org",
+      "RemotePkgPlatform": "source",
+      "RemoteSha": "0.1.7-1",
+      "Requirements": [
+        "R"
+      ],
+      "Hash": "5f5a7629f956619d519205ec475fe647"
     },
     "stringi": {
       "Package": "stringi",
@@ -2583,6 +3264,24 @@
         "methods"
       ],
       "Hash": "7dc765ac9b909487326a7d471fdd3821"
+    },
+    "xtable": {
+      "Package": "xtable",
+      "Version": "1.8-4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "RemoteType": "standard",
+      "RemotePkgRef": "xtable",
+      "RemoteRef": "xtable",
+      "RemoteRepos": "https://cloud.r-project.org",
+      "RemotePkgPlatform": "source",
+      "RemoteSha": "1.8-4",
+      "Requirements": [
+        "R",
+        "stats",
+        "utils"
+      ],
+      "Hash": "b8acdf8af494d9ec19ccb2481a9b11c2"
     },
     "yaml": {
       "Package": "yaml",
