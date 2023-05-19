@@ -4,7 +4,7 @@ author: "Vincent ROCHER & Juliette COOKE"
 format: 
   revealjs:
     fontsize: 24px
-    width: 1600
+    width: 1400
 editor: source
 execute:
   echo: true
@@ -56,7 +56,9 @@ require(gt)
 require(AnnotationHub)
 require(BiocHubsShiny)
 require(biomaRt)
-
+require(enrichplot)
+library(FELLA)
+library(KEGGREST)
 theme_set(theme_bw(base_size=12)) 
 theme_update(panel.background = element_rect(fill = "transparent", colour = NA), 
              plot.background = element_rect(fill = "transparent", colour = NA)) 
@@ -88,15 +90,68 @@ The interpretation of the list of differentially expressed genes can be challeng
 ### In such situations, enrichment analysis can be employed to enhance the understanding of our dataset.
 
 
+
+## Introduction
+
+Pathway enrichment methods were originally developed for gene enrichment.
+
+They are also widely used with metabolites and metabolomics data, meaning we can apply gene enrichment methods to metabolites (with caution!)
+
+:::{.notes}
+
+Juliette
+
+:::
+
+## Differences vs genes
+
+Metabolomics data has a lower metabolome coverage than genes have of genome coverage, and there is less metabolite data in general.
+
+For metabolites, there is no Gene Ontology equivalent, but ChEBI ontology & pathway sets are close. This means that gaining functional information is more difficult and less standardised.
+
+Metabolite identifier mapping is a major issue: metabolites have multiple names, IDs, isomers and are called different things depending on the database.
+
+There is always a bias depending on input data used for enrichment analyses, more so for metabolomics (some metabolites cannot be detected and will never be used to enrich pathways).
+
+Exo-metabolomics vs endo-metabolomics: metabolites from exo-metabolomics (blood) are further away from internal pathways than endo (cells, tissue).
+
+Finally, it also depends on how pathways have been defined and obtaining a general consensus of metabolic pathways is difficult.
+
+
+:::{.notes}
+
+Juliette
+
+:::
+
+
+
 ## Approaches
 
 ::: {style="font-size: 22px;"}
 
-To derive biological meaning from the results of differential expression analysis, there are several approaches available. Two commonly used methods are:
+To derive biological meaning from the results of differential expression analysis, there are several approaches available. 
+
+### For genes
+
 
 1.  **Over Representation Analysis (ORA)**: This method determines whether the differentially expressed genes are enriched in specific pathways or ontological groups. It assesses whether the observed number of genes in a particular pathway or gene ontology term is higher than what would be expected by chance.
 
 2.  **Gene Set Enrichment Analysis (GSEA)**: GSEA evaluates whether a pre-defined set of genes (gene set) shows statistically significant differences between two or more biological conditions. Instead of focusing on individual genes, GSEA considers the collective behavior of genes within a gene set to identify enriched biological pathways or functional categories.
+
+### For Metabolites
+
+1. **ORA**: Over-representation analysis (Fisher's exact test)
+
+2. **MSEA**: Metabolite set enrichment analysis, often referred to as GSEA even for metabolites = a Functional Class Scoring (FCS) method
+
+3. **Topology-based methods**: uses networks of pathways in addition to other methods
+
+:::
+
+:::{.notes}
+
+Juliette read For Metabolites
 
 :::
 
@@ -377,6 +432,21 @@ getBM(attributes = c("ensembl_gene_id",mus_musculus_attributes),
 ```
 
 
+## Databases for Metabolites
+
+### Databases and IDs
+
+-   KEGG, PubChem, ChEBI, MeSH, HMDB are databases which all have their own metabolite IDs, some with links to each other
+
+-   Converting IDs: MetaboAnalyst can convert from names/IDs to many different IDs, KEGG API in R
+
+:::{.notes}
+
+Juliette
+
+:::
+
+
 # Functionnal analysis
 
 ## Approaches
@@ -403,6 +473,28 @@ To derive biological meaning from the results of differential expression analysi
 
 These pathway collections databases serve as valuable resources for researchers to explore and analyze biological pathways, functional annotations, and disease associations. They facilitate the interpretation of gene expression data, identify key pathways related to specific biological processes or diseases, and contribute to a deeper understanding of biological systems.
 
+## Metabolites pathway sets
+
+Pathway sets are collections of metabolites grouped together based on a metabolic function, sometimes focused around an important metabolite. Some examples are `Glycolysis / Gluconeogenesis`, `Arginine and proline metabolism`, `Fatty acid biosynthesis`.
+
+Pathway sets for metabolomics can be found in different databases:
+
+-   KEGG
+
+-   Reactome
+
+-   Metabolic networks: BiGG / MetabolicAtlas
+
+Pathway definitions are relatively arbitrary and depend on the database. Filtering them may be necessary as many include non metabolic pathways such as cell differenciation processes, immune related pathways, or generic terms such as `Metabolic pathways`.
+
+More pathway sets can be found on BioCyc for example, but it requires an account, and extracting relevant data is complicated.
+
+:::{.notes}
+
+Juliette
+
+:::
+
 ## **Gene Ontology (GO)**
 
 <http://geneontology.org/>
@@ -414,10 +506,79 @@ GO is a widely used database that categorizes genes into three main ontologies: 
 
 ## **KEGG (Kyoto Encyclopedia of Genes and Genomes)**
 
-KEGG is a comprehensive database that integrates biological pathways, genomic information, and functional annotations. It covers various organisms and provides detailed pathway maps, as well as information on metabolic pathways, signaling networks, diseases, and drugs.
+KEGG is a Japanese database of genes, pathways, diseases, drugs and more. It contains metabolic pathways as well as many other pathways related to diseases, the immune system, genetic processes, and many more.
 
+Everything in KEGG has its own KEGG ID, and often also has an external ID (such as ChEBI for metabolites).
 
-List here: https://www.genome.jp/kegg/catalog/org_list.html
+When studying metabolomics data, we should filter the pathways to only use metabolic pathways (done in the Exercises part of this course).
+
+Using the KEGG API, we can access the database directly inside R.
+
+Information on the KEGG API can be found here: <https://www.kegg.jp/kegg/rest/keggapi.html>
+
+In R, we will be using the [KEGGREST](https://www.bioconductor.org/packages/release/bioc/html/KEGGREST.html) library.
+
+:::{.notes}
+
+Juliette
+
+:::
+
+## `keggList()`
+
+KEGG generic pathways can be listed using keggList and the term "pathway".
+
+```{r, kegg-generic, cache=TRUE}
+head(keggList("pathway"))
+```
+
+We can also search for pathways of a given species using the 3-letter species codes from KEGG. This is a subset of pathways of the generic pathway, so the pathway IDs are the same with "hsa" instead of "map".
+
+```{r, kegg-human, cache=TRUE}
+head(keggList("pathway", "hsa"))
+```
+
+:::{.notes}
+
+Juliette
+
+:::
+
+## `keggLink()`
+
+We can link multiple databases using `keggLink()`, for example to get all compounds in each pathway. Because compounds aren't species-specific in KEGG, they are mapped to the generic pathways.
+
+```{r, kegg-link1, cache=TRUE}
+head(keggLink("compound", "pathway"))
+```
+
+However, genes are species-specific so we can extract all human genes and their pathways directly.
+
+```{r, kegg-link2, cache=TRUE}
+head(keggLink("hsa", "pathway"))
+```
+
+:::{.notes}
+
+Juliette
+
+:::
+
+## `keggConv()`
+
+To convert all compound KEGG IDs to ChEBI, we can do the following:
+
+```{r, kegg-conv, cache=TRUE}
+head(keggConv("compound", "chebi"))
+```
+
+We can get a list of all pathways for a given organism, and a list of all compounds per pathway. We can then match them together to get all metabolites organised into pathways for our organism (done in the Exercises part of this course).
+
+:::{.notes}
+
+Juliette
+
+:::
 
 ## **WikiPathways**
 WikiPathways is a community-curated database that focuses on biological pathways. It provides a platform for researchers to collaboratively create, annotate, and update pathway information. WikiPathways covers a wide range of species and offers pathway diagrams, annotations, and links to external resources.
@@ -435,6 +596,8 @@ MSigDB is a collection of gene sets that represent various biological concepts a
 ## **Medical Subject Headings (MeSH)**
 
 MeSH is a controlled vocabulary database developed by the National Library of Medicine (NLM). It provides standardized terminology for biomedical research and categorizes articles in PubMed. MeSH includes hierarchical relationships between terms and enables the identification of relevant articles based on specific topics or concepts.
+
+
 
 
 ## Over Representation analysis
@@ -651,6 +814,44 @@ fisher.test(d, alternative = "greater")
 
 
 
+## Over-representation analysis (ORA)
+
+ORA for metabolite enrichment is the same method as for genes: it uses Fisher's exact test to test for significant overlap in sets.
+
+-   3 inputs:
+
+    -   a collection of pathways: one pathway is an ID associated with many metabolites. Metabolites can be in multiple pathways.
+
+    -   a list of metabolites of interest (i.e. filtered on p-values or fold changes), with IDs that match the pathway set IDs.
+
+    -   a background set:
+
+        -   targeted metabolomics: all assayed metabolites
+
+        -   untargeted metabolomics: all features that can be annotated
+
+
+:::{.notes}
+
+Juliette
+
+:::
+
+## ORA: extra information
+
+::: callout-warning
+Due to the smaller input datasets in metabolomics, the background set is very important! Use a specific background set corresponding to realistically observable metabolites, not all known metabolites.
+:::
+
+Multiple-testing corrections and p-value filtering are necessary to produce list of metabolites of interest. Because input datasets are usually smaller, selecting the correct significant metabolites is very important.
+
+Multiple-testing in ORA is also necessary, however due to the stringent nature of these tests, it's acceptable to use a higher threshold in metabolomics (e.g. 0.1 instead of 0.05), when using a specific background set.
+
+:::{.notes}
+
+Juliette
+
+:::
 
 ## Gene Set Enrichment Analysis (GSEA)
 
@@ -788,6 +989,52 @@ print(p5)
 ```
 
 
+## Metabolite set enrichment analysis (MSEA/GSEA)
+
+GSEA, also known as *MSEA* in metabolomics, is the same method as for genes. It requires values associated with each metabolite, uses the unfiltered metabolite dataset. It ranks all metabolite values and tests if closely ranked metabolites enrich the same pathway. Its main advantage is that it can detect subtle and coordinated changes.
+
+GSEA provides a p-value of enrichment for each pathway for significance, and an Enrichment Score of each pathway which indicates up or down regulation of that pathway.
+
+It doesn't require a threshold on input metabolite values as it uses the entire list of metabolites of interest. It therefore doesn't need a background set (background set = all input metabolites). However, this means that when using a partially annotated list of metabolites of interest, the background set is not necessarily representative of what could be measured since non annotated metabolites should still be a part of this set. This is important to take into account for the interpretation of the results as GSEA can only enrich using the input metabolites.
+
+:::{.notes}
+
+Juliette
+
+:::
+
+## GSEA: extra information
+
+In addition to p-values for each pathway, it provides a list of leading genes/metabolites which help enrich each pathway:
+
+> "The leading-edge subset in a gene set are those genes that appear in the ranked list at or before the point at which the running sum reaches its maximum deviation from zero. The leading-edge subset can be interpreted as the core that accounts for the gene set's enrichment signal."
+
+GSEA results do still need a filter on p-value to determine significantly enriched pathways, usually 0.05 or 0.1.
+
+::: callout-warning
+Depending on input values/scores, interpretation of pathway regulations can be different! For example the fold change values are one condition / a different condition so be sure to interpret the pathway up/down regulation in that direction.
+:::
+
+:::{.notes}
+
+Juliette
+
+:::
+
+## General metabolomics data enrichment warnings
+
+-   Any enrichment method is sensitive to metabolite mis-identification.
+
+-   Use organism-specific pathway set if available.
+
+-   If possible, run multiple times with different pathway databases and enrichment methods and form a consensus.
+
+:::{.notes}
+
+Juliette
+
+:::
+
 ## Over Representation Test tools
 
 ### Online tools
@@ -817,6 +1064,24 @@ print(p5)
 * `hypeR`
 * `gprofiler2`
 * `fgsea` (used internally by ClusterProfiler)
+
+
+
+## Tools for Metabolites
+
+-   R: `clusterprofiler`, `FELLA`
+
+-   In addition to R, Python can also be used for enrichment analyses: Python packages include `gseapy` with `gsea()` or `prerank()` functions
+
+-   MetaboAnalyst and IMPaLA: for online analyses
+
+-   Metexplore for visualisation using metabolic networks
+
+:::{.notes}
+
+Juliette
+
+:::
 
 ## Some examples with `clusterProfiler`
 
@@ -1059,6 +1324,17 @@ gseDO(geneListENTREZ, verbose = FALSE) %>% as_tibble()
 
 ```
 
+## Some examples with `clusterProfiler`
+
+### Universal enrichment analysis
+
+```{r}
+TERM2GENE <- select(org.db, keys = keys(org.db,"GOALL"), column="ENSEMBL",keytype="GOALL") %>% dplyr::select(GOALL,ENSEMBL)
+enricher(de_genes$rowname, TERM2GENE = TERM2GENE,universe = DE_result$rowname) %>% as_tibble()
+```
+
+
+
 
 ## Some examples with `rbioapi`
 
@@ -1169,9 +1445,340 @@ rba_string_enrichment_ppi(ids = proteins_mapped$stringId,
 ```
 
 
+## Clusterprofiler for Metabolites
+
+### Input data
+
+In the lesson examples, I will be using a simulated data set based on a metabolic network.
+
+```{r, eval=FALSE, echo=FALSE}
+cond = zscores %>% as.data.frame() %>% select(2)  %>% rownames_to_column("id")
+write.table(cond %>% rename("score" = 2), paste0("data/example_metab_data_",names(cond)[2],".tsv"), sep="\t", quote = F, row.names = F)
+```
+
+::: columns
+::: {.column width="45%"}
+Pathway sets
+
+```{r, pathway-sets, echo=FALSE}
+pathway_sets = read.table("data/metabolite_pathways.tsv", sep="\t", header = T) %>% 
+  mutate(metabolite = str_remove(metabolite, "[a-z]$")) %>% relocate(subsystem)
+
+metabolites = read.table("data/example_metab_data_Acylglycerides_metabolism.tsv", sep="\t", header = T) %>% arrange(desc(score)) %>% mutate(id = as.character(id)) %>% pull(score,id) %>% na.omit()
+
+gsea.metab = GSEA(metabolites, TERM2GENE = pathway_sets,minGSSize = 3, pvalueCutoff = 1)
+pathway_sets %>% dplyr::slice(sample(1:dplyr::n())) %>% head(15) %>% tibble()
+```
+:::
+
+::: {.column width="10%"}
+:::
+
+::: {.column width="45%"}
+Metabolomics data
+
+```{r, metabo-data, echo=FALSE}
+metabolites %>% enframe() %>% tibble() %>% head(15)
+```
+:::
+:::
+
+------------------------------------------------------------------------
+
+### ORA
+
+```{r, ora-data, echo=FALSE}
+metabolites.ORA = read.table("data/example_metab_data_Acylglycerides_metabolism.tsv", sep="\t", header = T) %>% na.omit() %>% dplyr::filter(abs(score)> 1) %>% pull(id)
+```
+
+```{r, ora}
+ora.metab = enricher(metabolites.ORA , TERM2GENE = pathway_sets)
+dotplot(ora.metab)
+```
+
+------------------------------------------------------------------------
+
+### GSEA/MSEA
+
+#### GSEA example: results
+
+```{r, gsea-results, echo=FALSE}
+tibble(gsea.metab@result) %>% dplyr::filter(pvalue < 0.05) %>% dplyr::select(ID, setSize, NES, pvalue, core_enrichment) %>% head(8)
+```
+
+```{r, gsea-plot}
+enrichplot::gseaplot2(gsea.metab, geneSetID = 8, title = gsea.metab$Description[8])
+```
+
+------------------------------------------------------------------------
+
+```{r, gsea-dotplot}
+dotplot(gsea.metab)
+```
+
+
+## MetaboAnalyst
+
+MetaboAnalyst is an online platform for various steps of analysing metabolomics data.
+
+![](images/metaboanalyst.png){fig-align="center"}
+
+------------------------------------------------------------------------
+
+It can be useful for a quick analysis but often remains unclear on the actual methods used. For example, it mentions MSEA in its description but never actually provides a GSEA or MSEA analysis.
+
+![](images/metaboanalyst_enrichment.png){fig-align="center" width="277"}
+
+::: callout-warning
+Due to its online nature, reproducibility of results can be an issue between versions. Similarly, IMPaLA is an online interface for enriching genes and metabolites, but its results must be taken with a grain of salt since it combines many pathway databases into one in the results.
+:::
+
+------------------------------------------------------------------------
+
+### Different MetaboAnalyst analyses
+
+MetaboAnalyst provides interfaces for ORA, single sample profiling and QEA. ssprofiling and QEA are other enrichment methods that we will not go over during this course.
+
+![](images/enrichment_analysis.png){fig-align="center" width="414"}
+
+## Metexplore
+
+### Biosources/metabolic networks
+
+KEGG - E. coli
+
+![](images/metabolic_network.png){fig-align="center"}
+
+------------------------------------------------------------------------
+
+![](images/biosource_stats.png){fig-align="center" width="343"}
+
+------------------------------------------------------------------------
+
+### ID mapping
+
+-   Usually from "common names" to CHEBI
+
+-   Most often requires a manual step for missing ID conversions
+
+-   Can add a background set of metabolites for ORA
+
+![](images/metexplore_mapping.png){fig-align="center" width="148"}
+
+------------------------------------------------------------------------
+
+![](images/metexplore_mapping_example.png){fig-align="center" width="507"}
+
+------------------------------------------------------------------------
+
+### Pathway analysis
+
+-   Once a metabolite dataset has been mapped to a network, pathway analysis (ORA) is done automatically using the mapped data
+
+-   Can be viewed in a table with multiple test corrections
+
+![](images/metexplore_pathway_enrichment.png){fig-align="center"}
+
+------------------------------------------------------------------------
+
+### Visualisation
+
+-   Can visualise a subset of metabolites and reactions, or entire pathways
+
+-   Highlight metabolites of interest
+
+![](images/metexplore_viz.png){fig-align="center"}
+
+## FELLA
+
+-   Uses KEGG network and a list of KEGG metabolites
+
+-   Represents KEGG as a knowledge graph with hierarchical connections from metabolites to pathways through reactions, enzymes...
+
+## FELLA: example
+
+```{r, fella-data, echo=FALSE}
+data("FELLA.sample")
+input.sample = read.table("data/epithelial_input.csv", sep= ",", header = T)
+```
+
+```{r, fella-build-kegg, echo=FALSE}
+#| eval: false
+
+# Only needs to be run once to create the file
+
+graph <- buildGraphFromKEGGREST(
+ organism = "hsa",
+ filter.path = c("01100", "01200", "01210", "01212", "01230"))
+
+buildDataFromGraph(
+ keggdata.graph = graph,
+ databaseDir = "kegg_db/",
+ internalDir = FALSE,
+ matrices = "diffusion",
+ normality = "diffusion",
+ niter = 50)
+
+fella.data <- loadKEGGdata(
+ databaseDir = "kegg_db",
+ internalDir = FALSE,
+ loadMatrix = NULL
+ )
+myAnalysis = FELLA::enrich(compounds = input.sample%>% pull(KEGG.id), method = "diffusion", 
+    approx = "normality",
+    data = fella.data)
+```
+
+
+```{r, fella-generate-graph, echo=FALSE}
+myAnalysis <- readRDS("data/myAnalysis.rds")
+fella.data <- readRDS("data/fella.data.rds")
+g <- generateResultsGraph(object = myAnalysis, data = fella.data)
+v.size <- c(
+  "1" = 10,
+  "2" = 6,
+  "3" = 5,
+  "4" = 4,
+  "5" = 2
+)
+v.color <- stats::setNames(grDevices::palette()[1:5], 1:5)
+
+```
+
+```{r, fella-fig, echo=FALSE, fig.width=6, fig.height=7}
+#| fig-width: 17
+#| fig-height: 10
+plotGraph(g, 
+     vertex.size = v.size[V(g)$com], 
+     vertex.color = v.color[V(g)$com], 
+     # only show level 1 (pathway) and 5 (compound)
+     vertex.label = ifelse(V(g)$com %in% c(1, 5), V(g)$label, ""), 
+     vertex.label.dist = 1, 
+     vertex.label.color = ifelse(V(g)$name %in% input.sample, 
+                                 "indianred1", "gray20"), 
+     edge.width = 3,
+     nlimit = 150)
+```
+
+
+# Visualisation of enrichment results
+
+## Basic visualisations: Dotplot
+
+```{r}
+#| echo: false
+
+dotplot(ego,showCategory=10)
+```
+
+## Basic visualisations: Gene-Concept Network
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+y <- setReadable(ego, OrgDb = org.db, keyType="ENSEMBL")
+p1 <- cnetplot(y, foldChange=geneList, node_label="none", 
+        color_category='firebrick', 
+        color_gene='steelblue')
+print(p1)
+```
+
+### Basic visualisations: UpSet plots
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
+upsetplot(ego)
+```
+
+> For GSEA result, it will plot the fold change distributions of different categories (e.g. unique to pathway, overlaps among different pathways).
+
+## Basic visualisations: Gene-Concept Network
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+y <- setReadable(ego, OrgDb = org.db, keyType="ENSEMBL")
+p2 <- heatplot(y, foldChange=geneList, showCategory=5)
+print(p2)
+```
+
+
 # Beyond Enrichment
+
+## Relationship between pathway using term similarity
+
+### Enrichment Map
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
+ego <- pairwise_termsim(ego)
+emapplot(ego, showCategory = 10)
+```
+
+## Relationship between pathway using term similarity
+
+### Tree plot
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
+treeplot(ego)
+```
+
+
 
 ## Relationship between pathway and products (features) using semantic
 
-GO-CAMs
+### Functional similarity of gene products can be estimated by controlled biological vocabularies, using __semantic similarity measures__. 
+
+#### The semantic similarity measures take into account the distance or information content between terms in the ontology. 
+
+Known measures: 
+* IC based: Resnik, Lin, Schlicker, and Jiang-Conrath. 
+* Graph based: Wang (graph structure of GO).
+
+See [clusterProfiler book](https://yulab-smu.top/biomedical-knowledge-mining-book/semantic-similarity-overview.html) for more details.
+
+## Relationship between pathway and products (features) using `GOSemSim`
+
+```{r}
+#| warning: false
+#| message: false
+
+
+library(GOSemSim)
+hsGO <- godata(org.db, ont="BP",keytype = "ENSEMBL")
+```
+
+### Get GO similarity based on genes sets
+
+```{r}
+goSim("GO:0098813", "GO:0007059", semData=hsGO, measure="Jiang")
+```
+
+```{r}
+mgoSim(as_tibble(ego)$ID, as_tibble(ego)$ID, semData=hsGO, measure="Jiang", combine=NULL)
+```
+
+### Get gene similarity based on go terms
+
+```{r}
+mgeneSim(genes=de_genes$rowname[1:10],
+         semData=hsGO, measure="Wang",verbose=FALSE)
+```
+
+## References
+
+-   Wieder C, Frainay C, Poupin N, Rodríguez-Mier P, Vinson F, Cooke J, et al. (2021) **Pathway analysis in metabolomics: Recommendations for the use of over-representation analysis.** PLoS Comput Biol 17(9): e1009105. https://doi.org/10.1371/journal.pcbi.1009105
+-   Subramanian A, Tamayo P, Mootha VK, Mukherjee S, Ebert BL, Gillette MA, Paulovich A, Pomeroy SL, Golub TR, Lander ES, Mesirov JP. **Gene set enrichment analysis: a knowledge-based approach for interpreting genome-wide expression profiles.** Proc Natl Acad Sci U S A. 2005 Oct 25;102(43):15545-50. doi: 10.1073/pnas.0506580102. Epub 2005 Sep 30. PMID: 16199517; PMCID: PMC1239896.
 
