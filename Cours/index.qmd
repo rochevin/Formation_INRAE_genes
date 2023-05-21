@@ -655,6 +655,8 @@ $$
 
 ![From https://www.pathwaycommons.org/guide/primers/statistics/fishers_exact_test/](index_files/imgs/figure_1.png){fig-align="center"}
 
+
+
 ## Fisher Exact Test
 
 ### With an (false) example
@@ -680,6 +682,10 @@ $$
 
 ![From https://www.pathwaycommons.org/guide/primers/statistics/fishers_exact_test/](index_files/imgs/figure_3.png){fig-align="center"}
 
+:::{.notes}
+Comment calculer la p-value et qu'est-ce que la p-value veut dire ? 
+Quelle est a la probabilité que j'observe 12 genes DE+pathway OU PLUS par hasard ?
+:::
 
 ## Fisher Exact Test
 
@@ -1684,7 +1690,7 @@ p1 <- cnetplot(y, foldChange=geneList, node_label="none",
 print(p1)
 ```
 
-### Basic visualisations: UpSet plots
+## Basic visualisations: UpSet plots
 
 ```{r}
 #| echo: false
@@ -1769,6 +1775,9 @@ goSim("GO:0098813", "GO:0007059", semData=hsGO, measure="Jiang")
 ```{r}
 mgoSim(as_tibble(ego)$ID, as_tibble(ego)$ID, semData=hsGO, measure="Jiang", combine=NULL)
 ```
+
+## Relationship between pathway and products (features) using `GOSemSim`
+
 
 ### Get gene similarity based on go terms
 

@@ -5599,7 +5599,20 @@ p = 1 - \displaystyle\sum_{i = 0}^{k-1}\frac{{M \choose i}{{N-M} \choose {n-i}}}
 <h2>Fisher Exact Test</h2>
 <h3 id="with-an-false-example-3">With an (false) example</h3>
 
-<img data-src="index_files/imgs/figure_3.png" class="r-stretch quarto-figure-center"><p class="caption">From https://www.pathwaycommons.org/guide/primers/statistics/fishers_exact_test/</p></section>
+<img data-src="index_files/imgs/figure_3.png" class="r-stretch quarto-figure-center"><p class="caption">From https://www.pathwaycommons.org/guide/primers/statistics/fishers_exact_test/</p><aside class="notes">
+<p>Comment calculer la p-value et qu’est-ce que la p-value veut dire ? Quelle est a la probabilité que j’observe 12 genes DE+pathway OU PLUS par hasard ?</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
 <section id="fisher-exact-test-7" class="slide level2">
 <h2>Fisher Exact Test</h2>
 <h3 id="solution">Solution</h3>
@@ -8356,18 +8369,12 @@ $p_value
 <img data-src="index_files/figure-revealjs/unnamed-chunk-60-1.png" width="960" class="r-stretch"></section>
 <section id="basic-visualisations-gene-concept-network" class="slide level2">
 <h2>Basic visualisations: Gene-Concept Network</h2>
-<div class="cell">
-<div class="cell-output-display">
-<p><img data-src="index_files/figure-revealjs/unnamed-chunk-61-1.png" width="960"></p>
-</div>
-</div>
-<h3 id="basic-visualisations-upset-plots">Basic visualisations: UpSet plots</h3>
-<div class="cell">
-<div class="cell-output-display">
-<p><img data-src="index_files/figure-revealjs/unnamed-chunk-62-1.png" width="960"></p>
-</div>
-</div>
-<blockquote>
+
+<img data-src="index_files/figure-revealjs/unnamed-chunk-61-1.png" width="960" class="r-stretch"></section>
+<section id="basic-visualisations-upset-plots" class="slide level2">
+<h2>Basic visualisations: UpSet plots</h2>
+
+<img data-src="index_files/figure-revealjs/unnamed-chunk-62-1.png" width="960" class="r-stretch"><blockquote>
 <p>For GSEA result, it will plot the fold change distributions of different categories (e.g.&nbsp;unique to pathway, overlaps among different pathways).</p>
 </blockquote>
 </section>
@@ -25280,6 +25287,9 @@ GO:0046649      0.177      0.156      0.158
  [ reached getOption("max.print") -- omitted 98 rows ]</code></pre>
 </div>
 </div>
+</section>
+<section id="relationship-between-pathway-and-products-features-using-gosemsim-1" class="slide level2">
+<h2>Relationship between pathway and products (features) using <code>GOSemSim</code></h2>
 <h3 id="get-gene-similarity-based-on-go-terms">Get gene similarity based on go terms</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb112"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb112-1"><a href="#cb112-1"></a><span class="fu">mgeneSim</span>(<span class="at">genes=</span>de_genes<span class="sc">$</span>rowname[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>],</span>
