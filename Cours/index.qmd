@@ -505,12 +505,29 @@ Juliette
 
 ## **Gene Ontology (GO)**
 
-<http://geneontology.org/>
+::: {style="font-size: 18px;"}
 
+### Website: <http://geneontology.org/>
+
+### Description: 
 GO is a widely used database that categorizes genes into three main ontologies: molecular function, biological process, and cellular component. It provides a standardized vocabulary to describe gene functions and interactions, allowing researchers to annotate and analyze gene sets in a structured manner.
 
 
-[Ten Quick Tips for Using the Gene Ontology](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1003343)
+1. **Molecular Function**
+   - Describes the elemental activities of a gene product at the molecular level.
+2. **Biological Process**
+   - Represents sets of molecular events or biological pathways achieved by one or more gene products.
+   - Biological process terms describe the larger, coordinated series of events that involve multiple molecular functions.
+3. **Cellular Component**
+   - Refers to the subcellular structures, locations, and macromolecular complexes in which gene products are active.
+   - Cellular component terms describe the physical compartments or structures where gene products function.
+
+
+:::{.callout-tip}
+* [Ten Quick Tips for Using the Gene Ontology](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1003343)
+:::
+
+:::
 
 ## **KEGG (Kyoto Encyclopedia of Genes and Genomes)**
 
@@ -589,24 +606,59 @@ Juliette
 :::
 
 ## **WikiPathways**
+
+### Website: <https://www.wikipathways.org/>
+
+### Description
+
 WikiPathways is a community-curated database that focuses on biological pathways. It provides a platform for researchers to collaboratively create, annotate, and update pathway information. WikiPathways covers a wide range of species and offers pathway diagrams, annotations, and links to external resources.
 
 ## **Disease Ontology**
+
+### Website: <https://disease-ontology.org/>
+
+### Description
 The Disease Ontology (DO) is a structured and standardized ontology that describes human diseases and their relationships. It provides a hierarchical framework to classify and annotate diseases, enabling researchers to study disease-associated genes, pathways, and biological processes.
 
 ## **Reactome**
+
+### Website: <https://reactome.org/tools/reactome-fiviz>
+
+### Description
 Reactome is a curated database of biological pathways and reactions. It covers a wide range of species and provides detailed pathway information, including molecular events, regulatory processes, and disease associations. Reactome also offers advanced visualization tools and data analysis features.
 
 ## **Molecular Signatures Database (MSigDB)**
 
-MSigDB is a collection of gene sets that represent various biological concepts and pathways. It includes curated gene sets from different sources, such as pathways, gene ontology terms, and gene expression signatures. MSigDB is widely used for gene set enrichment analysis and pathway-based functional analysis.
+::: {style="font-size: 18px;"}
+
+### Website: <https://www.gsea-msigdb.org/gsea/msigdb>
+
+### Description
+MSigDB is a collection of gene sets that represent various biological concepts and pathways. 
+It includes curated gene sets from different sources: 
+
+* H: hallmark gene sets
+* C1: positional gene sets
+* C2: curated gene sets
+* C3: motif gene sets
+* C4: computational gene sets
+* C5: GO gene sets
+* C6: oncogenic signatures
+* C7: immunologic signatures
+
+:::
 
 ## **Medical Subject Headings (MeSH)**
 
+### Website: <https://disease-ontology.org/>
+
+### Description
 MeSH is a controlled vocabulary database developed by the National Library of Medicine (NLM). It provides standardized terminology for biomedical research and categorizes articles in PubMed. MeSH includes hierarchical relationships between terms and enables the identification of relevant articles based on specific topics or concepts.
 
-
-
+:::{.callout-note}
+* Data source from gendoo, gene2pubmed and RBBH are all supported. User can select interesting category to test. All 16 categories of MeSH are supported. The analysis supports about 200 species.
+* MeSH terms were associated with Entrez Gene ID by three methods, gendoo, gene2pubmed and RBBH (Reciprocal Blast Best Hit).
+:::
 
 ## Over Representation analysis
 
