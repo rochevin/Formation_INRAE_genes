@@ -1,125 +1,43 @@
 ---
-title: "TP"
+title: "Practical Course: Functional analysis of genes and metabolites"
+author: "Vincent ROCHER & Juliette COOKE"
 format: revealjs
 editor: visual
 ---
 
-# Practical Course: Gene Enrichment Analysis with `clusterProfiler`
+# Environnement de travail
 
-## Introduction
+## Docker
 
--   Brief overview of gene enrichment analysis
--   Importance of identifying enriched biological pathways
-
-## Setup
-
--   Install `clusterProfiler`
--   Load required packages
-
-```{r}
-#| eval: false
-
-# Install clusterProfiler from Bioconductor
-if (!requireNamespace("BiocManager", quietly = TRUE))
-  install.packages("BiocManager")
-
-BiocManager::install(c("clusterProfiler","DOSE"))
-
-# Load required packages
-library(clusterProfiler)
-library(DOSE)
-library(org.Hs.eg.db) # for human gene annotation
+```bash
+docker run -d --name rstduio_4.2 -e PASSWORD=coucou -e DISABLE_AUTH=true -e USERID=1001 -e GROUPID=1001 -e ROOT=true -v /home/rochevin/Documents/:/workspace -p 8787:8787 rocker/verse:4.2.2
 ```
 
-```{r}
-#| echo: false
-
-library(clusterProfiler)
-library(DOSE)
-library(enrichplot)
-library(tidyverse)
-library(org.Hs.eg.db) # for human gene annotation
+```yaml
+services:
+  rstudio:
+    image: rocker/verse:4.2
+    ports:
+      - "8787:8787"
+    environment:
+      DISABLE_AUTH: true
+      USERID: 1001
+      GROUPID: 1001
+      ROOT: true
+      PASSWORD: coucou
+    volumes:
+      - /home/rochevin/Documents/:/workspace
 ```
 
-## Data
 
--   Import list of differentially expressed genes
--   Convert gene IDs to Entrez IDs using `org.Hs.eg.db`
+## `git`
 
-```{r}
-# Import list of differentially expressed genes
-de_genes <- read_tsv("liste_genes.tsv")
+## `renv``
 
-# Convert gene IDs to Entrez IDs using org.Hs.eg.db
-de_genes_entrez <- bitr(de_genes$gene_name, fromType = "SYMBOL", toType = "ENTREZID", OrgDb = org.Hs.eg.db)
-```
+## Supports
 
-## Gene Ontology Enrichment Analysis
-
--   Perform Gene Ontology (GO) enrichment analysis
--   Plot results using `dotplot` and `enrichMap`
-
-```{r}
-# Perform GO enrichment analysis
-go_enrichment <- enrichGO(de_genes_entrez$ENTREZID, OrgDb = org.Hs.eg.db, keyType = "ENTREZID", ont = "BP")
-
-# Plot results with dotplot
-dotplot(go_enrichment,showCategory = 25)
-
-# Plot results with enrichMap
-go_enrichment <- pairwise_termsim(go_enrichment)
-emapplot(go_enrichment, showCategory = 10)
-```
-
-## Kyoto Encyclopedia of Genes and Genomes (KEGG) Enrichment Analysis
-
--   Perform KEGG enrichment analysis
--   Plot results using `dotplot` and `enrichMap`
-
-```{r}
-# Perform KEGG enrichment analysis
-kegg_enrichment <- enrichKEGG(de_genes_entrez$ENTREZID, OrgDb = org.Hs.eg.db, keyType = "ENTREZID")
-
-# Plot results with dotplot
-dotplot(kegg_enrichment)
-
-# Plot results with enrichMap
-enrichMap(kegg_enrichment, showCategory = 10)
-```
-
-## Gene Set Enrichment Analysis (GSEA)
-
--   Perform GSEA using `gseGO` function
--   Plot results using `barplot`
-
-```{r}
-# Perform GSEA
-gsea <- gseGO(de_genes_entrez$ENTREZID, OrgDb = org.Hs.eg.db, nPerm = 1000)
-
-# Plot results with barplot
-barplot(gsea, showCategory = 10)
-```
-
-## Network Visualization
-
--   Visualize gene interaction network using `visNetwork`
-
-```{r}
-# Visualize gene interaction network
-genes <- rownames(gsea)
-network <- enricher(genes, OrgDb = org.Hs.eg.db, keyType = "ENTREZID", pvalueCutoff = 0.05) %>%
-  simplify(rmOverlap = TRUE) %>%
-  toCytoscape()
-
-visNetwork(nodes = network$nodes, edges = network$edges)
-```
-
-## Conclusion
-
--   Summary of gene enrichment analysis methods and tools
--   Importance of carefully selecting appropriate methods and tools
--   Future directions in gene enrichment analysis
-
-## References
-
--   List of relevant articles and resources used in the presentation.
+-   [**Slides du cours**](Cours/index.html).
+-   **Slides du TP**:
+  - [Genes](TP/index.html).
+  - [Metabolites](TP/tp_metab.html).
+-   [**Wiki compagnon**](https://github.com/rochevin/Formation_INRAE_genes/wiki).
