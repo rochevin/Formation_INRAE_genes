@@ -1,0 +1,3 @@
+[submodule "TP/Formation_INRAE_genes.wiki"]
+	path = TP/Formation_INRAE_genes.wiki
+	url = https://github.com/rochevin/Formation_INRAE_genes.wiki.git

@@ -1,125 +1,272 @@
 ---
-title: "TP"
-format: revealjs
+title: "Practical Course: Functional analysis of genes and metabolites"
+author: "Vincent ROCHER & Juliette COOKE"
+format: 
+  revealjs:
+    fontsize: 24px
 editor: visual
 ---
 
-# Practical Course: Gene Enrichment Analysis with `clusterProfiler`
+# Make a good working space
 
-## Introduction
+## Docker and Containers
 
--   Brief overview of gene enrichment analysis
--   Importance of identifying enriched biological pathways
+### **What is Docker?**
+  - Docker is an open-source platform for automating application deployment using containerization.
 
-## Setup
+### **What are Containers?**
+  - Containers are lightweight, isolated environments that package software and its dependencies, ensuring consistent behavior across different systems.
 
--   Install `clusterProfiler`
--   Load required packages
+### **Benefits of Docker:**
+  - __Portability__: Docker allows applications to run consistently across different environments, from development to production.
+  - __Scalability__: Docker simplifies scaling by enabling the replication and distribution of containers.
+  - __Efficiency__: Containers are lightweight and start quickly, making the deployment process faster and more efficient.
 
-```{r}
-#| eval: false
 
-# Install clusterProfiler from Bioconductor
-if (!requireNamespace("BiocManager", quietly = TRUE))
-  install.packages("BiocManager")
+## Docker with `rocker` images
 
-BiocManager::install(c("clusterProfiler","DOSE"))
+#### Using `docker run`
 
-# Load required packages
-library(clusterProfiler)
-library(DOSE)
-library(org.Hs.eg.db) # for human gene annotation
+``` bash
+docker run -d --name rstudio_4.2 -e PASSWORD=coucou -e DISABLE_AUTH=true -e USERID=1001 -e GROUPID=1001 -e ROOT=true -v /home/rochevin/Documents/:/workspace -p 8787:8787 rocker/verse:4.2.2
 ```
 
-```{r}
-#| echo: false
+#### Using `docker compose`
 
-library(clusterProfiler)
-library(DOSE)
-library(enrichplot)
-library(tidyverse)
-library(org.Hs.eg.db) # for human gene annotation
+``` yaml
+services:
+  rstudio:
+    image: rocker/verse:4.2
+    ports:
+      - "8787:8787"
+    environment:
+      DISABLE_AUTH: true
+      USERID: 1001
+      GROUPID: 1001
+      ROOT: true
+      PASSWORD: coucou
+    volumes:
+      - /home/rochevin/Documents/:/workspace
 ```
 
-## Data
+and then: `docker compose up`
 
--   Import list of differentially expressed genes
--   Convert gene IDs to Entrez IDs using `org.Hs.eg.db`
+## `git`
 
-```{r}
-# Import list of differentially expressed genes
-de_genes <- read_tsv("liste_genes.tsv")
+Git is a distributed version control system that allows you to track changes in files over time.
 
-# Convert gene IDs to Entrez IDs using org.Hs.eg.db
-de_genes_entrez <- bitr(de_genes$gene_name, fromType = "SYMBOL", toType = "ENTREZID", OrgDb = org.Hs.eg.db)
+-   To use Git, you start by creating a repository, which serves as a storage space for your project's files.
+-   You can then make changes to the files, commit those changes, and branch off to work on different features.
+
+### `git` with FAIR principles
+
+Git is important for FAIR principles (Findable, Accessible, Interoperable, and Reusable) because it enables researchers to track and share their work, making it more findable and accessible. It also allows for collaboration and versioning, promoting reproducibility and ensuring the interoperability and reusability of research outputs.
+
+## `git` with this practile course
+
+### Download all content (slide + code) with `git`:
+
+```bash
+git clone --recurse-submodules https://github.com/rochevin/Formation_INRAE_genes.git
 ```
 
-## Gene Ontology Enrichment Analysis
 
--   Perform Gene Ontology (GO) enrichment analysis
--   Plot results using `dotplot` and `enrichMap`
+## `renv`
 
-```{r}
-# Perform GO enrichment analysis
-go_enrichment <- enrichGO(de_genes_entrez$ENTREZID, OrgDb = org.Hs.eg.db, keyType = "ENTREZID", ont = "BP")
+### The `renv` R package is a tool that helps manage the dependencies of R projects.
 
-# Plot results with dotplot
-dotplot(go_enrichment,showCategory = 25)
+1.  Its purpose is to create a reproducible environment by tracking and isolating the specific versions of packages used in a project.
+2.  It ensures that others can reproduce the exact same environment and results by providing a consistent set of dependencies.
 
-# Plot results with enrichMap
-go_enrichment <- pairwise_termsim(go_enrichment)
-emapplot(go_enrichment, showCategory = 10)
+#### This is crucial for FAIR principles as it enhances the reproducibility and reusability of R-based research. By using renv, researchers can easily share their code and ensure that others can run it without compatibility issues or unexpected package version differences.
+
+### Initializing
+
+`renv::init(bioconductor=TRUE)`
+
+``` r
+* Using Bioconductor version '3.16'.
+This project already has a lockfile. What would you like to do? 
+
+1: Restore the project from the lockfile.
+2: Discard the lockfile and re-initialize the project.
+3: Activate the project without snapshotting or installing any packages.
+4: Abort project initialization.
 ```
 
-## Kyoto Encyclopedia of Genes and Genomes (KEGG) Enrichment Analysis
+## Rstudio
 
--   Perform KEGG enrichment analysis
--   Plot results using `dotplot` and `enrichMap`
+RStudio IDE is an integrated development environment specifically designed for the R programming language. It provides a user-friendly interface for writing, debugging, and running R code, as well as numerous features for data visualization, package management, and project organization.
 
-```{r}
-# Perform KEGG enrichment analysis
-kegg_enrichment <- enrichKEGG(de_genes_entrez$ENTREZID, OrgDb = org.Hs.eg.db, keyType = "ENTREZID")
+### Rstudio with Git, renv, and Docker
 
-# Plot results with dotplot
-dotplot(kegg_enrichment)
+-   With Git, RStudio IDE allows you to version control your R projects, enabling you to track changes, collaborate with others, and easily revert to previous versions if needed. You can commit your code changes, create branches for different features or experiments, and merge them back into the main codebase.
 
-# Plot results with enrichMap
-enrichMap(kegg_enrichment, showCategory = 10)
+-   RStudio IDE integrates with the `renv` package to manage project dependencies. By using renv, you can create a project-specific environment that captures the versions of R packages required for your project. This ensures that anyone working on the project can easily reproduce the exact same environment and avoid potential compatibility issues.
+
+-   Additionally, RStudio IDE can be integrated with Docker, a platform for containerization. Docker allows you to package your R project, along with all its dependencies, into a portable container. This makes it easier to share your project with others, ensuring that it runs consistently across different systems and eliminates the need for manual environment setup.
+
+#### In summary, RStudio IDE in combination with Git, renv, and Docker provides a powerful set of tools for version control, dependency management, and environment reproducibility in R-based projects, thereby supporting the principles of FAIR research.
+
+## `Rmarkdown` and `quarto` Formats
+
+- **RMarkdown:**
+  - RMarkdown is a dynamic document format that combines R code, text, and visualizations to create reproducible reports, presentations, and documents.
+  - It allows you to seamlessly integrate R code chunks with narrative text, enabling the automatic execution and inclusion of results in the final output.
+  - RMarkdown supports various output formats such as HTML, PDF, Word, and more, making it versatile for different purposes.
+
+- **Quarto Formats:**
+  - Quarto is an extension of RMarkdown that enhances the capabilities of dynamic document generation.
+
+- **Benefits of RMarkdown and Quarto:**
+  - Reproducibility: RMarkdown and Quarto formats ensure that code, analysis, and visualizations are documented together, making results reproducible and transparent.
+  - Flexibility: Both formats provide options for customization and adaptability, allowing users to tailor the appearance and layout of their documents.
+  - Integration: RMarkdown and Quarto seamlessly integrate with RStudio IDE, facilitating a smooth workflow for R users.
+
+
+## Bonus: `pak`
+
+### `pak`: A Fresh Approach to R Package Installation
+
+#### install package on CRAN: `pak::pkg_install("tibble")`
+
+#### install package on Bioconductor: `pak::pkg_install("DESeq2")`
+
+#### install package on github: `pak::pkg_install("tidyverse/tibble")`
+
+#### pak::pkg_deps_tree("tibble")
+
+```r
+#> tibble 3.2.1 [new][bld][cmp]                                                    
+#> ├─fansi 1.0.4 [new][bld][cmp]                                                   
+#> ├─lifecycle 1.0.3 [new][bld]                                                    
+#> │ ├─cli 3.6.1 [new][bld][cmp]                                                   
+#> │ ├─glue 1.6.2 [new][bld][cmp]                                                  
+#> │ └─rlang 1.1.0 [new][bld][cmp]                                                 
+#> ├─magrittr 2.0.3 [new][bld][cmp]                                                
+#> ├─pillar 1.9.0 [new][bld]                                                       
+#> │ ├─cli                                                                         
+#> │ ├─fansi                                                                       
+#> │ ├─glue                                                                        
+#> │ ├─lifecycle                                                                   
+#> │ ├─rlang                                                                       
+#> │ ├─utf8 1.2.3 [new][bld][cmp]                                                  
+#> │ └─vctrs 0.6.2 [new][bld][cmp]                                                 
+#> │   ├─cli                                                                       
+#> │   ├─glue                                                                      
+#> │   ├─lifecycle                                                                 
+#> │   └─rlang                                                                     
+#> ├─pkgconfig 2.0.3 [new][bld]                                                    
+#> ├─rlang                                                                         
+#> └─vctrs                                                                         
+#>                                                                                 
+#> Key:  [new] new | [bld] build | [cmp] compile      
 ```
 
-## Gene Set Enrichment Analysis (GSEA)
+# Functionnal analysis: Genes
 
--   Perform GSEA using `gseGO` function
--   Plot results using `barplot`
+## Load annotation and data
 
-```{r}
-# Perform GSEA
-gsea <- gseGO(de_genes_entrez$ENTREZID, OrgDb = org.Hs.eg.db, nPerm = 1000)
+#### 1. Use `BiomaRt` or `AnnotationHub` to get the complete genome annotation
 
-# Plot results with barplot
-barplot(gsea, showCategory = 10)
+:::{.callout-tip}
+## Get proper annotation for `AnnotationHub` using `BiocHubsShiny`:
+
+The `BiocHubsShiny` package allows users to visually explore the `AnnotationHub` and `ExperimentHub` resources via shiny. It provides a tabular display of the available resources with the ability to filter and search through the column fields.
+
+See `BiocHubsShiny` vignette : https://bioconductor.org/packages/release/bioc/vignettes/BiocHubsShiny/inst/doc/BiocHubsShiny.html
+
+```{r,eval=FALSE,echo=T}
+BiocHubsShiny::BiocHubsShiny()
 ```
+:::
 
-## Network Visualization
 
--   Visualize gene interaction network using `visNetwork`
+#### 2. Load the whole dataset 
 
-```{r}
-# Visualize gene interaction network
-genes <- rownames(gsea)
-network <- enricher(genes, OrgDb = org.Hs.eg.db, keyType = "ENTREZID", pvalueCutoff = 0.05) %>%
-  simplify(rmOverlap = TRUE) %>%
-  toCytoscape()
+:::{.callout-tip}
+## Tips to load data
 
-visNetwork(nodes = network$nodes, edges = network$edges)
-```
+1. Use `list.files(pattern="xlsx")` to get the whole list of data.
 
-## Conclusion
+2. The `readxl` package allow to load both `.xls` and `.xlsx` files.
 
--   Summary of gene enrichment analysis methods and tools
--   Importance of carefully selecting appropriate methods and tools
--   Future directions in gene enrichment analysis
+3. `map` can apply a function (like `readxl::read_xlsx`) to a list (of files).
 
-## References
+:::
 
--   List of relevant articles and resources used in the presentation.
+## `clusterProfiler`
+
+1. Convert Ensembl `GENEID` to `ENTREZID`.
+2. Get the Gene classification based on GO distribution at a specific level.
+3. GO over-representation analysis.
+  * Try differents things like using another background gene list and removing specific level of GO terms.
+4. Gene Set Enrichment Analysis.
+
+## `clusterProfiler`: General enrichment functions
+
+
+1. Using `enricher`, make an ORA with a custom `TERM2GENE`.
+2. Make the same analyze for `GSEA`.
+
+##  Enrichment test for KEGG
+
+* Make the same analysis as `GO` using `KEGG` databases.
+
+:::{.callout-tip}
+## Tips
+
+* `clusterProfiler` need `ENTREZ` gene IDs to work with KEGG (as KEGG database).
+* List all species available here: https://www.genome.jp/kegg/catalog/org_list4.html
+:::
+
+## Vizualisation of `clusterProfiler`
+
+1. Make a Dotplot.
+2. Make a Gene-Concept Network
+3. Make a UpSet plots
+4. Make a Heatmaps
+5. Make a Enrichment Map
+6. Make a Tree plot
+7. KEGG: Visualise a pathway in a browser
+8. KEGG: Visualise a pathway as a file using `pathview`
+
+## Vizualisation of `clusterProfiler`
+
+#### Customization
+
+:::{.callout-tip}
+## Tips
+
+* `clusterProfiler` generate plot as `ggplot2` objects so we can add layer and informations.
+:::
+
+* We can also take the table directly and make our own plot
+
+## Multiples dataset testing with `clusterProfiler`
+
+- Choose a dataset and make a comparison of different cluster using `compareCluster`.
+
+:::{.callout-tip}
+## Tips
+
+`compareCluster` work with a lot of functions, like `enrichGO`, you can try some of them.
+:::
+
+
+## Some examples with `rbioapi`
+
+### Using STRING
+
+STRING let you perform two types of enrichments.
+
+1. Map genes to proteins id first.
+2. Do a Functional enrichment with STRING api.
+
+
+:::{.callout-warning}
+Currently, STRING supports Gene Ontology, KEGG pathways, UniProt Keywords, PubMed publications, Pfam domains, InterPro domains, and SMART domains. (source).
+:::
+
+3. Get functional annotations
+4. Make a protein-protein interaction enrichment
