@@ -7,13 +7,21 @@ editor: visual
 
 # Environnement de travail
 
+## Supports
+
+-   [**Slides du cours**](Cours/index.html).
+-   **Slides du TP**:
+-   [Genes](TP/index.html).
+-   [Metabolites](TP/tp_metab.html).
+-   [**Wiki compagnon**](https://github.com/rochevin/Formation_INRAE_genes/wiki).
+
 ## Docker
 
-```bash
-docker run -d --name rstduio_4.2 -e PASSWORD=coucou -e DISABLE_AUTH=true -e USERID=1001 -e GROUPID=1001 -e ROOT=true -v /home/rochevin/Documents/:/workspace -p 8787:8787 rocker/verse:4.2.2
+``` bash
+docker run -d --name rstudio_4.2 -e PASSWORD=coucou -e DISABLE_AUTH=true -e USERID=1001 -e GROUPID=1001 -e ROOT=true -v /home/rochevin/Documents/:/workspace -p 8787:8787 rocker/verse:4.2.2
 ```
 
-```yaml
+``` yaml
 services:
   rstudio:
     image: rocker/verse:4.2
@@ -29,15 +37,52 @@ services:
       - /home/rochevin/Documents/:/workspace
 ```
 
+and then: `docker compose up`
 
 ## `git`
 
+Git is a distributed version control system that allows you to track changes in files over time.
+
+-   To use Git, you start by creating a repository, which serves as a storage space for your project's files.
+-   You can then make changes to the files, commit those changes, and branch off to work on different features.
+
+### `git` witf FAIR principles
+
+Git is important for FAIR principles (Findable, Accessible, Interoperable, and Reusable) because it enables researchers to track and share their work, making it more findable and accessible. It also allows for collaboration and versioning, promoting reproducibility and ensuring the interoperability and reusability of research outputs.
+
 ## `renv``
 
-## Supports
+### The `renv` R package is a tool that helps manage the dependencies of R projects.
 
--   [**Slides du cours**](Cours/index.html).
--   **Slides du TP**:
-  - [Genes](TP/index.html).
-  - [Metabolites](TP/tp_metab.html).
--   [**Wiki compagnon**](https://github.com/rochevin/Formation_INRAE_genes/wiki).
+1.  Its purpose is to create a reproducible environment by tracking and isolating the specific versions of packages used in a project.
+2.  It ensures that others can reproduce the exact same environment and results by providing a consistent set of dependencies.
+
+#### This is crucial for FAIR principles as it enhances the reproducibility and reusability of R-based research. By using renv, researchers can easily share their code and ensure that others can run it without compatibility issues or unexpected package version differences.
+
+### Initializing
+
+`renv::init(bioconductor=TRUE)`
+
+``` r
+* Using Bioconductor version '3.16'.
+This project already has a lockfile. What would you like to do? 
+
+1: Restore the project from the lockfile.
+2: Discard the lockfile and re-initialize the project.
+3: Activate the project without snapshotting or installing any packages.
+4: Abort project initialization.
+```
+
+## Rstudio
+
+RStudio IDE is an integrated development environment specifically designed for the R programming language. It provides a user-friendly interface for writing, debugging, and running R code, as well as numerous features for data visualization, package management, and project organization.
+
+### Rstudio with Git, renv, and Docker
+
+-   With Git, RStudio IDE allows you to version control your R projects, enabling you to track changes, collaborate with others, and easily revert to previous versions if needed. You can commit your code changes, create branches for different features or experiments, and merge them back into the main codebase.
+
+-   RStudio IDE integrates with the `renv` package to manage project dependencies. By using renv, you can create a project-specific environment that captures the versions of R packages required for your project. This ensures that anyone working on the project can easily reproduce the exact same environment and avoid potential compatibility issues.
+
+-   Additionally, RStudio IDE can be integrated with Docker, a platform for containerization. Docker allows you to package your R project, along with all its dependencies, into a portable container. This makes it easier to share your project with others, ensuring that it runs consistently across different systems and eliminates the need for manual environment setup.
+
+#### In summary, RStudio IDE in combination with Git, renv, and Docker provides a powerful set of tools for version control, dependency management, and environment reproducibility in R-based projects, thereby supporting the principles of FAIR research.
