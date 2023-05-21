@@ -313,6 +313,14 @@ The `BiocHubsShiny` package allows users to visually explore the `AnnotationHub`
 BiocHubsShiny::BiocHubsShiny()
 ```
 
+
+::: {.callout-warning}
+## Caution
+
+`BiocHubsShiny::BiocHubsShiny()` need `bioconductor>=3.17` and `R>=4.3`.
+
+:::
+
 ## AnnotationHub
 
 Paste the code from `BiocHubsShiny` and get the `EnsemblDB` object
