@@ -7,7 +7,7 @@
 <link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="index_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
 <link href="index_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.2.335">
+  <meta name="generator" content="quarto-1.2.475">
 
   <meta name="author" content="Vincent ROCHER &amp; Juliette COOKE">
   <title>Practical Course: Functional analysis of genes and metabolites</title>
@@ -400,8 +400,8 @@ Vincent ROCHER &amp; Juliette COOKE
 
 </section>
 <section>
-<section id="environnement-de-travail" class="title-slide slide level1 center">
-<h1>Environnement de travail</h1>
+<section id="make-a-good-working-space" class="title-slide slide level1 center">
+<h1>Make a good working space</h1>
 
 </section>
 <section id="docker-and-containers" class="slide level2">
@@ -423,7 +423,9 @@ Vincent ROCHER &amp; Juliette COOKE
 </section>
 <section id="docker-with-rocker-images" class="slide level2">
 <h2>Docker with <code>rocker</code> images</h2>
+<h4 id="using-docker-run">Using <code>docker run</code></h4>
 <div class="sourceCode" id="cb1"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> rstudio_4.2 <span class="at">-e</span> PASSWORD=coucou <span class="at">-e</span> DISABLE_AUTH=true <span class="at">-e</span> USERID=1001 <span class="at">-e</span> GROUPID=1001 <span class="at">-e</span> ROOT=true <span class="at">-v</span> /home/rochevin/Documents/:/workspace <span class="at">-p</span> 8787:8787 rocker/verse:4.2.2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<h4 id="using-docker-compose">Using <code>docker compose</code></h4>
 <div class="sourceCode" id="cb2"><pre class="sourceCode numberSource yaml number-lines code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">services</span><span class="kw">:</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="at">  </span><span class="fu">rstudio</span><span class="kw">:</span></span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> rocker/verse:4.2</span></span>
@@ -449,8 +451,13 @@ Vincent ROCHER &amp; Juliette COOKE
 <h3 id="git-with-fair-principles"><code>git</code> with FAIR principles</h3>
 <p>Git is important for FAIR principles (Findable, Accessible, Interoperable, and Reusable) because it enables researchers to track and share their work, making it more findable and accessible. It also allows for collaboration and versioning, promoting reproducibility and ensuring the interoperability and reusability of research outputs.</p>
 </section>
+<section id="git-with-this-practile-course" class="slide level2">
+<h2><code>git</code> with this practile course</h2>
+<h3 id="download-all-content-slide-code-with-git">Download all content (slide + code) with <code>git</code>:</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">git</span> clone <span class="at">--recurse-submodules</span> https://github.com/rochevin/Formation_INRAE_genes.git</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
 <section id="renv" class="slide level2">
-<h2>`renv``</h2>
+<h2><code>renv</code></h2>
 <h3 id="the-renv-r-package-is-a-tool-that-helps-manage-the-dependencies-of-r-projects.">The <code>renv</code> R package is a tool that helps manage the dependencies of R projects.</h3>
 <ol type="1">
 <li>Its purpose is to create a reproducible environment by tracking and isolating the specific versions of packages used in a project.</li>
@@ -459,13 +466,13 @@ Vincent ROCHER &amp; Juliette COOKE
 <h4 id="this-is-crucial-for-fair-principles-as-it-enhances-the-reproducibility-and-reusability-of-r-based-research.-by-using-renv-researchers-can-easily-share-their-code-and-ensure-that-others-can-run-it-without-compatibility-issues-or-unexpected-package-version-differences.">This is crucial for FAIR principles as it enhances the reproducibility and reusability of R-based research. By using renv, researchers can easily share their code and ensure that others can run it without compatibility issues or unexpected package version differences.</h4>
 <h3 id="initializing">Initializing</h3>
 <p><code>renv::init(bioconductor=TRUE)</code></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="sc">*</span> Using Bioconductor version <span class="st">'3.16'</span>.</span>
-<span id="cb3-2"><a href="#cb3-2"></a>This project already has a lockfile. What would you like to do? </span>
-<span id="cb3-3"><a href="#cb3-3"></a></span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="dv">1</span><span class="sc">:</span> Restore the project from the lockfile.</span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="dv">2</span><span class="sc">:</span> Discard the lockfile and re<span class="sc">-</span>initialize the project.</span>
-<span id="cb3-6"><a href="#cb3-6"></a><span class="dv">3</span><span class="sc">:</span> Activate the project without snapshotting or installing any packages.</span>
-<span id="cb3-7"><a href="#cb3-7"></a><span class="dv">4</span><span class="sc">:</span> Abort project initialization.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="sc">*</span> Using Bioconductor version <span class="st">'3.16'</span>.</span>
+<span id="cb4-2"><a href="#cb4-2"></a>This project already has a lockfile. What would you like to do? </span>
+<span id="cb4-3"><a href="#cb4-3"></a></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="dv">1</span><span class="sc">:</span> Restore the project from the lockfile.</span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="dv">2</span><span class="sc">:</span> Discard the lockfile and re<span class="sc">-</span>initialize the project.</span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="dv">3</span><span class="sc">:</span> Activate the project without snapshotting or installing any packages.</span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="dv">4</span><span class="sc">:</span> Abort project initialization.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="rstudio" class="slide level2">
 <h2>Rstudio</h2>
@@ -477,6 +484,226 @@ Vincent ROCHER &amp; Juliette COOKE
 <li><p>Additionally, RStudio IDE can be integrated with Docker, a platform for containerization. Docker allows you to package your R project, along with all its dependencies, into a portable container. This makes it easier to share your project with others, ensuring that it runs consistently across different systems and eliminates the need for manual environment setup.</p></li>
 </ul>
 <h4 id="in-summary-rstudio-ide-in-combination-with-git-renv-and-docker-provides-a-powerful-set-of-tools-for-version-control-dependency-management-and-environment-reproducibility-in-r-based-projects-thereby-supporting-the-principles-of-fair-research.">In summary, RStudio IDE in combination with Git, renv, and Docker provides a powerful set of tools for version control, dependency management, and environment reproducibility in R-based projects, thereby supporting the principles of FAIR research.</h4>
+</section>
+<section id="rmarkdown-and-quarto-formats" class="slide level2">
+<h2><code>Rmarkdown</code> and <code>quarto</code> Formats</h2>
+<ul>
+<li><strong>RMarkdown:</strong>
+<ul>
+<li>RMarkdown is a dynamic document format that combines R code, text, and visualizations to create reproducible reports, presentations, and documents.</li>
+<li>It allows you to seamlessly integrate R code chunks with narrative text, enabling the automatic execution and inclusion of results in the final output.</li>
+<li>RMarkdown supports various output formats such as HTML, PDF, Word, and more, making it versatile for different purposes.</li>
+</ul></li>
+<li><strong>Quarto Formats:</strong>
+<ul>
+<li>Quarto is an extension of RMarkdown that enhances the capabilities of dynamic document generation.</li>
+</ul></li>
+<li><strong>Benefits of RMarkdown and Quarto:</strong>
+<ul>
+<li>Reproducibility: RMarkdown and Quarto formats ensure that code, analysis, and visualizations are documented together, making results reproducible and transparent.</li>
+<li>Flexibility: Both formats provide options for customization and adaptability, allowing users to tailor the appearance and layout of their documents.</li>
+<li>Integration: RMarkdown and Quarto seamlessly integrate with RStudio IDE, facilitating a smooth workflow for R users.</li>
+</ul></li>
+</ul>
+</section>
+<section id="bonus-pak" class="slide level2">
+<h2>Bonus: <code>pak</code></h2>
+<h3 id="pak-a-fresh-approach-to-r-package-installation"><code>pak</code>: A Fresh Approach to R Package Installation</h3>
+<h4 id="install-package-on-cran-pakpkg_installtibble">install package on CRAN: <code>pak::pkg_install("tibble")</code></h4>
+<h4 id="install-package-on-bioconductor-pakpkg_installdeseq2">install package on Bioconductor: <code>pak::pkg_install("DESeq2")</code></h4>
+<h4 id="install-package-on-github-pakpkg_installtidyversetibble">install package on github: <code>pak::pkg_install("tidyverse/tibble")</code></h4>
+<h4 id="pakpkg_deps_treetibble">pak::pkg_deps_tree(“tibble”)</h4>
+<div class="sourceCode" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co">#&gt; tibble 3.2.1 [new][bld][cmp]                                                    </span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="co">#&gt; ├─fansi 1.0.4 [new][bld][cmp]                                                   </span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="co">#&gt; ├─lifecycle 1.0.3 [new][bld]                                                    </span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co">#&gt; │ ├─cli 3.6.1 [new][bld][cmp]                                                   </span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co">#&gt; │ ├─glue 1.6.2 [new][bld][cmp]                                                  </span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="co">#&gt; │ └─rlang 1.1.0 [new][bld][cmp]                                                 </span></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="co">#&gt; ├─magrittr 2.0.3 [new][bld][cmp]                                                </span></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="co">#&gt; ├─pillar 1.9.0 [new][bld]                                                       </span></span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="co">#&gt; │ ├─cli                                                                         </span></span>
+<span id="cb5-10"><a href="#cb5-10"></a><span class="co">#&gt; │ ├─fansi                                                                       </span></span>
+<span id="cb5-11"><a href="#cb5-11"></a><span class="co">#&gt; │ ├─glue                                                                        </span></span>
+<span id="cb5-12"><a href="#cb5-12"></a><span class="co">#&gt; │ ├─lifecycle                                                                   </span></span>
+<span id="cb5-13"><a href="#cb5-13"></a><span class="co">#&gt; │ ├─rlang                                                                       </span></span>
+<span id="cb5-14"><a href="#cb5-14"></a><span class="co">#&gt; │ ├─utf8 1.2.3 [new][bld][cmp]                                                  </span></span>
+<span id="cb5-15"><a href="#cb5-15"></a><span class="co">#&gt; │ └─vctrs 0.6.2 [new][bld][cmp]                                                 </span></span>
+<span id="cb5-16"><a href="#cb5-16"></a><span class="co">#&gt; │   ├─cli                                                                       </span></span>
+<span id="cb5-17"><a href="#cb5-17"></a><span class="co">#&gt; │   ├─glue                                                                      </span></span>
+<span id="cb5-18"><a href="#cb5-18"></a><span class="co">#&gt; │   ├─lifecycle                                                                 </span></span>
+<span id="cb5-19"><a href="#cb5-19"></a><span class="co">#&gt; │   └─rlang                                                                     </span></span>
+<span id="cb5-20"><a href="#cb5-20"></a><span class="co">#&gt; ├─pkgconfig 2.0.3 [new][bld]                                                    </span></span>
+<span id="cb5-21"><a href="#cb5-21"></a><span class="co">#&gt; ├─rlang                                                                         </span></span>
+<span id="cb5-22"><a href="#cb5-22"></a><span class="co">#&gt; └─vctrs                                                                         </span></span>
+<span id="cb5-23"><a href="#cb5-23"></a><span class="co">#&gt;                                                                                 </span></span>
+<span id="cb5-24"><a href="#cb5-24"></a><span class="co">#&gt; Key:  [new] new | [bld] build | [cmp] compile      </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section></section>
+<section>
+<section id="functionnal-analysis-genes" class="title-slide slide level1 center">
+<h1>Functionnal analysis: Genes</h1>
+
+</section>
+<section id="load-annotation-and-data" class="slide level2">
+<h2>Load annotation and data</h2>
+<h4 id="use-biomart-or-annotationhub-to-get-the-complete-genome-annotation">1. Use <code>BiomaRt</code> or <code>AnnotationHub</code> to get the complete genome annotation</h4>
+<div class="callout callout-tip callout-captioned callout-style-default">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Get proper annotation for <code>AnnotationHub</code> using <code>BiocHubsShiny</code>:</strong></p>
+</div>
+<div class="callout-content">
+<p>The <code>BiocHubsShiny</code> package allows users to visually explore the <code>AnnotationHub</code> and <code>ExperimentHub</code> resources via shiny. It provides a tabular display of the available resources with the ability to filter and search through the column fields.</p>
+<p>See <code>BiocHubsShiny</code> vignette : https://bioconductor.org/packages/release/bioc/vignettes/BiocHubsShiny/inst/doc/BiocHubsShiny.html</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>BiocHubsShiny<span class="sc">::</span><span class="fu">BiocHubsShiny</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<h4 id="load-the-whole-dataset">2. Load the whole dataset</h4>
+<div class="callout callout-tip callout-captioned callout-style-default">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tips to load data</strong></p>
+</div>
+<div class="callout-content">
+<ol type="1">
+<li><p>Use <code>list.files(pattern="xlsx")</code> to get the whole list of data.</p></li>
+<li><p>The <code>readxl</code> package allow to load both <code>.xls</code> and <code>.xlsx</code> files.</p></li>
+<li><p><code>map</code> can apply a function (like <code>readxl::read_xlsx</code>) to a list (of files).</p></li>
+</ol>
+</div>
+</div>
+</div>
+</section>
+<section id="clusterprofiler" class="slide level2">
+<h2><code>clusterProfiler</code></h2>
+<ol type="1">
+<li>Convert Ensembl <code>GENEID</code> to <code>ENTREZID</code>.</li>
+<li>Get the Gene classification based on GO distribution at a specific level.</li>
+<li>GO over-representation analysis.</li>
+</ol>
+<ul>
+<li>Try differents things like using another background gene list and removing specific level of GO terms.</li>
+</ul>
+<ol start="4" type="1">
+<li>Gene Set Enrichment Analysis.</li>
+</ol>
+</section>
+<section id="clusterprofiler-general-enrichment-functions" class="slide level2">
+<h2><code>clusterProfiler</code>: General enrichment functions</h2>
+<ol type="1">
+<li>Using <code>enricher</code>, make an ORA with a custom <code>TERM2GENE</code>.</li>
+<li>Make the same analyze for <code>GSEA</code>.</li>
+</ol>
+</section>
+<section id="enrichment-test-for-kegg" class="slide level2">
+<h2>Enrichment test for KEGG</h2>
+<ul>
+<li>Make the same analysis as <code>GO</code> using <code>KEGG</code> databases.</li>
+</ul>
+<div class="callout callout-tip callout-captioned callout-style-default">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tips</strong></p>
+</div>
+<div class="callout-content">
+<ul>
+<li><code>clusterProfiler</code> need <code>ENTREZ</code> gene IDs to work with KEGG (as KEGG database).</li>
+<li>List all species available here: https://www.genome.jp/kegg/catalog/org_list4.html</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="vizualisation-of-clusterprofiler" class="slide level2">
+<h2>Vizualisation of <code>clusterProfiler</code></h2>
+<ol type="1">
+<li>Make a Dotplot.</li>
+<li>Make a Gene-Concept Network</li>
+<li>Make a UpSet plots</li>
+<li>Make a Heatmaps</li>
+<li>Make a Enrichment Map</li>
+<li>Make a Tree plot</li>
+<li>KEGG: Visualise a pathway in a browser</li>
+<li>KEGG: Visualise a pathway as a file using <code>pathview</code></li>
+</ol>
+</section>
+<section id="vizualisation-of-clusterprofiler-1" class="slide level2">
+<h2>Vizualisation of <code>clusterProfiler</code></h2>
+<h4 id="customization">Customization</h4>
+<div class="callout callout-tip callout-captioned callout-style-default">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tips</strong></p>
+</div>
+<div class="callout-content">
+<ul>
+<li><code>clusterProfiler</code> generate plot as <code>ggplot2</code> objects so we can add layer and informations.</li>
+</ul>
+</div>
+</div>
+</div>
+<ul>
+<li>We can also take the table directly and make our own plot</li>
+</ul>
+</section>
+<section id="multiples-dataset-testing-with-clusterprofiler" class="slide level2">
+<h2>Multiples dataset testing with <code>clusterProfiler</code></h2>
+<ul>
+<li>Choose a dataset and make a comparison of different cluster using <code>compareCluster</code>.</li>
+</ul>
+<div class="callout callout-tip callout-captioned callout-style-default">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tips</strong></p>
+</div>
+<div class="callout-content">
+<p><code>compareCluster</code> work with a lot of functions, like <code>enrichGO</code>, you can try some of them.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="some-examples-with-rbioapi" class="slide level2">
+<h2>Some examples with <code>rbioapi</code></h2>
+<h3 id="using-string">Using STRING</h3>
+<p>STRING let you perform two types of enrichments.</p>
+<ol type="1">
+<li>Map genes to proteins id first.</li>
+<li>Do a Functional enrichment with STRING api.</li>
+</ol>
+<div class="callout callout-warning callout-captioned callout-style-default">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Warning</strong></p>
+</div>
+<div class="callout-content">
+<p>Currently, STRING supports Gene Ontology, KEGG pathways, UniProt Keywords, PubMed publications, Pfam domains, InterPro domains, and SMART domains. (source).</p>
+</div>
+</div>
+</div>
+<ol start="3" type="1">
+<li>Get functional annotations</li>
+<li>Make a protein-protein interaction enrichment</li>
+</ol>
 <div class="footer footer-default">
 
 </div>
@@ -692,6 +919,44 @@ Vincent ROCHER &amp; Juliette COOKE
         ]
       });
     </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
     <script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
       const toggleBodyColorMode = (bsSheetEl) => {

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.335">
+<meta name="generator" content="quarto-1.2.475">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -50,6 +50,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#formateurs" id="toc-formateurs" class="nav-link active" data-scroll-target="#formateurs">Formateurs</a></li>
   <li><a href="#supports" id="toc-supports" class="nav-link" data-scroll-target="#supports">Supports</a></li>
   <li><a href="#ressources" id="toc-ressources" class="nav-link" data-scroll-target="#ressources">Ressources</a></li>
+  <li><a href="#installation-des-packages" id="toc-installation-des-packages" class="nav-link" data-scroll-target="#installation-des-packages">Installation des packages</a></li>
   <li><a href="#objectifs-pédagogiques" id="toc-objectifs-pédagogiques" class="nav-link" data-scroll-target="#objectifs-pédagogiques">Objectifs pédagogiques</a></li>
   <li><a href="#pré-requis" id="toc-pré-requis" class="nav-link" data-scroll-target="#pré-requis">Pré-requis</a></li>
   <li><a href="#programme" id="toc-programme" class="nav-link" data-scroll-target="#programme">Programme</a>
@@ -91,9 +92,11 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="supports">Supports</h2>
 <ul>
 <li><a href="Cours/index.html"><strong>Slides du cours</strong></a>.</li>
-<li><strong>Slides du TP</strong>:</li>
+<li><strong>Slides du TP</strong>:
+<ul>
 <li><a href="TP/index.html">Genes</a>.</li>
 <li><a href="TP/tp_metab.html">Metabolites</a>.</li>
+</ul></li>
 <li><a href="https://github.com/rochevin/Formation_INRAE_genes/wiki"><strong>Wiki compagnon</strong></a>.</li>
 </ul>
 </section>
@@ -111,6 +114,32 @@ ul.task-list li input[type="checkbox"] {
 <li><a href="https://github.com/rochevin/formation_ggplot2/wiki/Data-manipulation-with-Tidyverse">Data manipulation with Tidyverse</a></li>
 </ul></li>
 </ul>
+</section>
+<section id="installation-des-packages" class="level2">
+<h2 class="anchored" data-anchor-id="installation-des-packages">Installation des packages</h2>
+<ul>
+<li>Télécharger le contenu de la formation: https://github.com/rochevin/Formation_INRAE_genes/archive/refs/heads/master.zip</li>
+<li>Dans <code>Rstudio</code>, cliquer sur <code>TP.Rproj</code>.</li>
+<li>Installer les packages du TP à la main :
+<ul>
+<li><strong>Gènes</strong>: https://github.com/rochevin/Formation_INRAE_genes/wiki/Gene-enrichment-analysis</li>
+<li><strong>Métabolites</strong>: https://github.com/rochevin/Formation_INRAE_genes/wiki/Metabolite-enrichment-analysis</li>
+</ul></li>
+<li><strong>OU</strong> utiliser <code>renv::restore()</code> depuis le projet <code>TP</code> pour que l’installation se fasse toute seule</li>
+</ul>
+<div class="callout-warning callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Nous utilisons R 4.3 pour faire fonctionner <code>BiocHubsShiny</code>. Les autres packages fonctionneront normalement en R 4.2</p>
+</div>
+</div>
 </section>
 <section id="objectifs-pédagogiques" class="level2">
 <h2 class="anchored" data-anchor-id="objectifs-pédagogiques">Objectifs pédagogiques</h2>

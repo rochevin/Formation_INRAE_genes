@@ -18,23 +18,36 @@ editor: visual
 
 ## Supports
 
--   [**Slides du cours**](Cours/index.html).
--   **Slides du TP**:
-  - [Genes](TP/index.html).
-  - [Metabolites](TP/tp_metab.html).
--   [**Wiki compagnon**](https://github.com/rochevin/Formation_INRAE_genes/wiki).
+- [**Slides du cours**](Cours/index.html).
+- **Slides du TP**:
+    - [Genes](TP/index.html).
+    - [Metabolites](TP/tp_metab.html).
+- [**Wiki compagnon**](https://github.com/rochevin/Formation_INRAE_genes/wiki).
 
 ## Ressources
 
-- [Introduction to Bulk RNA-seq data analysis](https://bioinformatics-core-shared-training.github.io/Bulk_RNAseq_Course_Apr22/)
-- `clusterProfiler` Book: https://yulab-smu.top/biomedical-knowledge-mining-book/index.html
-- `rbioapi` vignette: https://cran.r-project.org/web/packages/rbioapi/vignettes/rbioapi.html
-- Over Enrichment Analays explained: https://www.pathwaycommons.org/guide/primers/statistics/fishers_exact_test/
-- Help for tidyverse and ggplot2: 
-  - [R for data science](https://r4ds.had.co.nz/)
-  - `ggplot2` training: https://rochevin.github.io/formation_ggplot2/
-  - [Data manipulation with Tidyverse](https://github.com/rochevin/formation_ggplot2/wiki/Data-manipulation-with-Tidyverse)
+-   [Introduction to Bulk RNA-seq data analysis](https://bioinformatics-core-shared-training.github.io/Bulk_RNAseq_Course_Apr22/)
+-   `clusterProfiler` Book: https://yulab-smu.top/biomedical-knowledge-mining-book/index.html
+-   `rbioapi` vignette: https://cran.r-project.org/web/packages/rbioapi/vignettes/rbioapi.html
+-   Over Enrichment Analays explained: https://www.pathwaycommons.org/guide/primers/statistics/fishers_exact_test/
+-   Help for tidyverse and ggplot2:
+    -   [R for data science](https://r4ds.had.co.nz/)
+    -   `ggplot2` training: https://rochevin.github.io/formation_ggplot2/
+    -   [Data manipulation with Tidyverse](https://github.com/rochevin/formation_ggplot2/wiki/Data-manipulation-with-Tidyverse)
 
+## Installation des packages
+
+
+* Télécharger le contenu de la formation: https://github.com/rochevin/Formation_INRAE_genes/archive/refs/heads/master.zip
+* Dans `Rstudio`, cliquer sur `TP.Rproj`.
+* Installer les packages du TP à la main :
+  * __Gènes__: https://github.com/rochevin/Formation_INRAE_genes/wiki/Gene-enrichment-analysis
+  * __Métabolites__: https://github.com/rochevin/Formation_INRAE_genes/wiki/Metabolite-enrichment-analysis
+* __OU__ utiliser `renv::restore()` depuis le projet `TP` pour que l'installation se fasse toute seule
+
+::: {.callout-warning}
+Nous utilisons R 4.3 pour faire fonctionner `BiocHubsShiny`. Les autres packages fonctionneront normalement en R 4.2
+:::
 
 ## Objectifs pédagogiques
 

@@ -7,7 +7,7 @@ format:
 editor: visual
 ---
 
-# Environnement de travail
+# Make a good working space
 
 ## Docker and Containers
 
@@ -62,7 +62,16 @@ Git is a distributed version control system that allows you to track changes in 
 
 Git is important for FAIR principles (Findable, Accessible, Interoperable, and Reusable) because it enables researchers to track and share their work, making it more findable and accessible. It also allows for collaboration and versioning, promoting reproducibility and ensuring the interoperability and reusability of research outputs.
 
-## `renv``
+## `git` with this practile course
+
+### Download all content (slide + code) with `git`:
+
+```bash
+git clone --recurse-submodules https://github.com/rochevin/Formation_INRAE_genes.git
+```
+
+
+## `renv`
 
 ### The `renv` R package is a tool that helps manage the dependencies of R projects.
 
@@ -98,3 +107,166 @@ RStudio IDE is an integrated development environment specifically designed for t
 -   Additionally, RStudio IDE can be integrated with Docker, a platform for containerization. Docker allows you to package your R project, along with all its dependencies, into a portable container. This makes it easier to share your project with others, ensuring that it runs consistently across different systems and eliminates the need for manual environment setup.
 
 #### In summary, RStudio IDE in combination with Git, renv, and Docker provides a powerful set of tools for version control, dependency management, and environment reproducibility in R-based projects, thereby supporting the principles of FAIR research.
+
+## `Rmarkdown` and `quarto` Formats
+
+- **RMarkdown:**
+  - RMarkdown is a dynamic document format that combines R code, text, and visualizations to create reproducible reports, presentations, and documents.
+  - It allows you to seamlessly integrate R code chunks with narrative text, enabling the automatic execution and inclusion of results in the final output.
+  - RMarkdown supports various output formats such as HTML, PDF, Word, and more, making it versatile for different purposes.
+
+- **Quarto Formats:**
+  - Quarto is an extension of RMarkdown that enhances the capabilities of dynamic document generation.
+
+- **Benefits of RMarkdown and Quarto:**
+  - Reproducibility: RMarkdown and Quarto formats ensure that code, analysis, and visualizations are documented together, making results reproducible and transparent.
+  - Flexibility: Both formats provide options for customization and adaptability, allowing users to tailor the appearance and layout of their documents.
+  - Integration: RMarkdown and Quarto seamlessly integrate with RStudio IDE, facilitating a smooth workflow for R users.
+
+
+## Bonus: `pak`
+
+### `pak`: A Fresh Approach to R Package Installation
+
+#### install package on CRAN: `pak::pkg_install("tibble")`
+
+#### install package on Bioconductor: `pak::pkg_install("DESeq2")`
+
+#### install package on github: `pak::pkg_install("tidyverse/tibble")`
+
+#### pak::pkg_deps_tree("tibble")
+
+```r
+#> tibble 3.2.1 [new][bld][cmp]                                                    
+#> ├─fansi 1.0.4 [new][bld][cmp]                                                   
+#> ├─lifecycle 1.0.3 [new][bld]                                                    
+#> │ ├─cli 3.6.1 [new][bld][cmp]                                                   
+#> │ ├─glue 1.6.2 [new][bld][cmp]                                                  
+#> │ └─rlang 1.1.0 [new][bld][cmp]                                                 
+#> ├─magrittr 2.0.3 [new][bld][cmp]                                                
+#> ├─pillar 1.9.0 [new][bld]                                                       
+#> │ ├─cli                                                                         
+#> │ ├─fansi                                                                       
+#> │ ├─glue                                                                        
+#> │ ├─lifecycle                                                                   
+#> │ ├─rlang                                                                       
+#> │ ├─utf8 1.2.3 [new][bld][cmp]                                                  
+#> │ └─vctrs 0.6.2 [new][bld][cmp]                                                 
+#> │   ├─cli                                                                       
+#> │   ├─glue                                                                      
+#> │   ├─lifecycle                                                                 
+#> │   └─rlang                                                                     
+#> ├─pkgconfig 2.0.3 [new][bld]                                                    
+#> ├─rlang                                                                         
+#> └─vctrs                                                                         
+#>                                                                                 
+#> Key:  [new] new | [bld] build | [cmp] compile      
+```
+
+# Functionnal analysis: Genes
+
+## Load annotation and data
+
+#### 1. Use `BiomaRt` or `AnnotationHub` to get the complete genome annotation
+
+:::{.callout-tip}
+## Get proper annotation for `AnnotationHub` using `BiocHubsShiny`:
+
+The `BiocHubsShiny` package allows users to visually explore the `AnnotationHub` and `ExperimentHub` resources via shiny. It provides a tabular display of the available resources with the ability to filter and search through the column fields.
+
+See `BiocHubsShiny` vignette : https://bioconductor.org/packages/release/bioc/vignettes/BiocHubsShiny/inst/doc/BiocHubsShiny.html
+
+```{r,eval=FALSE,echo=T}
+BiocHubsShiny::BiocHubsShiny()
+```
+:::
+
+
+#### 2. Load the whole dataset 
+
+:::{.callout-tip}
+## Tips to load data
+
+1. Use `list.files(pattern="xlsx")` to get the whole list of data.
+
+2. The `readxl` package allow to load both `.xls` and `.xlsx` files.
+
+3. `map` can apply a function (like `readxl::read_xlsx`) to a list (of files).
+
+:::
+
+## `clusterProfiler`
+
+1. Convert Ensembl `GENEID` to `ENTREZID`.
+2. Get the Gene classification based on GO distribution at a specific level.
+3. GO over-representation analysis.
+  * Try differents things like using another background gene list and removing specific level of GO terms.
+4. Gene Set Enrichment Analysis.
+
+## `clusterProfiler`: General enrichment functions
+
+
+1. Using `enricher`, make an ORA with a custom `TERM2GENE`.
+2. Make the same analyze for `GSEA`.
+
+##  Enrichment test for KEGG
+
+* Make the same analysis as `GO` using `KEGG` databases.
+
+:::{.callout-tip}
+## Tips
+
+* `clusterProfiler` need `ENTREZ` gene IDs to work with KEGG (as KEGG database).
+* List all species available here: https://www.genome.jp/kegg/catalog/org_list4.html
+:::
+
+## Vizualisation of `clusterProfiler`
+
+1. Make a Dotplot.
+2. Make a Gene-Concept Network
+3. Make a UpSet plots
+4. Make a Heatmaps
+5. Make a Enrichment Map
+6. Make a Tree plot
+7. KEGG: Visualise a pathway in a browser
+8. KEGG: Visualise a pathway as a file using `pathview`
+
+## Vizualisation of `clusterProfiler`
+
+#### Customization
+
+:::{.callout-tip}
+## Tips
+
+* `clusterProfiler` generate plot as `ggplot2` objects so we can add layer and informations.
+:::
+
+* We can also take the table directly and make our own plot
+
+## Multiples dataset testing with `clusterProfiler`
+
+- Choose a dataset and make a comparison of different cluster using `compareCluster`.
+
+:::{.callout-tip}
+## Tips
+
+`compareCluster` work with a lot of functions, like `enrichGO`, you can try some of them.
+:::
+
+
+## Some examples with `rbioapi`
+
+### Using STRING
+
+STRING let you perform two types of enrichments.
+
+1. Map genes to proteins id first.
+2. Do a Functional enrichment with STRING api.
+
+
+:::{.callout-warning}
+Currently, STRING supports Gene Ontology, KEGG pathways, UniProt Keywords, PubMed publications, Pfam domains, InterPro domains, and SMART domains. (source).
+:::
+
+3. Get functional annotations
+4. Make a protein-protein interaction enrichment
