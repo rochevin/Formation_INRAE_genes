@@ -4,8 +4,6 @@
 .Ruserdata
 .Rprofile
 TP/data/data_rna/
-*.js
 12859_2018_2487_MOESM5_ESM/
 kegg_db/
 *_cache/
-*.qs
