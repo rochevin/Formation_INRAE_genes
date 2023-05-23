@@ -6,7 +6,7 @@ format:
 editor: visual
 execute:
   echo: true
-  cache: true
+  cache: false
 ---
 
 ```{r,load-packages}
@@ -14,7 +14,6 @@ execute:
 #| echo: false
 library(clusterProfiler)
 library(tidyverse)
-library(FELLA)
 library(KEGGREST)
 library(splitstackshape)
 ```

@@ -407,7 +407,7 @@
 <section id="input-data" class="title-slide slide level1 center">
 <h1>Input data</h1>
 <p><code>read.table</code> is a generic function: specify the separator with <code>sep=</code> , and if there are column names, use <code>header = T</code>.</p>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-1_18d7230547d4c28847a3ed39d8c79dff">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Pre-filtered metabolite inputs</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a>geno.mother.raw <span class="ot">=</span> <span class="fu">read.table</span>(<span class="st">"data/ML_add_geno_mother11_05_2023.csv"</span>, <span class="at">sep =</span> <span class="st">";"</span>, <span class="at">header =</span> T)</span>
 <span id="cb1-3"><a href="#cb1-3"></a>gestation.raw <span class="ot">=</span> <span class="fu">read.table</span>(<span class="st">"data/ML_add_gestation_stage_11_05_2023.csv"</span>, <span class="at">sep =</span> <span class="st">";"</span>, <span class="at">header =</span> T)</span>
@@ -424,14 +424,14 @@
 <li><p>dataframe</p></li>
 </ul>
 <p>Vectors are lists of elements. Vector elements can be named.</p>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-2_2c81d1cd79fe39ea9d4491e7ab8133f8">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>v <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
 <span id="cb2-2"><a href="#cb2-2"></a>v</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1 2 3</code></pre>
 </div>
 </div>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-3_3ce7653526fbeceea02fbe9d83c7c899">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">names</span>(v) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>)</span>
 <span id="cb4-2"><a href="#cb4-2"></a>v</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -440,7 +440,7 @@
 </div>
 </div>
 <p>Dataframes are tables: they have columns, rows, column names and can have row names.</p>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-4_f026ebcbac9108688bfbd5859a13b5b9">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="st">"cola"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>), <span class="st">"colb"</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>), <span class="at">row.names =</span> <span class="fu">c</span>(<span class="st">"row1"</span>, <span class="st">"row2"</span>, <span class="st">"row3"</span>))</span>
 <span id="cb6-2"><a href="#cb6-2"></a>df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -455,7 +455,7 @@ row3    3    6</code></pre>
 <h2>Tidyverse</h2>
 <p>Tidyverse is a R package which loads a collection of other packages designed to work well together for data manipulation. Some packages it contains are <code>tidyr</code>, <code>dplyr</code>, <code>ggplot2</code>.</p>
 <p>The syntax it is based on uses the pipe symbol: <code>%&gt;%</code> , useful for chaining different operations.</p>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-5_8139c4b90f3960db21d3cd52d54e1285">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>df <span class="sc">%&gt;%</span> <span class="fu">print</span>() <span class="co"># same as print(df)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     cola colb
@@ -484,7 +484,7 @@ row3    3    6</code></pre>
 
 <h3 id="examples">Examples</h3>
 <p>Here is an example using the background set:</p>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-6_81580568f150917f4610d6c6543e53bb">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># Background set = all measurable metabolites</span></span>
 <span id="cb10-2"><a href="#cb10-2"></a>background_unfiltered <span class="ot">=</span> <span class="fu">read.table</span>(<span class="st">"data/metabolites_present_endometre.csv"</span>, <span class="at">sep =</span> <span class="st">";"</span>, <span class="at">header =</span> T)</span>
 <span id="cb10-3"><a href="#cb10-3"></a><span class="fu">tail</span>(background_unfiltered)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -505,7 +505,7 @@ row3    3    6</code></pre>
 137 NA  NA  NA  NA  NA  NA  NA  NA  NA  NA   NA   NA   NA   NA   NA   NA   NA</code></pre>
 </div>
 </div>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-7_1a6f86d5fc2d1d3ffe9ce197ff67b479">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>background <span class="ot">=</span> <span class="fu">read.table</span>(<span class="st">"data/metabolites_present_endometre.csv"</span>, <span class="at">sep =</span> <span class="st">";"</span>, <span class="at">header =</span> T) <span class="sc">%&gt;%</span> </span>
 <span id="cb12-2"><a href="#cb12-2"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">if_any</span>(PubChem, is.na))  <span class="co"># filter out rows that contain NA in column PubChem</span></span>
 <span id="cb12-3"><a href="#cb12-3"></a><span class="fu">tail</span>(background)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -551,7 +551,7 @@ row3    3    6</code></pre>
 <section class="slide level2">
 
 <p>And an example using the raw unfiltered fold changes:</p>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-8_287d625f80a5377f5398cc2764b3bff7">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="co"># Join by metabolite names to get all fold changes with the ID columns (ChEBI, KEGG..)</span></span>
 <span id="cb14-2"><a href="#cb14-2"></a>all.fc.file <span class="ot">=</span> <span class="fu">read.table</span>(<span class="st">"data/log2_FC_endometrium_metabolites_present.csv"</span>, <span class="at">sep =</span> <span class="st">";"</span>, <span class="at">header =</span> T) </span>
 <span id="cb14-3"><a href="#cb14-3"></a><span class="fu">head</span>(all.fc.file)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -588,7 +588,7 @@ row3    3    6</code></pre>
 <section id="kegg" class="slide level2">
 <h2>KEGG</h2>
 <p>Using the KEGG API, we can access the database directly inside R. We can get a list of all pathways for a given organism, and a list of all compounds per pathway. We can then match them together to get all metabolites organised into pathways for our organism.</p>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-9_a03f11a90dff7a0fcfacf4155203dce6">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="co"># Pig KEGG pathways</span></span>
 <span id="cb18-2"><a href="#cb18-2"></a>pig.pathways <span class="ot">=</span> <span class="fu">keggList</span>(<span class="st">"pathway"</span>, <span class="st">"ssc"</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb18-3"><a href="#cb18-3"></a>  <span class="fu">enframe</span>() <span class="sc">%&gt;%</span> </span>
@@ -611,7 +611,7 @@ row3    3    6</code></pre>
 <section class="slide level2">
 
 <p>Other organisms, and a table to convert IDs:</p>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-10_d0f6b30773f9c094cdd0fadde83652f1">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="co"># Human KEGG pathways</span></span>
 <span id="cb19-2"><a href="#cb19-2"></a>human.pathways <span class="ot">=</span> <span class="fu">keggList</span>(<span class="st">"pathway"</span>, <span class="st">"hsa"</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb19-3"><a href="#cb19-3"></a>  <span class="fu">enframe</span>() <span class="sc">%&gt;%</span> </span>
@@ -636,7 +636,7 @@ row3    3    6</code></pre>
 <h2>Reactome</h2>
 <p>Reactome pathways can be downloaded <a href="https://reactome.org/download-data">here</a>, in <code>Physical Entity (PE) Identifier mapping files</code> &gt; <code>ChEBI to pathways</code>.</p>
 <p>Reactome has many more pathways than KEGG meaning it is harder to enrich them. The database contains many pathways not pertaining to metabolism meaning we would need to filter them (manually?).</p>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-11_6f28a9165cb3875f5f96592560928c55">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="co"># Create colnames</span></span>
 <span id="cb20-2"><a href="#cb20-2"></a>reactome.colnames <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"ChEBI"</span>, <span class="st">"RID"</span>, <span class="st">"URL"</span>, <span class="st">"PathwayName"</span>, <span class="st">"EvidenceCode"</span>, <span class="st">"Species"</span>)</span>
 <span id="cb20-3"><a href="#cb20-3"></a></span>
@@ -664,7 +664,7 @@ row3    3    6</code></pre>
 <section id="metabolic-network" class="slide level2">
 <h2>Metabolic network</h2>
 <p>Metabolic networks can be used for various flux-based simulations of metabolism, but they are also databases of knowledge. We can use pathway-metabolite information extracted from a network in the same way as any other pathway set.</p>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-12_d91b76993df8910a4beb3b007302896e">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="co"># Metabolites have network-specific IDs, this is a mapped ID to KEGG and ChEBI table</span></span>
 <span id="cb21-2"><a href="#cb21-2"></a>metab.network.ids <span class="ot">=</span> <span class="fu">read.table</span>(<span class="st">"data/metabolite_ids.tsv"</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>, <span class="at">header =</span> T, <span class="at">quote =</span> <span class="st">""</span>)</span>
 <span id="cb21-3"><a href="#cb21-3"></a><span class="co"># The original file contains nan instead of NA, so replace them:</span></span>
@@ -685,7 +685,7 @@ row3    3    6</code></pre>
 <h2>CPDB</h2>
 <p>ConsensusPathDB is a compiled database of various pathway sets, including Reactome, KEGG, BioCyc and others. We are using it as an example of a very large pathway set database.</p>
 <p>The database can be downloaded from <a href="http://cpdb.molgen.mpg.de/" class="uri">http://cpdb.molgen.mpg.de/</a>: &gt; “Biological pathways (as defined by source databases) with their metabolites identified with KEGG / ChEBI / Pubchem-compound accession numbers”</p>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-13_0f9d3e739b47bdfba54dc70453e6512f">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>cpdb <span class="ot">=</span> <span class="fu">read.table</span>(<span class="st">"data/CPDB_pathways_metabolites.tab"</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>, <span class="at">comment.char =</span> <span class="st">""</span>, <span class="at">header =</span> T) <span class="sc">%&gt;%</span></span>
 <span id="cb22-2"><a href="#cb22-2"></a>  <span class="fu">cSplit</span>(<span class="st">"metabolites"</span>, <span class="st">","</span>,<span class="at">direction =</span> <span class="st">"long"</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb22-3"><a href="#cb22-3"></a>  <span class="fu">unique</span>() <span class="sc">%&gt;%</span> </span>
@@ -710,7 +710,7 @@ row3    3    6</code></pre>
 <h2>Basic ORA</h2>
 <p>We will use the KEGG IDs in the input data and perform ORA using the KEGG pathway sets. By default, the background set is the entire list of metabolites in the pathway set.</p>
 <h3 id="geno-mother-dataset">Geno mother dataset</h3>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-14_f0f1a36bbbf67fa64f23c1cf512979db">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>ora.geno.mother.kegg <span class="ot">=</span> <span class="fu">enricher</span>(geno.mother.raw<span class="sc">$</span>KEGG , <span class="at">TERM2GENE =</span> kegg.pathways <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>name))</span>
 <span id="cb23-2"><a href="#cb23-2"></a><span class="fu">dotplot</span>(ora.geno.mother.kegg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
@@ -719,7 +719,7 @@ row3    3    6</code></pre>
 <section class="slide level2">
 
 <h3 id="gestation-data-set">Gestation data set</h3>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-15_8a119363b35f654528b1ea28442a8a5e">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>ora.gestation.kegg <span class="ot">=</span> <span class="fu">enricher</span>(gestation.raw<span class="sc">$</span>KEGG, <span class="at">TERM2GENE =</span> kegg.pathways <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>name))</span>
 <span id="cb24-2"><a href="#cb24-2"></a><span class="fu">dotplot</span>(ora.gestation.kegg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
@@ -728,7 +728,7 @@ row3    3    6</code></pre>
 <section id="varying-background-set" class="slide level2">
 <h2>Varying background set</h2>
 <p>Changing the background set will completely change the resulting pathway significance, usually reducing the number of significant pathways. In metabolomics, we should use the set of measurable metabolites during the experiment. Depending on if it was targeted or untargeted, this set may be larger or smaller.</p>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-16_6c79e0d40704a0cd60caf8b0e800bc29">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="co"># Using the background set</span></span>
 <span id="cb25-2"><a href="#cb25-2"></a>ora.geno.mother.kegg <span class="ot">=</span> <span class="fu">enricher</span>(geno.mother.raw<span class="sc">$</span>KEGG , <span class="at">TERM2GENE =</span> kegg.pathways <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>name),</span>
 <span id="cb25-3"><a href="#cb25-3"></a>                                <span class="at">universe =</span> background <span class="sc">%&gt;%</span> <span class="fu">pull</span>(KEGG))</span>
@@ -748,7 +748,7 @@ row3    3    6</code></pre>
 <section class="slide level2">
 
 <h3 id="using-the-annotation-set-as-an-example">Using the annotation set as an example</h3>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-17_9aa834052592cde056de56b71aeaa9bc">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>ora.geno.mother.kegg <span class="ot">=</span> <span class="fu">enricher</span>(geno.mother.raw<span class="sc">$</span>KEGG , <span class="at">TERM2GENE =</span> kegg.pathways <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>name),</span>
 <span id="cb26-2"><a href="#cb26-2"></a>                                <span class="at">universe =</span> annot.db <span class="sc">%&gt;%</span> <span class="fu">pull</span>(KEGG))</span>
 <span id="cb26-3"><a href="#cb26-3"></a><span class="fu">dotplot</span>(ora.geno.mother.kegg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -759,7 +759,7 @@ row3    3    6</code></pre>
 <h2>Varying pathway database</h2>
 <p>Instead of KEGG pathways, we can use the metabolic network pathways or Reactome pathways.</p>
 <h3 id="metabolic-network-1">Metabolic network</h3>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-18_96a1c3a14a29f3db73ae63c4aa50c0cc">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>ora.geno.mother.metnet <span class="ot">=</span> <span class="fu">enricher</span>(geno.mother.raw<span class="sc">$</span>KEGG , <span class="at">TERM2GENE =</span> metab.network.pathways <span class="sc">%&gt;%</span> </span>
 <span id="cb27-2"><a href="#cb27-2"></a>                                    <span class="fu">select</span>(subsystem, kegg) <span class="sc">%&gt;%</span> <span class="fu">na.omit</span>(), </span>
 <span id="cb27-3"><a href="#cb27-3"></a>                                  <span class="at">universe =</span> annot.db <span class="sc">%&gt;%</span> <span class="fu">pull</span>(KEGG))</span>
@@ -770,7 +770,7 @@ row3    3    6</code></pre>
 <section class="slide level2">
 
 <p>Using the second larger dataset, it is harder to gain significantly enriched pathways. Using the metabolic network pathways, we are unable to get any enriched pathways even with no p-value cutoff. Only by removing the background set are we able to get enrichment.</p>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-19_03f5849b8c46d18cb34913871c01f4eb">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>ora.gestation.metnet <span class="ot">=</span> <span class="fu">enricher</span>(gestation.raw<span class="sc">$</span>KEGG , <span class="at">TERM2GENE =</span> metab.network.pathways <span class="sc">%&gt;%</span> <span class="fu">select</span>(subsystem, kegg) <span class="sc">%&gt;%</span> <span class="fu">na.omit</span>())</span>
 <span id="cb28-2"><a href="#cb28-2"></a><span class="fu">dotplot</span>(ora.gestation.metnet)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
@@ -780,7 +780,7 @@ row3    3    6</code></pre>
 
 <h3 id="reactome-1">Reactome</h3>
 <p>Reactome is a larger pathway set, meaning we need to use no background set (!) to get significant pathways.</p>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-20_cd329b87880c70137bf580cfb66dada4">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>ora.gestation.reactome <span class="ot">=</span> <span class="fu">enricher</span>(gestation.raw<span class="sc">$</span>KEGG , <span class="at">TERM2GENE =</span> reactome.pathways)</span>
 <span id="cb29-2"><a href="#cb29-2"></a><span class="fu">dotplot</span>(ora.gestation.reactome)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
@@ -789,7 +789,7 @@ row3    3    6</code></pre>
 <section class="slide level2">
 
 <p>As you can see, even though the p-values are low, having only one metabolite enrich each pathway is not necessarily relevant.</p>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-21_e8d2ad79ff2cbcb8b0a3c180542005bf">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a>ora.geno.mother.reactome <span class="ot">=</span> <span class="fu">enricher</span>(geno.mother.raw<span class="sc">$</span>KEGG , <span class="at">TERM2GENE =</span> reactome.pathways,</span>
 <span id="cb30-2"><a href="#cb30-2"></a>                                    <span class="at">pvalueCutoff =</span> <span class="fl">0.1</span>)</span>
 <span id="cb30-3"><a href="#cb30-3"></a><span class="fu">dotplot</span>(ora.geno.mother.reactome)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -800,7 +800,7 @@ row3    3    6</code></pre>
 
 <h3 id="cpdb-1">CPDB</h3>
 <p>Here is an example of using a non filtered pathway set database. We obtain many non-metabolic pathways that are enriched but are meaningless in terms of our input data.</p>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-22_f507675f9657e404cc228abb67a1deda">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>ora.gestation.cpdb <span class="ot">=</span> <span class="fu">enricher</span>(gestation.raw<span class="sc">$</span>KEGG, </span>
 <span id="cb31-2"><a href="#cb31-2"></a>                              <span class="at">TERM2GENE =</span> cpdb <span class="sc">%&gt;%</span> <span class="fu">filter</span>(source <span class="sc">==</span> <span class="st">"Reactome"</span>) <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>source))</span>
 <span id="cb31-3"><a href="#cb31-3"></a><span class="fu">dotplot</span>(ora.gestation.cpdb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -810,7 +810,7 @@ row3    3    6</code></pre>
 <section id="varying-significant-metabolites" class="slide level2">
 <h2>Varying significant metabolites</h2>
 <p>The initial filtering of measured metabolites can also change the resulting enrichment. Here we can use a strict filtering of the fold changes in the initial dataset. Since it is stricter, we can’t use a background set in this example since we wouldn’t get any results.</p>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-23_c2b823caf2879e74fee96b43d2c6268f">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a>gestation.filtered <span class="ot">=</span> all.fc <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>geno.mother) <span class="sc">%&gt;%</span></span>
 <span id="cb32-2"><a href="#cb32-2"></a>  <span class="fu">filter</span>(<span class="fu">abs</span>(gestation) <span class="sc">&gt;</span> <span class="dv">1</span>)</span>
 <span id="cb32-3"><a href="#cb32-3"></a>ora.gestation.filtered.kegg <span class="ot">=</span> <span class="fu">enricher</span>(gestation.filtered<span class="sc">$</span>KEGG , <span class="at">TERM2GENE =</span> kegg.pathways <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>name))</span>
@@ -821,7 +821,7 @@ row3    3    6</code></pre>
 <section class="slide level2">
 
 <p>We can also use a more relaxed threshold on this dataset’s fold changes, again without a background set for illustration purposes.</p>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-24_23c05427f2da5c0130734f997a2d8eaa">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>gestation.filtered <span class="ot">=</span> all.fc <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>geno.mother) <span class="sc">%&gt;%</span></span>
 <span id="cb33-2"><a href="#cb33-2"></a>  <span class="fu">filter</span>(<span class="fu">abs</span>(gestation) <span class="sc">&gt;</span> <span class="fl">0.1</span>)</span>
 <span id="cb33-3"><a href="#cb33-3"></a>ora.gestation.filtered.kegg <span class="ot">=</span> <span class="fu">enricher</span>(gestation.filtered<span class="sc">$</span>KEGG , <span class="at">TERM2GENE =</span> kegg.pathways <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>name))</span>
@@ -833,7 +833,7 @@ row3    3    6</code></pre>
 <h2>Varying minGSSize</h2>
 <p>By default, ORA filters out pathways smaller than 10 metabolites when enriching. This parameter can be varied depending on the pathway sets: if you know that they are smaller in general, lowering this threshold may be more relevant.</p>
 <p>A lower minGSSize means more pathways to test against, which usually means higher p-values but more possibilities for small pathways to be enriched.</p>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-25_3bbf69b15e3fe722bc0b9125fae0d615">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>pathway.sizes <span class="ot">=</span> kegg.pathways <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(value.x) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">count =</span> <span class="fu">n</span>()) </span>
 <span id="cb34-2"><a href="#cb34-2"></a>pathway.counts <span class="ot">=</span> pathway.sizes <span class="sc">%&gt;%</span> <span class="fu">pull</span>(count)</span>
 <span id="cb34-3"><a href="#cb34-3"></a><span class="fu">hist</span>(pathway.counts, <span class="at">breaks =</span> <span class="dv">50</span>)</span>
@@ -843,7 +843,7 @@ row3    3    6</code></pre>
 <img data-src="tp_metab_files/figure-revealjs/unnamed-chunk-25-1.png" width="960" class="r-stretch"></section>
 <section class="slide level2">
 
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-26_dc7b9669dc945d5f4571df3fa62c9e56">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a>ora.gestation.filtered.kegg <span class="ot">=</span> <span class="fu">enricher</span>(geno.mother.raw<span class="sc">$</span>KEGG , </span>
 <span id="cb35-2"><a href="#cb35-2"></a>                                       <span class="at">TERM2GENE =</span> kegg.pathways <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>name), </span>
 <span id="cb35-3"><a href="#cb35-3"></a>                                       <span class="at">minGSSize =</span> <span class="dv">10</span>, </span>
@@ -855,7 +855,7 @@ row3    3    6</code></pre>
 <section class="slide level2">
 
 <p>In this case, by setting <code>minGSSize</code> to 3, we gain some new enriched pathways at the cost of higher adjusted p-values. These pathways weren’t enriched before because there were less total pathways, so their enrichments weren’t as significant. We most likely added many small pathways with no enrichment by lowering the <code>minGSSize</code>.</p>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-27_38a7060ae17a063c2dc66555facbe0ce">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a>ora.gestation.filtered.kegg <span class="ot">=</span> <span class="fu">enricher</span>(geno.mother.raw<span class="sc">$</span>KEGG , </span>
 <span id="cb36-2"><a href="#cb36-2"></a>                                       <span class="at">TERM2GENE =</span> kegg.pathways <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>name), </span>
 <span id="cb36-3"><a href="#cb36-3"></a>                                       <span class="at">minGSSize =</span> <span class="dv">3</span>, </span>
@@ -868,7 +868,7 @@ row3    3    6</code></pre>
 <h2>Bonus: varying p-value cutoff</h2>
 <p>We can also vary the p-value and p-value adjust cutoff to determine what is and isn’t a significantly enriched pathway. This must be done with caution as a high cutoff will provide many false positives.</p>
 <p>We can use the previous example with a <code>pvalueCutoff</code> of 0.05 (the default).</p>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-28_b5472803d596d99562aee8393e74874b">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a>ora.gestation.filtered.kegg <span class="ot">=</span> <span class="fu">enricher</span>(geno.mother.raw<span class="sc">$</span>KEGG , </span>
 <span id="cb37-2"><a href="#cb37-2"></a>                                       <span class="at">TERM2GENE =</span> kegg.pathways <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>name), </span>
 <span id="cb37-3"><a href="#cb37-3"></a>                                       <span class="at">minGSSize =</span> <span class="dv">3</span>, </span>
@@ -880,13 +880,13 @@ row3    3    6</code></pre>
 <section id="ora-on-up-vs-down-regulated-in-dataset" class="slide level2">
 <h2>ORA on up vs down regulated in dataset</h2>
 <p>In addition to using the entire filtered fold changes, we can split the dataset into up and down regulated metabolites.</p>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-29_0e8ddb02721c09c16c5be4cc90cc7ca9">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a>geno.mother.raw.up <span class="ot">=</span> geno.mother.raw <span class="sc">%&gt;%</span> <span class="fu">filter</span>(log2FC_mg <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
 <span id="cb38-2"><a href="#cb38-2"></a>geno.mother.raw.down <span class="ot">=</span> geno.mother.raw <span class="sc">%&gt;%</span> <span class="fu">filter</span>(log2FC_mg <span class="sc">&lt;</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Using a higher <code>pvalueCutoff</code> to show enriched pathways: again, because we are being stringent with the background set and by splitting the input set into two, we can be less strict with the p.adjust.</p>
 <h3 id="upregulated-metabolites">Upregulated metabolites</h3>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-30_73780607165f2c968a8bbfbe421a038c">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>ora.geno.mother.kegg.up <span class="ot">=</span> <span class="fu">enricher</span>(geno.mother.raw.up<span class="sc">$</span>KEGG , <span class="at">TERM2GENE =</span> kegg.pathways <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>name),</span>
 <span id="cb39-2"><a href="#cb39-2"></a>                                <span class="at">universe =</span> annot.db <span class="sc">%&gt;%</span> <span class="fu">pull</span>(KEGG), <span class="at">pvalueCutoff =</span> <span class="fl">0.2</span>, <span class="at">minGSSize =</span> <span class="dv">3</span>)</span>
 <span id="cb39-3"><a href="#cb39-3"></a><span class="fu">dotplot</span>(ora.geno.mother.kegg.up)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -896,7 +896,7 @@ row3    3    6</code></pre>
 <section class="slide level2">
 
 <p>We can plot using the p-value as a the colour to show that these unadjusted p-values are still significant.</p>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-31_f1287a3e40d58aed46db64b1cb7af8b7">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a><span class="fu">dotplot</span>(ora.geno.mother.kegg.up, <span class="at">color =</span> <span class="st">"pvalue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
@@ -904,7 +904,7 @@ row3    3    6</code></pre>
 <section class="slide level2">
 
 <h3 id="downregulated-metabolites">Downregulated metabolites:</h3>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-32_eaef1223075a001132f336f58fd1c284">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>ora.geno.mother.kegg.down <span class="ot">=</span> <span class="fu">enricher</span>(geno.mother.raw.down<span class="sc">$</span>KEGG , <span class="at">TERM2GENE =</span> kegg.pathways <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>name),</span>
 <span id="cb41-2"><a href="#cb41-2"></a>                                <span class="at">universe =</span> annot.db <span class="sc">%&gt;%</span> <span class="fu">pull</span>(KEGG), <span class="at">pvalueCutoff =</span> <span class="fl">0.1</span>, <span class="at">minGSSize =</span> <span class="dv">3</span>)</span>
 <span id="cb41-3"><a href="#cb41-3"></a><span class="fu">dotplot</span>(ora.geno.mother.kegg.down)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -921,7 +921,7 @@ row3    3    6</code></pre>
 <h2>Gestation data set</h2>
 <h3 id="using-fold-changes">Using fold changes</h3>
 <p>For illustrative purposes, we set the <code>pvalueCutoff</code> to be 1 to show all pathway p-values.</p>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-33_0c69a00af1c226cf3da753f93fcacaef">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a>gsea.input.gestation <span class="ot">=</span> all.fc <span class="sc">%&gt;%</span> </span>
 <span id="cb42-2"><a href="#cb42-2"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(gestation)) <span class="sc">%&gt;%</span> </span>
 <span id="cb42-3"><a href="#cb42-3"></a>  <span class="fu">na.omit</span>() <span class="sc">%&gt;%</span></span>
@@ -936,16 +936,16 @@ row3    3    6</code></pre>
 <pre><code># A tibble: 27 × 11
    ID     Description setSize enrichmentScore   NES pvalue p.adjust qvalue  rank
    &lt;chr&gt;  &lt;chr&gt;         &lt;int&gt;           &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
- 1 Purin… Purine met…       7          -0.731 -1.31  0.136    0.136  0.939     9
- 2 Nucle… Nucleotide…       6          -0.740 -1.29  0.165    0.165  0.939     9
- 3 Cyste… Cysteine a…       5           0.652  1.27  0.235    0.235  0.939     1
- 4 Pheny… Phenylalan…       4           0.670  1.19  0.288    0.288  0.939    10
- 5 Tyros… Tyrosine m…       3           0.726  1.19  0.296    0.296  0.939     6
- 6 2-Oxo… 2-Oxocarbo…       8           0.467  1.07  0.355    0.355  0.939    11
- 7 Sulfu… Sulfur met…       4           0.632  1.12  0.360    0.360  0.939     6
- 8 Argin… Arginine b…       3          -0.732 -1.12  0.371    0.371  0.939    15
- 9 Valin… Valine, le…       3           0.683  1.12  0.392    0.392  0.939    16
-10 Valin… Valine, le…       3           0.683  1.12  0.392    0.392  0.939    16
+ 1 Purin… Purine met…       7          -0.731 -1.32  0.128    0.128  0.936     9
+ 2 Nucle… Nucleotide…       6          -0.740 -1.28  0.146    0.146  0.936     9
+ 3 Cyste… Cysteine a…       5           0.652  1.27  0.216    0.216  0.936     1
+ 4 Tyros… Tyrosine m…       3           0.726  1.19  0.283    0.283  0.936     6
+ 5 Pheny… Phenylalan…       4           0.670  1.20  0.290    0.290  0.936    10
+ 6 2-Oxo… 2-Oxocarbo…       8           0.467  1.07  0.352    0.352  0.936    11
+ 7 Sulfu… Sulfur met…       4           0.632  1.13  0.367    0.367  0.936     6
+ 8 Valin… Valine, le…       3           0.683  1.12  0.387    0.387  0.936    16
+ 9 Valin… Valine, le…       3           0.683  1.12  0.387    0.387  0.936    16
+10 Argin… Arginine b…       3          -0.732 -1.09  0.402    0.402  0.936    15
 # ℹ 17 more rows
 # ℹ 2 more variables: leading_edge &lt;chr&gt;, core_enrichment &lt;chr&gt;</code></pre>
 </div>
@@ -955,7 +955,7 @@ row3    3    6</code></pre>
 
 <p>This gseaplot shows that even if Purine metabolism seems to be enriched, with so few metabolites it doesn’t reach a high enough enrichment score and p-value to be classed as significant when correcting the p-value. Even the raw p-value is fairly high at 0.169.</p>
 <p>The gseaplot also reveals that we have a split of strong fold changed metabolites: 1 up and 4 down.</p>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-34_c612611f442b68b15cc6853998c0c046">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a>enrichplot<span class="sc">::</span><span class="fu">gseaplot2</span>(gsea.gestation.kegg, <span class="at">geneSetID =</span> <span class="dv">1</span>, <span class="at">title =</span> gsea.gestation.kegg<span class="sc">$</span>Description[<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
@@ -963,7 +963,7 @@ row3    3    6</code></pre>
 <section class="slide level2">
 
 <p>This dotplot uses the unadjusted pvalue as the colour legend. Only the very red pathways could be considered as enriched.</p>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-35_bad5835f5f8db1d29e260207b0e96af3">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a><span class="fu">dotplot</span>(gsea.gestation.kegg, <span class="at">color =</span> <span class="st">"pvalue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
@@ -973,7 +973,7 @@ row3    3    6</code></pre>
 <h3 id="using-absolute-fold-changes">Using absolute fold changes</h3>
 <p>In genomics, when genes are upregulated together this usually means that the enriched pathway is upregulated. With metabolites, pathways can be enriched regardless of an increase or a decrease in metabolite concentration: this means we can look for enriched pathways that are affected using the metabolites, without being able to conclude on its up or down regulation.</p>
 <p>To do this, we use the absolute value of the fold changes instead of the raw fold changes. We also need to add a parameter to GSEA: <code>scoreType = "pos"</code>, to do a one tailed test, since all our values will be positive.</p>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-36_1d9583b7ef85de94e39f6924a3c72ce5">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a>gsea.input.gestation <span class="ot">=</span> all.fc <span class="sc">%&gt;%</span></span>
 <span id="cb46-2"><a href="#cb46-2"></a>  <span class="fu">mutate</span>(<span class="at">gestation =</span> <span class="fu">abs</span>(gestation)) <span class="sc">%&gt;%</span> </span>
 <span id="cb46-3"><a href="#cb46-3"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(gestation)) <span class="sc">%&gt;%</span> </span>
@@ -989,7 +989,7 @@ row3    3    6</code></pre>
 </section>
 <section class="slide level2">
 
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-37_1d515105cfcb525b7b7cd55844b275e0">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1"></a>enrichplot<span class="sc">::</span><span class="fu">gseaplot2</span>(gsea.gestation.kegg, <span class="at">geneSetID =</span> <span class="dv">1</span>, <span class="at">title =</span> gsea.gestation.kegg<span class="sc">$</span>Description[<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
@@ -999,7 +999,7 @@ row3    3    6</code></pre>
 <h2>Geno mother data set</h2>
 <p>We can do the same analyses with the second data set.</p>
 <h3 id="using-fold-changes-1">Using fold changes</h3>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-38_eba0d36da8fea359c9c5816adb4c9d8c">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1"></a>gsea.input.geno <span class="ot">=</span> all.fc <span class="sc">%&gt;%</span></span>
 <span id="cb48-2"><a href="#cb48-2"></a>  <span class="fu">mutate</span>(<span class="at">geno.mother =</span> geno.mother) <span class="sc">%&gt;%</span> </span>
 <span id="cb48-3"><a href="#cb48-3"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(geno.mother))<span class="sc">%&gt;%</span> <span class="fu">na.omit</span>() <span class="sc">%&gt;%</span></span>
@@ -1015,16 +1015,16 @@ row3    3    6</code></pre>
 <pre><code># A tibble: 27 × 11
    ID     Description setSize enrichmentScore   NES pvalue p.adjust qvalue  rank
    &lt;chr&gt;  &lt;chr&gt;         &lt;int&gt;           &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
- 1 Biosy… Biosynthes…      14          -0.718 -1.65 0.0144   0.0144  0.390    12
- 2 Thiam… Thiamine m…       3          -0.902 -1.44 0.0504   0.0504  0.631     8
- 3 Cyste… Cysteine a…       5          -0.808 -1.47 0.0701   0.0701  0.631     3
- 4 Gluta… Glutathion…       5          -0.783 -1.42 0.108    0.108   0.730    12
- 5 Carbo… Carbon met…       9          -0.587 -1.20 0.235    0.235   0.975    13
- 6 Oxida… Oxidative …       3          -0.749 -1.20 0.304    0.304   0.975     8
- 7 Glyce… Glyceropho…       5           0.688  1.19 0.346    0.346   0.975    15
- 8 Nucle… Nucleotide…       6           0.610  1.11 0.400    0.400   0.975     4
- 9 Purin… Purine met…       7           0.571  1.07 0.414    0.414   0.975     4
-10 Argin… Arginine b…       3           0.671  1.07 0.432    0.432   0.975     3
+ 1 Biosy… Biosynthes…      14          -0.718 -1.68 0.0126   0.0126  0.341    12
+ 2 Thiam… Thiamine m…       3          -0.902 -1.44 0.0511   0.0511  0.690     8
+ 3 Cyste… Cysteine a…       5          -0.808 -1.44 0.0805   0.0805  0.725     3
+ 4 Gluta… Glutathion…       5          -0.783 -1.39 0.117    0.117   0.787    12
+ 5 Carbo… Carbon met…       9          -0.587 -1.20 0.259    0.259   0.975    13
+ 6 Glyce… Glyceropho…       5           0.688  1.22 0.285    0.285   0.975    15
+ 7 Oxida… Oxidative …       3          -0.749 -1.20 0.318    0.318   0.975     8
+ 8 Nucle… Nucleotide…       6           0.610  1.11 0.406    0.406   0.975     4
+ 9 Purin… Purine met…       7           0.571  1.07 0.416    0.416   0.975     4
+10 Argin… Arginine a…       4          -0.617 -1.05 0.450    0.450   0.975    17
 # ℹ 17 more rows
 # ℹ 2 more variables: leading_edge &lt;chr&gt;, core_enrichment &lt;chr&gt;</code></pre>
 </div>
@@ -1032,7 +1032,7 @@ row3    3    6</code></pre>
 </section>
 <section class="slide level2">
 
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-39_f43094b73b50c1f41872b8a67bd4c55c">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1"></a><span class="fu">dotplot</span>(gsea.geno.kegg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
@@ -1040,7 +1040,7 @@ row3    3    6</code></pre>
 <section class="slide level2">
 
 <p>The most enriched pathway for this dataset is Biosynthesis of cofactors. In the gseaplot, many metabolites have a strong negative fold change.</p>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-40_c1731dba461508d4e10bdef080dc4e04">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1"></a>enrichplot<span class="sc">::</span><span class="fu">gseaplot2</span>(gsea.geno.kegg, <span class="at">geneSetID =</span> <span class="dv">1</span>, <span class="at">title =</span> gsea.geno.kegg<span class="sc">$</span>Description[<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
@@ -1049,7 +1049,7 @@ row3    3    6</code></pre>
 
 <h3 id="using-absolute-fold-changes-1">Using absolute fold changes</h3>
 <p>By using the absolute values of fold changes, we can reveal pathways that weren’t enriched before simply because their metabolites were split over up and down regulated metabolites.</p>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-41_56349096141f6cc151ec002abf1ba2f0">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1"></a>gsea.input.geno.abs <span class="ot">=</span> all.fc <span class="sc">%&gt;%</span></span>
 <span id="cb52-2"><a href="#cb52-2"></a>  <span class="fu">mutate</span>(<span class="at">geno.mother =</span> <span class="fu">abs</span>(geno.mother)) <span class="sc">%&gt;%</span> </span>
 <span id="cb52-3"><a href="#cb52-3"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(geno.mother)) <span class="sc">%&gt;%</span> </span>
@@ -1065,7 +1065,7 @@ row3    3    6</code></pre>
 </section>
 <section class="slide level2">
 
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-42_264128ee71a41447cbad9de55f63140f">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1"></a>enrichplot<span class="sc">::</span><span class="fu">gseaplot2</span>(gsea.geno.kegg, <span class="at">geneSetID =</span> <span class="dv">9</span>, <span class="at">title =</span> gsea.geno.kegg<span class="sc">$</span>Description[<span class="dv">9</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img data-src="tp_metab_files/figure-revealjs/unnamed-chunk-42-1.png" width="960"></p>
@@ -1078,7 +1078,7 @@ row3    3    6</code></pre>
 </section>
 <section id="metabolic-network-pathways-instead-of-kegg-pathways" class="slide level2">
 <h2>Metabolic network pathways instead of KEGG pathways</h2>
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-43_79228d28dd93a51fdbc5d91545e99aa8">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1"></a>gsea.gestation.network <span class="ot">=</span> <span class="fu">GSEA</span>(gsea.input.gestation, </span>
 <span id="cb55-2"><a href="#cb55-2"></a>                      <span class="at">TERM2GENE =</span> metab.network.pathways <span class="sc">%&gt;%</span> <span class="fu">select</span>(subsystem, kegg) <span class="sc">%&gt;%</span> <span class="fu">na.omit</span>(),</span>
 <span id="cb55-3"><a href="#cb55-3"></a>                      <span class="at">minGSSize =</span> <span class="dv">3</span>, <span class="at">pvalueCutoff =</span> <span class="fl">0.1</span>, <span class="at">pAdjustMethod =</span> <span class="st">"none"</span>)</span>
@@ -1087,7 +1087,7 @@ row3    3    6</code></pre>
 <pre><code># A tibble: 1 × 11
   ID      Description setSize enrichmentScore   NES pvalue p.adjust qvalue  rank
   &lt;chr&gt;   &lt;chr&gt;         &lt;int&gt;           &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;int&gt;
-1 Purine… Purine met…      11           0.709  1.32   0.08     0.08  0.961    11
+1 Purine… Purine met…      11           0.709  1.30 0.0929   0.0929  0.969    11
 # ℹ 2 more variables: leading_edge &lt;chr&gt;, core_enrichment &lt;chr&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1"></a><span class="fu">dotplot</span>(gsea.gestation.network)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1096,25 +1096,25 @@ row3    3    6</code></pre>
 <img data-src="tp_metab_files/figure-revealjs/unnamed-chunk-43-1.png" width="960" class="r-stretch"></section>
 <section class="slide level2">
 
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-44_67a1f6f2d59e8299e4a55b0e67bf15c6">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1"></a>enrichplot<span class="sc">::</span><span class="fu">gseaplot2</span>(gsea.gestation.network, <span class="at">geneSetID =</span> <span class="dv">1</span>, <span class="at">title =</span> gsea.gestation.network<span class="sc">$</span>Description[<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
 <img data-src="tp_metab_files/figure-revealjs/unnamed-chunk-44-1.png" width="960" class="r-stretch"></section>
 <section class="slide level2">
 
-<div class="cell" data-hash="tp_metab_cache/revealjs/unnamed-chunk-45_d6872dfe54ec333f8050f75a2892f921">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1"></a>gsea.geno.kegg <span class="ot">=</span> <span class="fu">GSEA</span>(gsea.input.geno, </span>
 <span id="cb59-2"><a href="#cb59-2"></a>                      <span class="at">TERM2GENE =</span> metab.network.pathways <span class="sc">%&gt;%</span> <span class="fu">select</span>(subsystem, kegg) <span class="sc">%&gt;%</span> <span class="fu">na.omit</span>(),</span>
 <span id="cb59-3"><a href="#cb59-3"></a>                      <span class="at">minGSSize =</span> <span class="dv">3</span>, <span class="at">pvalueCutoff =</span> <span class="fl">0.05</span>, <span class="at">pAdjustMethod =</span> <span class="st">"none"</span>)</span>
 <span id="cb59-4"><a href="#cb59-4"></a><span class="fu">tibble</span>(gsea.geno.kegg<span class="sc">@</span>result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 11
-  ID     Description setSize enrichmentScore   NES  pvalue p.adjust qvalue  rank
-  &lt;chr&gt;  &lt;chr&gt;         &lt;int&gt;           &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
-1 Gluta… Glutathion…       8          -0.817 -1.66 0.00977  0.00977  0.222    12
-2 Glyci… Glycine, s…      11          -0.736 -1.57 0.0115   0.0115   0.222    14
-3 Ascor… Ascorbate …       4          -0.9   -1.53 0.0158   0.0158   0.222     9
+  ID      Description setSize enrichmentScore   NES pvalue p.adjust qvalue  rank
+  &lt;chr&gt;   &lt;chr&gt;         &lt;int&gt;           &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+1 Ascorb… Ascorbate …       4          -0.9   -1.55 0.0125   0.0125  0.278     9
+2 Glutat… Glutathion…       8          -0.817 -1.65 0.0132   0.0132  0.278    12
+3 Glycin… Glycine, s…      11          -0.736 -1.62 0.0227   0.0227  0.319    14
 # ℹ 2 more variables: leading_edge &lt;chr&gt;, core_enrichment &lt;chr&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1"></a><span class="fu">dotplot</span>(gsea.geno.kegg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
