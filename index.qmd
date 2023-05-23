@@ -18,11 +18,11 @@ editor: visual
 
 ## Supports
 
-- [**Slides du cours**](Cours/index.html).
-- **Slides du TP**:
-    - [Genes](TP/index.html).
-    - [Metabolites](TP/tp_metab.html).
-- [**Wiki compagnon**](https://github.com/rochevin/Formation_INRAE_genes/wiki).
+-   [**Slides du cours**](Cours/index.html).
+-   **Slides du TP**:
+    -   [Genes](TP/index.html).
+    -   [Metabolites](TP_metab/index.html).
+-   [**Wiki compagnon**](https://github.com/rochevin/Formation_INRAE_genes/wiki).
 
 ## Ressources
 
@@ -37,15 +37,14 @@ editor: visual
 
 ## Installation des packages
 
+-   Télécharger le contenu de la formation: https://github.com/rochevin/Formation_INRAE_genes/archive/refs/heads/master.zip
+-   Dans `Rstudio`, cliquer sur `TP.Rproj`.
+-   Installer les packages du TP à la main :
+    -   **Gènes**: https://github.com/rochevin/Formation_INRAE_genes/wiki/Gene-enrichment-analysis
+    -   **Métabolites**: https://github.com/rochevin/Formation_INRAE_genes/wiki/Metabolite-enrichment-analysis
+-   **OU** utiliser `renv::restore()` depuis le projet `TP` pour que l'installation se fasse toute seule
 
-* Télécharger le contenu de la formation: https://github.com/rochevin/Formation_INRAE_genes/archive/refs/heads/master.zip
-* Dans `Rstudio`, cliquer sur `TP.Rproj`.
-* Installer les packages du TP à la main :
-  * __Gènes__: https://github.com/rochevin/Formation_INRAE_genes/wiki/Gene-enrichment-analysis
-  * __Métabolites__: https://github.com/rochevin/Formation_INRAE_genes/wiki/Metabolite-enrichment-analysis
-* __OU__ utiliser `renv::restore()` depuis le projet `TP` pour que l'installation se fasse toute seule
-
-::: {.callout-warning}
+::: callout-warning
 Nous utilisons R 4.3 pour faire fonctionner `BiocHubsShiny`. Les autres packages fonctionneront normalement en R 4.2
 :::
 
